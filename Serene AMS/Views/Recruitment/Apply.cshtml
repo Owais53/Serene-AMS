@@ -1,0 +1,139 @@
+﻿@model Serene_AMS.ViewModels.ApplyVM
+@{
+
+
+    ViewBag.Title = "Apply";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@using (Html.BeginForm("Apply", "Recruitment", FormMethod.Post,new { enctype="multipart/form-data"}))
+{
+
+
+    @Html.AntiForgeryToken()
+
+    <form class="form-horizontal" id="form-sample-1" novalidate="novalidate">
+
+        <fieldset>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.ApplicantName, "Name", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ApplicantName, new { htmlAttributes = new { @id = "getname", @class = "form-control", @name = "name" } })
+                    @Html.ValidationMessageFor(model => model.ApplicantName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.Phone, "Contact", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @id = "getphone", @class = "form-control", @name = "phone" } })
+                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.Email, "Email", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "getEmail", @class = "form-control", @name = "email" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">
+                    Date of Birth
+                </label>
+                <div class="col-md-10">
+                    <div class="input-group date">
+
+                        <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
+                        @Html.EditorFor(model => model.Dob, new { @class = "form-control", placeholder = "Date of Birth", @readonly = "true" })
+                        @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">
+                    Gender
+                </label>
+                <div class="col-md-10">
+                    <label class="ui-radio ui-radio-inline">
+                        @Html.RadioButtonFor(model => model.Gender, "Male")
+                        <span class="input-span"></span>Male
+                    </label>
+                    <label class="ui-radio ui-radio-inline">
+                        @Html.RadioButtonFor(model => model.Gender, "Female")
+                        <span class="input-span"></span>Female
+                    </label>
+                    @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">
+                    Address
+                </label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @id = "getreasonreq", @class = "form-control", @name = "txtreason" } })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">
+                    Select CV
+                </label>
+                <div class="col-md-10">
+                    <input type="file" name="postedFile" />
+                    @Html.ValidationMessage("CustomError")
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Submit" class="btn btn-primary" id="btnAdd" />
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+}
+
+@section scripts{
+
+    
+    <script>
+    $(function () {
+    var successMessage = '@TempData["SuccessMessage1"]'
+    if (successMessage != '')
+    alertify.success(successMessage);
+    });
+    </script>
+    <script>
+        $(function () {
+            var errorMessage = '@TempData["ErrorMessage1"]'
+            if (errorMessage != '')
+                alertify.error(errorMessage);
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('input[type=datetime]').datepicker({
+                dateFormat: "dd/M/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0"
+            });
+
+        });
+
+
+
+
+    </script>
+
+
+
+}

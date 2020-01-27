@@ -1,0 +1,85 @@
+﻿
+@{
+                /**/
+
+                ViewBag.Title = "View Applications";
+}
+
+<div class="ibox">
+
+    <div class="ibox-body">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="#pill-1-1" data-toggle="tab">View Applications</a>
+            </li>
+
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane show active" id="pill-1-1">
+                <table id="applicant" class="table table-striped table-hover responsive table-responsive">
+                    <thead>
+                        <tr style="background-color:#0094ff; color:#ecf0f1">
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Date of Birth</th>
+                            <th>Gender</th>
+                            <th>Status</th>
+                            <th>Address</th>
+                            <th>CV</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Date of Birth</th>
+                            <th>Gender</th>
+                            <th>Status</th>
+                            <th>Address</th>
+                            <th>CV</th>
+                        </tr>
+                    </tfoot>
+
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+
+
+    <script type="text/javascript">
+        var Popup, dataTable;
+        $(function () {
+            dataTable = $('#applicant').DataTable({
+                pageLength: 10,
+                "ajax": {
+                    "url": '/recruitment/GetApplicantList',
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                    { "data": "ApplicantName", "authowidth": false },
+                    { "data": "Phone", "authowidth": false },
+                    { "data": "Email", "authowidth": false },
+                    { "data": "Dob", "authowidth": false },
+                    { "data": "Gender", "authowidth": false },
+                    { "data": "Status", "authowidth": false },
+                    { "data": "Status", "authowidth": false },
+                    { "data": "CV", "authowidth": false }
+
+                ]
+            });
+
+        });
+       </script>
+
+}
