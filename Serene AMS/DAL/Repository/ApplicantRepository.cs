@@ -38,6 +38,7 @@ namespace Serene_AMS.DAL.Repository
                 Gender = gender,
                 Status = "Pending",
                 Address = address,
+                Submittedon = DateTime.Now.Date,
                 CV = cv,
             };
 

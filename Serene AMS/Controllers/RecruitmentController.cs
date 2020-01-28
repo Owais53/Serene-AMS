@@ -23,10 +23,7 @@ namespace Serene_AMS.Controllers
         {
             IRepository objrepo = new ApplicantRepository();
 
-            var name = objrepo.Getname(model.ApplicantName,model.Email);
-
-            if (name == null)
-            {
+           
                 if (postedFile == null)
                 {
                     ModelState.AddModelError("CustomError", "Please select CV");
@@ -58,11 +55,8 @@ namespace Serene_AMS.Controllers
                         TempData["ErrorMessage1"] = "Data not added";
                     }
                 }
-            }
-            else
-            {
-                TempData["ErrorMessage1"] = "You have already Submitted Application";
-            }
+            
+           
                 return View();
         }
 
@@ -80,5 +74,7 @@ namespace Serene_AMS.Controllers
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
 
         }
+       
+
     }
 }

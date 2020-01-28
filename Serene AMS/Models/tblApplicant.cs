@@ -31,6 +31,7 @@ namespace Serene_AMS.Models
         public string Status { get; set; }
         public string Address { get; set; }
         public string CV { get; set; }
+        public Nullable<System.DateTime> Submittedon { get; set; }
     
         public virtual tblVacancy tblVacancy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
