@@ -66,7 +66,13 @@
 
 @section scripts{
         
-     
+<script>
+        $(function () {
+            var successMessage = '@TempData["UpdateMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+</script>
 
     <script type="text/javascript">
         var Popup, dataTable1;
@@ -92,7 +98,22 @@
                         },
                     },
                     { "data": "Gender", "authowidth": false },
-                    { "data": "Status", "authowidth": false },
+                    {
+                        "data": "Status", "render": function (data) {
+                            if (data == "Pending") {
+                                return "<label class='badge-primary'>" + data + "</label>"
+
+                            }
+                            else if (data == "Rejected") {
+                                return "<label class='badge-danger'>" + data + "</label>"
+
+                            }
+                            else {
+                                return "<label class='badge-success'>" + data + "</label>"
+
+                            }
+                        },
+                    },
                     {
                         "data": "Submittedon","render": function (data) {
                             var date = new Date(parseInt(data.substr(6)));
@@ -105,10 +126,18 @@
                         "data": "CV", "render": function (data) {
                             return '<a href="/CV/'+ data +'">View</a>'
                         },
+                    },
+                    {
+                        "data": "ApplicationId", "render": function (data, type, full) {
+                            return "<a href='@Url.Action("Approve","Recruitment")?id=" + data+"' class='btn btn-primary' id='getbtna'>Approve</a> <a href='@Url.Action("Reject","Recruitment")?id=" + data+"' class='btn btn-danger' id='getbtnb'>Reject</a>" 
+
+                        },
+                        "orderable": false,
+                        "width": "150px"
                     }
                     
 
-                ],
+                ]
               
 
             });
@@ -138,7 +167,50 @@
                 table.draw();
             });
 
-        });
+           
+                        $("#getbtna applicant").on('click', function () {
+                            $.ajax({
+                                url: "/Recruitment/Approve",
+                                type: "Post",
+                                success: function (data) {
+                                    if (data.success) {
+
+                                        $("#applicant").DataTable.ajax.reload();
+
+                                        $.notify(data.message, {
+                                            globalPosition: "top center",
+                                            className: "success"
+                                        })
+
+
+                                    }
+                                }
+
+                            });
+            });
+
+            $("#getbtnb applicant").on('click', function () {
+                $.ajax({
+                    url: "/Recruitment/Reject",
+                    type: "Post",
+                    success: function (data) {
+                        if (data.success) {
+
+                            $("#applicant").DataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+
+                        }
+                    }
+
+                });
+            });
+                   
+             });
        </script>
 
 }

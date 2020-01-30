@@ -1,5 +1,6 @@
 ﻿using Serene_AMS.DAL.Interface;
 using Serene_AMS.DAL.Repository;
+using Serene_AMS.Models;
 using Serene_AMS.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,28 @@ namespace Serene_AMS.Controllers
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
 
         }
-       
-
+        public ActionResult ViewCandidate()
+        {
+            return View();
+        }
+     
+        public ActionResult Approve(int id)
+        {
+            IRepository objrepo = new ApplicantRepository();
+            objrepo.Update(id);
+            objrepo.Save();
+            TempData["UpdateMessage"] = "Approved Successfully";
+            return View("ViewApplications");
+            
+            
+        }
+        public ActionResult Reject(int id)
+        {
+            IRepository objrepo = new ApplicantRepository();
+            objrepo.Update1(id);
+            objrepo.Save();
+            TempData["UpdateMessage"] = "Rejected Successfully";
+            return View("ViewApplications");
+        }
     }
 }

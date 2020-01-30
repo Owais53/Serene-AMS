@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "ViewCandidate";
+}
+
+<div class="ibox">
+
+    <div class="ibox-body">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="#pill-1-1" data-toggle="tab">View Candidate</a>
+            </li>
+
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane show active" id="pill-1-1">
+                <table id="tablec" class="table table-striped table-hover responsive table-responsive">
+                    <thead>
+                        <tr style="background-color:#0094ff; color:#ecf0f1">
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Date of Birth</th>
+                            <th>Gender</th>
+                            <th>Status</th>
+                            <th>Submitted on</th>
+                            <th>CV</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Date of Birth</th>
+                            <th>Gender</th>
+                            <th>Status</th>
+                            <th>Submitted on</th>
+                            <th>CV</th>
+                        </tr>
+                    </tfoot>
+
+
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+
+    <script>
+        $(function () {
+            var successMessage = '@TempData["UpdateMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+    </script>
+
+    <script type="text/javascript">
+        var Popup, dataTable1;
+        $(function () {
+
+            dataTable1 = $('#tablec').DataTable({
+                pageLength: 10,
+                "ajax": {
+                    "url": '/recruitment/GetApplicantList',
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                    { "data": "ApplicantName", "authowidth": false },
+                    { "data": "Phone", "authowidth": false },
+                    { "data": "Email", "authowidth": false },
+                    {
+                        "data": "Dob", "render": function (mydata) {
+                            var date = new Date(parseInt(mydata.substr(6)));
+                            var month = date.getMonth() + 1;
+                            return date.getDate() + "/" + month + "/" + date.getFullYear();
+                        },
+                    },
+                    { "data": "Gender", "authowidth": false },
+                    {
+                        "data": "Status", "render": function (data) {
+                            if (data == "Pending") {
+                                return "<label class='badge-primary'>" + data + "</label>"
+
+                            }
+                            else if (data == "Rejected") {
+                                return "<label class='badge-danger'>" + data + "</label>"
+
+                            }
+                            else {
+                                return "<label class='badge-success'>" + data + "</label>"
+
+                            }
+                        },
+                    },
+                    {
+                        "data": "Submittedon", "render": function (data) {
+                            var date = new Date(parseInt(data.substr(6)));
+                            var month = date.getMonth() + 1;
+                            return date.getFullYear() + "/" + month + "/" + date.getDate();
+                        },
+
+                    },
+                    {
+                        "data": "CV", "render": function (data) {
+                            return '<a href="/CV/' + data + '">View</a>'
+                        },
+                    },
+                    {
+                        "data": "ApplicationId", "render": function (data, type, full) {
+                            return "<a href='@Url.Action("Approve","Recruitment")?id=" + data + "' class='btn btn-primary' id='getbtna'>Approve</a> <a href='@Url.Action("Reject","Recruitment")?id=" + data + "' class='btn btn-danger' id='getbtnb'>Reject</a>"
+
+                        },
+                        "orderable": false,
+                        "width": "150px"
+                    }
+
+
+                ]
+
+
+            });
+
+
+        });
+    </script>
+    }

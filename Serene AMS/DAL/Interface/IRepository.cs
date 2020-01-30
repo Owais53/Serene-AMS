@@ -20,8 +20,8 @@ namespace Serene_AMS.DAL.Interface
 
         tblApplicant AddApplicant(string name,string phone,string email,DateTime dob,string gender,string address,string cv);
 
-        void Update();
-
+        void Update(int ApplicationId);
+        void Update1(int ApplicationId);
         void Delete(int ApplicationId);
 
         void Save();

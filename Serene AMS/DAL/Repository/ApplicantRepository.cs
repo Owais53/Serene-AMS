@@ -3,6 +3,7 @@ using Serene_AMS.Models;
 using Serene_AMS.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -66,7 +67,9 @@ namespace Serene_AMS.DAL.Repository
 
         public tblApplicant GetById(int ApplicationId)
         {
-            throw new NotImplementedException();
+           var getid= context.tblApplicants.FirstOrDefault(x => x.ApplicationId == ApplicationId);
+
+            return getid;
         }
 
         public void Save()
@@ -74,9 +77,20 @@ namespace Serene_AMS.DAL.Repository
             context.SaveChanges();
         }
 
-        public void Update()
+        public void Update(int ApplicationId)
         {
-            throw new NotImplementedException();
+            var obj = context.tblApplicants.Find(ApplicationId);
+            obj.Status = "Approved";
+            context.Entry(obj).State = EntityState.Modified;
+
+        }
+        public void Update1(int ApplicationId)
+        {
+            var obj = context.tblApplicants.Find(ApplicationId);
+            obj.Status = "Rejected";
+            context.Entry(obj).State = EntityState.Modified;
+
         }
     }
+
 }
