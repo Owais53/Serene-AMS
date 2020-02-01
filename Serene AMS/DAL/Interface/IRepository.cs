@@ -23,6 +23,9 @@ namespace Serene_AMS.DAL.Interface
         void Update(int ApplicationId);
         void Update1(int ApplicationId);
         void Delete(int ApplicationId);
+        void update2(int Applicationid,int Marks);
+        void update3(int Applicationid, int Marks);
+        void update4(int Applicationid);
 
         void Save();
 

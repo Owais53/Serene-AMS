@@ -29,6 +29,8 @@
           <Property Name="Submittedon" Type="date" />
           <Property Name="Address" Type="nvarchar(max)" />
           <Property Name="CV" Type="varchar" MaxLength="200" />
+          <Property Name="Marks" Type="int" />
+          <Property Name="TestStatus" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="tblCandidates">
           <Key>
@@ -801,6 +803,8 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <NavigationProperty Name="tblCandidates" Relationship="Self.FK_tblCandidates_tblApplicant" FromRole="tblApplicant" ToRole="tblCandidates" />
           <Property Name="CV" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Submittedon" Type="DateTime" Precision="0" />
+          <Property Name="Marks" Type="Int32" />
+          <Property Name="TestStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblCandidate">
           <Key>
@@ -1600,6 +1604,8 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <EntitySetMapping Name="tblApplicants">
             <EntityTypeMapping TypeName="HrmsModel.tblApplicant">
               <MappingFragment StoreEntitySet="tblApplicant">
+                <ScalarProperty Name="TestStatus" ColumnName="TestStatus" />
+                <ScalarProperty Name="Marks" ColumnName="Marks" />
                 <ScalarProperty Name="Submittedon" ColumnName="Submittedon" />
                 <ScalarProperty Name="CV" ColumnName="CV" />
                 <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />

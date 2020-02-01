@@ -804,6 +804,8 @@
     <Content Include="Views\Recruitment\ViewApplications.cshtml" />
     <Content Include="Views\Recruitment\Approve.cshtml" />
     <Content Include="Views\Recruitment\ViewCandidate.cshtml" />
+    <Content Include="Views\Recruitment\Marksupload.cshtml" />
+    <Content Include="Views\Recruitment\ViewMarks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

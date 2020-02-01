@@ -1,0 +1,198 @@
+﻿@model Serene_AMS.Models.tblApplicant
+@{
+    ViewBag.Title = "ViewMarks";
+}
+
+
+<div class="ibox">
+
+    <div class="ibox-body">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="#pill-1-1" data-toggle="tab">View Marks</a>
+            </li>
+
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane show active" id="pill-1-1">
+
+                <div class="form-group">
+                    <label>From:</label>
+                    <input type="text" id="frmtxt" />
+                </div>
+                <div class="form-group">
+                    <label>To:</label>
+                    <input type="text" id="totxt"/>
+                </div>
+               <form id="Form">
+               <div id="get">
+                   @Html.HiddenFor(x=>x.ApplicationId)
+                   <table id="tablem" class="table table-striped table-hover responsive table-responsive">
+
+                    <thead>
+                        <tr style="background-color:#0094ff; color:#ecf0f1">
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Marks</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Marks</th>
+                            <th>Status</th>
+                        </tr>
+                    </tfoot>
+
+
+                </table>
+                   </div>
+            </form>
+
+
+
+
+            </div>
+            </div>
+        </div>
+</div>
+
+@section scripts{
+    
+<script type="text/javascript">
+    var statusvalue =
+        [
+            "Select",
+            "Called for Interview"
+            
+        ];
+    $(function () {
+
+        dataTable2 = $('#tablem').DataTable({
+            pageLength: 10,
+            "ajax": {
+                "url": '/recruitment/GetMarksList',
+                "type": "get",
+                "datatype": "json"
+            },
+            "columns": [
+
+                { "data": "ApplicantName", "authowidth": false },
+                { "data": "Phone", "authowidth": false },
+                { "data": "Email", "authowidth": false },               
+                { "data": "Gender", "authowidth": false },
+                { "data": "Marks", "authowidth": false },
+                {
+                    "data": "TestStatus", "render": function (data) {
+                        if (data == "Pending") {
+                            return "<label class='badge-primary'>" + data + "</label>"
+
+                        }
+                        else if (data == "Fail") {
+                            return "<label class='badge-danger'>" + data + "</label>"
+
+                        }
+                        else {
+                            return "<label class='badge-success'>" + data + "</label>"
+
+                        }
+                    },
+                },
+               
+                {
+                    "data": "ApplicationId",
+                    "render": function (d, t, r) {
+                        var $select = $("<select id='ddlId' onChange='javascript: getvalue(this);'></select>", {
+                            "id": r[6] + "start",
+                            "value": d
+                        });
+                        $.each(statusvalue, function (k, v) {
+                            var $option = $("<option></option>", {
+                                "text": v,
+                                "value": d
+                            });
+                            if (d === v) {
+                                $option.attr("selected", "selected")
+                            }
+                            $select.append($option);
+                        });
+                        return $select.prop("outerHTML");
+                    },
+                    "orderable": false,
+                    "width": "150px"
+                
+                 },
+                                                    
+            ]
+
+
+        });
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var min = parseInt($('#frmtxt').val(), 10);
+                var max = parseInt($('#totxt').val(), 10);
+                var SubmittedMarks = parseFloat(data[4]) || 0;
+                if ((isNaN(min) && isNaN(max)) ||
+                    (isNaN(min) && SubmittedMarks <= max) ||
+                    (min <= SubmittedMarks && isNaN(max)) ||
+                    (min <= SubmittedMarks && SubmittedMarks <= max)) {
+                    return true;
+                }
+                return false;
+            }
+        );
+        
+     
+        var table1 = $('#tablem').DataTable();
+
+        // Event listener to the two range filtering inputs to redraw on input
+        $('#frmtxt, #totxt').keyup(function () {
+            table1.draw();
+        });
+
+
+    });
+    function getvalue(sel) {
+       
+        var selectedOption = $("#ddlId option:selected").text();
+        $("<input/>", { type: 'hidden', name: 'txtselectedtext' }).val(selectedOption).appendTo("#Form");
+
+        
+
+        $.get("/Recruitment/GetStatus", { id: sel.value }, function (res) {
+            $("#get").html(res);
+            Post();
+        })
+        
+       
+    }
+    function Post() {
+        
+            $.post("/Recruitment/PostStatus", function (res) {
+                if (res) {
+
+                    $.notify(data.message, {
+                        globalPosition: "top center",
+                        className: "success"
+
+                    });
+
+                }
+
+
+
+            })
+        }
+    
+</script>
+    
+}

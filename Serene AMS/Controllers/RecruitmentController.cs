@@ -75,9 +75,68 @@ namespace Serene_AMS.Controllers
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
 
         }
-        public ActionResult ViewCandidate()
+        public ActionResult GetCandidateList()
         {
-            return View();
+            IRepository obj = new ApplicantRepository();
+
+            var Data = obj.GetAll().Where(x=>x.Status == "Approved").ToList();
+
+
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
+
+        }
+        public ActionResult GetCandidates(int? id)
+        {
+            IRepository obj = new ApplicantRepository();
+            var candidates = obj.GetById(Convert.ToInt32(id)) ?? new tblApplicant();
+            return PartialView("Marksupload",candidates);
+        }
+        public ActionResult UploadMarks(tblApplicant obj)
+        {
+            IRepository repo = new ApplicantRepository();
+            if (ModelState.IsValid)
+            {
+                if (obj.ApplicationId > 0)
+                {
+                    if(obj.Marks >= 60)
+                    {
+                        TempData["UpdateMessage3"] = "Uploaded Successfully";
+                        repo.update2(obj.ApplicationId, Convert.ToInt32(obj.Marks));
+                        repo.Save();
+                    }
+                    else if(obj.Marks < 60)
+                    {
+                        TempData["UpdateMessage3"] = "Uploaded Successfully";
+                        repo.update3(obj.ApplicationId, Convert.ToInt32(obj.Marks));
+                        repo.Save();
+                    }
+                   
+                }
+                else
+                {
+                    repo.Add(obj);
+                }
+                 repo.Save();
+                return Json(new { success = true, message = "Marks Uploaded Successfully" }, JsonRequestBehavior.AllowGet);
+
+            }
+
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public ActionResult ViewCandidate(int id=0)
+        {
+            IRepository obj = new ApplicantRepository();
+            if (id == 0)
+            {
+                return View(new tblApplicant());
+            }
+            else
+            {
+                var Applicationid = obj.GetAll().Where(x => x.ApplicationId == id).FirstOrDefault();
+
+                return View(Applicationid);
+            }
         }
      
         public ActionResult Approve(int id)
@@ -97,6 +156,46 @@ namespace Serene_AMS.Controllers
             objrepo.Save();
             TempData["UpdateMessage"] = "Rejected Successfully";
             return View("ViewApplications");
+        }
+        public ActionResult ViewMarks()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult GetStatus(int id = 0)
+        {
+            IRepository obj = new ApplicantRepository();
+            if(id == 0)
+            {
+                return View("ViewMarks", new tblApplicant());
+            }
+            else
+            {
+                return View("ViewMarks", obj.GetAll().Where(x=>x.ApplicationId == id).FirstOrDefault<tblApplicant>());
+            }
+           
+        }
+        [HttpPost]
+        public ActionResult PostStatus(tblApplicant form)
+        {
+            IRepository repo = new ApplicantRepository();
+            
+            
+            repo.update4(Convert.ToInt32(form.ApplicationId));
+            repo.Save();
+
+            return Json(new { success = true, message = "Marks Uploaded Successfully" }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult GetMarksList()
+        {
+            IRepository obj = new ApplicantRepository();
+
+            var Data = obj.GetAll().Where(x => x.TestStatus == "Pass").ToList();
+
+
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
         }
     }
 }

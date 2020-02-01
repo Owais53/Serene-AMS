@@ -41,6 +41,7 @@ namespace Serene_AMS.DAL.Repository
                 Address = address,
                 Submittedon = DateTime.Now.Date,
                 CV = cv,
+                TestStatus = "Pending",
             };
 
             return addapplicant;
@@ -67,7 +68,7 @@ namespace Serene_AMS.DAL.Repository
 
         public tblApplicant GetById(int ApplicationId)
         {
-           var getid= context.tblApplicants.FirstOrDefault(x => x.ApplicationId == ApplicationId);
+            var getid = context.tblApplicants.Find(ApplicationId);
 
             return getid;
         }
@@ -76,7 +77,28 @@ namespace Serene_AMS.DAL.Repository
         {
             context.SaveChanges();
         }
-
+        public void update2(int Applicationid,int Marks)
+        {
+            var obj = context.tblApplicants.Find(Applicationid);
+            obj.Marks = Marks;
+            obj.TestStatus = "Pass";
+            context.Entry(obj).State = EntityState.Modified;
+        }
+        public void update3(int Applicationid, int Marks)
+        {
+            var obj = context.tblApplicants.Find(Applicationid);
+            obj.Marks = Marks;
+            obj.TestStatus = "Fail";
+            context.Entry(obj).State = EntityState.Modified;
+        }
+        public void update4(int Applicationid)
+        {
+            var obj = context.tblApplicants.Find(Applicationid);
+            obj.Status = "Called for Interview";
+            context.Entry(obj).State = EntityState.Modified;
+            
+            
+        }
         public void Update(int ApplicationId)
         {
             var obj = context.tblApplicants.Find(ApplicationId);
