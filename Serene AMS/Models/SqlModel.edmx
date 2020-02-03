@@ -158,6 +158,7 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DepartmentId" Type="int" />
+          <Property Name="JobLevel" Type="varchar" MaxLength="75" />
           <Property Name="Position" Type="varchar(max)" />
           <Property Name="BasicPay" Type="money" />
           <Property Name="IncomeTax" Type="money" />
@@ -952,6 +953,7 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <Property Name="IncomeTax" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="tblDepartment" Relationship="Self.FK_tblPosition_tblDepartment" FromRole="tblPosition" ToRole="tblDepartments" />
           <NavigationProperty Name="tblEmployees" Relationship="Self.FK_tblEmployee_tblPosition" FromRole="tblPosition" ToRole="tblEmployee" />
+          <Property Name="JobLevel" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblPurchase">
           <Key>
@@ -1742,6 +1744,7 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <EntitySetMapping Name="tblPositions">
             <EntityTypeMapping TypeName="HrmsModel.tblPosition">
               <MappingFragment StoreEntitySet="tblPosition">
+                <ScalarProperty Name="JobLevel" ColumnName="JobLevel" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
                 <ScalarProperty Name="Position" ColumnName="Position" />

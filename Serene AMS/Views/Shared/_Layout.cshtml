@@ -203,11 +203,11 @@
                             </fieldset>
                         </div>
                         <small>
-                         @if (Session["RoleName"] != null)
-                         {
-                         <text> @Session["RoleName"].ToString() </text>
-                        }
-                      </small>
+                            @if (Session["RoleName"] != null)
+                            {
+                                <text> @Session["RoleName"].ToString() </text>
+                            }
+                        </small>
                     </div>
                 </div>
                 <ul class="side-menu metismenu">
@@ -253,15 +253,16 @@
                     <li>
                         <a href="javascript:;">
                             <i class="sidebar-item-icon fa fa-table"></i>
-                            <span class="nav-label">Tables</span><i class="fa fa-angle-left arrow"></i>
+                            <span class="nav-label">Recruitment</span><i class="fa fa-angle-left arrow"></i>
                         </a>
                         <ul class="nav-2-level collapse">
-                            <li>
-                                <a href="table_basic.html">Basic Tables</a>
-                            </li>
-                            <li>
-                                <a href="datatables.html">Datatables</a>
-                            </li>
+                            <li>@Html.ActionLink("Apply", "Apply", "Recruitment")</li>
+
+                            <li>@Html.ActionLink("View Applications", "ViewApplications", "Recruitment")</li>
+                            <li>@Html.ActionLink("View Candidate", "ViewCandidate", "Recruitment")</li>
+                            <li>@Html.ActionLink("View Candidate", "ViewMarks", "Recruitment")</li>
+
+
                         </ul>
                     </li>
                     <li>
@@ -394,29 +395,30 @@
                 </div>
             </div>
         </div>
-            <div class="sidenav-backdrop backdrop"></div>
-            <div class="preloader-backdrop">
-                <div style="text-align:center;height:300px">
-                    <img src="~/img/InternetSlowdown_Day.gif" />
-                </div>
+        <div class="sidenav-backdrop backdrop"></div>
+        <div class="preloader-backdrop">
+            <div style="text-align:center;height:300px">
+                <img src="~/img/InternetSlowdown_Day.gif" />
             </div>
+        </div>
 
-            <script src="~/Scripts/jquery.min.js" type="text/javascript"></script>
-            <script src="~/Scripts/popper.min.js" type="text/javascript"></script>
-            <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
-            <script src="~/Scripts/metisMenu.min.js" type="text/javascript"></script>
-            <script src="~/Scripts/jquery.slimscroll.min.js" type="text/javascript"></script>
-            <!-- CORE SCRIPTS-->
-            <script src="~/Scripts/app.min.js" type="text/javascript"></script>
-            <!-- PAGE LEVEL SCRIPTS-->
-            <script src="~/Scripts/dashboard_1_demo.js" type="text/javascript"></script>
-            <script src="~/Scripts/datatables.min.js"></script>
-            <script src="~/Scripts/jquery.validate.min.js"></script>
-            <script src="~/Scripts/sweetalert.min.js"></script>
-            <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-            <script src="~/Scripts/alertify.min.js"></script>
-            <script src="~/Scripts/notify.min.js"></script>
-            <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-            @RenderSection("scripts", required: false)
+        <script src="~/Scripts/jquery.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+        <script src="~/Scripts/popper.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/metisMenu.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/jquery.slimscroll.min.js" type="text/javascript"></script>
+        <!-- CORE SCRIPTS-->
+        <script src="~/Scripts/app.min.js" type="text/javascript"></script>
+        <!-- PAGE LEVEL SCRIPTS-->
+        <script src="~/Scripts/dashboard_1_demo.js" type="text/javascript"></script>
+        <script src="~/Scripts/datatables.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/sweetalert.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/Scripts/alertify.min.js"></script>
+        <script src="~/Scripts/notify.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+        @RenderSection("scripts", required: false)
 </body>
 </html>

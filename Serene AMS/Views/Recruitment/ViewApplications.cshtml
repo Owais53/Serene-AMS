@@ -2,18 +2,19 @@
 @{
    ViewBag.Title = "View Applications";
 }
-
+<div class="page-heading">
+    <h1 class="page-title">View Applications</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="~/Views/Recruitment/ViewApplications.cshtml"><i class="la la-home font-20"></i></a>
+        </li>
+        <li class="breadcrumb-item">View Applications</li>
+    </ol>
+</div>
 <div class="ibox">
 
     <div class="ibox-body">
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link active" href="#pill-1-1" data-toggle="tab">View Applications</a>
-            </li>
-
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane show active" id="pill-1-1">
+       
                 <div class="form-group row">
                     <label>From Date</label>
                     <div class="input-group date">
@@ -27,7 +28,10 @@
                             <input id="todate" class="datepicker" />
                        </div>
                     </div>
-                </div>
+               <label style="color:red;" id="lblerror"></label>
+               <br /> 
+             <button type="button" id="btnfilter" class="btn btn-primary">Filter</button>
+            </div>
                       
             <table id="applicant" class="table table-striped table-hover responsive table-responsive">
                             <thead>
@@ -60,8 +64,7 @@
 
                         </table>
                     </div>
-        </div>
-    </div>
+       
 
 
 @section scripts{
@@ -158,14 +161,29 @@
             );
 
 
-            $("#frmdate").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
-            $("#todate").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+            $("#frmdate").datepicker({  changeMonth: true, changeYear: true });
+            $("#todate").datepicker({ changeMonth: true, changeYear: true });
+           
             var table = $('#applicant').DataTable();
+            $("#btnfilter").on('click', function () {
+                var frm = new Date($('#frmdate').val());
+                var to = new Date($('#todate').val());
+                if (frm > to) {
+                    $("#lblerror").html("From Date should not be greater than To Date");
+                   
+                }
+                else if (frm = to) {
+                    $("#lblerror").html("");
+                    table.draw();
+                }
+                else{
+                    $("#lblerror").html("");
+                    table.draw();
 
-            // Event listener to the two range filtering inputs to redraw on input
-            $('#frmdate, #todate').change(function () {
-                table.draw();
+                }                              
             });
+            // Event listener to the two range filtering inputs to redraw on input
+           
 
            
                         $("#getbtna applicant").on('click', function () {

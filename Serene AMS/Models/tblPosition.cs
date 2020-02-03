@@ -25,6 +25,7 @@ namespace Serene_AMS.Models
         public string Position { get; set; }
         public Nullable<decimal> BasicPay { get; set; }
         public Nullable<decimal> IncomeTax { get; set; }
+        public string JobLevel { get; set; }
     
         public virtual tblDepartment tblDepartment { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

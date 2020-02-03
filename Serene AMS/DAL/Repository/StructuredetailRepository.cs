@@ -35,6 +35,20 @@ namespace Serene_AMS.DAL.Repository
         {
             return context.tblStructuredetails;
         }
+        public IEnumerable<tblPosition> Getpos()
+        {
+            return context.tblPositions;
+        }
+
+        public IEnumerable<tblDepartment> validation(string dep)
+        {
+            return context.tblDepartments.Where(x=>x.DepartmentName == dep);
+        }
+
+        public IEnumerable<tblPosition> validation1(string pos)
+        {
+            return context.tblPositions.Where(x => x.Position == pos);
+        }
 
         public tblStructuredetail GetById(int Id)
         {
@@ -55,5 +69,28 @@ namespace Serene_AMS.DAL.Repository
         {
             return context.tblRoles;
         }
+        public IEnumerable<tblDepartment> Getdep()
+        {
+            return context.tblDepartments;
+        }
+        public void Add(tblPosition obj)
+        {
+            context.tblPositions.Add(obj);
+        }
+        public tblPosition Addpos(int depid, string joblevel, string position, decimal basicpay, decimal Incometax)
+        {
+            var pos = new tblPosition()
+            {
+               DepartmentId = depid,
+               JobLevel = joblevel,
+               Position = position,
+               BasicPay = basicpay,
+               IncomeTax = Incometax,
+
+            };
+
+            return pos;
+        }
+
     }
 }

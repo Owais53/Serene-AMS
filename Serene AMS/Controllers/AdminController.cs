@@ -162,5 +162,100 @@ namespace Serene_AMS.Controllers
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public ActionResult Position()
+        {
+            IStructuredetailRepository objstructureRepository = new StructuredetailRepository();
+            var deplist = objstructureRepository.Getdep().ToList();
+
+            SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+            ViewBag.getdeplist = list;
+
+            var levellist = new SelectList(new[]
+           {
+                new {ID="1",Name="Low"},
+                new {ID="2",Name="Medium"},
+                new {ID="3",Name="High"}
+            },
+            "Name", "Name", "1"
+             );
+            ViewBag.getlevellist = levellist;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Position(tblPosition obj,FormCollection form)
+        {
+            IStructuredetailRepository objstructureRepository = new StructuredetailRepository();
+            var deplist = objstructureRepository.Getdep().ToList();
+            var depname = form["txtname"];
+           
+            var check = objstructureRepository.validation(depname).FirstOrDefault();
+            var check1 = objstructureRepository.validation1(obj.Position).FirstOrDefault();
+            
+            if(check !=null && check1 != null)
+            {
+                SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+                ViewBag.getdeplist = list;
+                var levellist = new SelectList(new[]
+                {
+                new {ID="1",Name="Low"},
+                new {ID="2",Name="Medium"},
+                new {ID="3",Name="High"}
+                },
+                "Name", "Name", "1"
+                );
+                ViewBag.getlevellist = levellist;
+
+                TempData["ErrorMessage9"] = "Position " +obj.Position + "Already Exists in Department " + depname + "";
+            }
+            else
+            {
+                SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+                ViewBag.getdeplist = list;
+                var levellist = new SelectList(new[]
+                {
+                new {ID="1",Name="Low"},
+                new {ID="2",Name="Medium"},
+                new {ID="3",Name="High"}
+                },
+                "Name", "Name", "1"
+                );
+                ViewBag.getlevellist = levellist;
+
+
+                var add = objstructureRepository.Addpos(Convert.ToInt32(obj.DepartmentId), obj.JobLevel, obj.Position, Convert.ToDecimal(obj.BasicPay), Convert.ToDecimal(obj.IncomeTax));
+                objstructureRepository.Add(add);
+                objstructureRepository.Save();              
+                RedirectToAction("ViewPosition", "Admin");
+                TempData["SucessMessage9"] = "Position Created Sucessfully";
+            }
+           
+            return View();
+        }
+        public ActionResult ViewPosition()
+        {
+            return View();
+        }
+        public ActionResult GetPosList()
+        {
+            IDepartmentRepository objdepartmentRepository = new DepartmentRepository();
+            IStructuredetailRepository objstructrepo = new StructuredetailRepository();
+
+
+            var Data = (from pos in objstructrepo.Getpos()                       
+                        join dep in objdepartmentRepository.GetAll() on pos.DepartmentId equals dep.DepartmentId
+                        select new
+                        {
+                            
+                           
+                            dep.DepartmentName,
+                            pos.JobLevel,
+                            pos.Position,
+                            pos.Id
+
+                        }).ToList();
+
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

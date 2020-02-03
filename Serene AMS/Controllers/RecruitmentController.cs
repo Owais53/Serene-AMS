@@ -69,7 +69,7 @@ namespace Serene_AMS.Controllers
         {
             IRepository obj = new ApplicantRepository();
 
-            var Data = obj.GetAll().ToList();
+            var Data = obj.GetAll().Where(x=>x.Status == "Pending").ToList();
 
 
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
@@ -175,16 +175,22 @@ namespace Serene_AMS.Controllers
             }
            
         }
-        [HttpPost]
-        public ActionResult PostStatus(tblApplicant form)
+        
+        public ActionResult PostStatus(int id,tblApplicant form)
         {
             IRepository repo = new ApplicantRepository();
-            
-            
-            repo.update4(Convert.ToInt32(form.ApplicationId));
-            repo.Save();
 
-            return Json(new { success = true, message = "Marks Uploaded Successfully" }, JsonRequestBehavior.AllowGet);
+            if (form.Status == "Select")
+            {
+                return View("ViewMarks");
+            }
+            else
+            {
+                repo.update4(Convert.ToInt32(id));
+                repo.Save();
+            }
+
+            return View("ViewMarks");
 
         }
 
@@ -197,5 +203,10 @@ namespace Serene_AMS.Controllers
 
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult Home()
+        {
+            return View();
+        }
+
     }
 }
