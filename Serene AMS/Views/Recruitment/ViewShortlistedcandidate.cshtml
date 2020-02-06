@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "View Short Listed Candidate";
+}
+
+<div class="page-heading">
+<h1 class="page-title">Short Listed Candidates</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="~/Views/Recruitment/ViewShortlistedcandidate.cshtml"><i class="la la-home font-20"></i></a>
+    </li>
+    <li class="breadcrumb-item">Short Listed Candidates</li>
+</ol>
+</div>
+<div class="ibox">
+
+    <div class="ibox-body">
+        <table id="tblslcandid" class="table table-striped table-hover responsive table-responsive">
+            <thead>
+                <tr style="background-color:#0094ff; color:#ecf0f1">
+
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Applied For</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Applied For</th>
+                    <th>Status</th>
+
+                </tr>
+            </tfoot>
+
+
+        </table>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="modal" id="Modalempregister" tabindex="-1" data-backdrop="false">
+                        <div class="modal-dialog ">
+                            @Html.Partial("HireEmployee")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage25"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+    </script>
+
+    <script type="text/javascript">
+        var Popup, dataTable2;
+        $(function () {
+
+            dataTable2 = $('#tblslcandid').DataTable({
+                pageLength: 10,
+                "ajax": {
+                    "url": '/recruitment/GetslcanList',
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                    { "data": "ApplicantName", "authowidth": false },
+                    { "data": "Phone", "authowidth": false },
+                    { "data": "Email", "authowidth": false },
+                    { "data": "Appliedfor", "authowidth": false },
+                    { "data": "Status", "authowidth": false },
+                    {
+                    "data": "ApplicationId", "render": function (data, type) {
+                        return "<button class='btn btn-primary' id='btnhire' type='button'  onclick=getSlCandidate('" + data + "')>Hire</button>"
+
+                      },
+                    }
+
+
+                ]
+
+
+            });
+
+
+        });
+        function getSlCandidate(id) {
+
+            $.get("/Recruitment/GetSlCandidates", { id: id }, function (res) {
+
+                $("#employeemodal").html(res);
+                $("#Modalempregister").modal('show');
+
+
+            })
+
+        }
+
+        function Hire() {
+            var modal = $("#Modalempregister");
+            var form = $('form[name="empform"]');
+
+            form.validate();
+            if (!form.valid()) {
+                return;
+            } else {
+                var data = form.serialize();
+                $.post("/Recruitment/employeehire", data, function (res) {
+                    if (res) {
+                        modal.modal('hide');
+
+                        $("#tblslcandid").DataTable.ajax.reload();
+
+
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+
+                        });
+
+                    }
+
+                });
+
+            }
+        }
+
+    </script>
+
+
+
+
+
+}
+

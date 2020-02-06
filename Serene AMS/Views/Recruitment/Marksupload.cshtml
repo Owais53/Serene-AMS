@@ -13,7 +13,7 @@
 
                             </div>
                             <div class="modal-body" style="overflow: auto">
-                                @Html.HiddenFor(c=>c.ApplicationId)
+                                @Html.HiddenFor(c => c.ApplicationId)
                                 <div class="form-group">
                                     <label class="control-label">Total Marks:</label>
                                     <label class="control-label">100</label>
@@ -22,7 +22,11 @@
                                 <div class="form-group">
                                     <label class="control-label">Marks Obtained:</label>
                                     @Html.EditorFor(model => model.Marks, new { htmlAttributes = new { @id = "getmarks", @class = "form-control" } })
-                                </div>                                
+                                </div>
+                                <div class="form-group">
+                                  
+                                    @Html.EditorFor(model => model.VacancyId, new { htmlAttributes = new { @id = "getid", @class = "form-control" } })
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-primary" onclick="Upload()">Upload</button>

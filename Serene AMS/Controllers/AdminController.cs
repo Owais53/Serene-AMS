@@ -2,6 +2,7 @@
 using Serene_AMS.DAL.Repository;
 using Serene_AMS.Models;
 using Serene_AMS.ViewModel;
+using Serene_AMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -183,7 +184,7 @@ namespace Serene_AMS.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Position(tblPosition obj,FormCollection form)
+        public ActionResult Position(PositionVM obj,FormCollection form)
         {
             IStructuredetailRepository objstructureRepository = new StructuredetailRepository();
             var deplist = objstructureRepository.Getdep().ToList();
@@ -191,8 +192,9 @@ namespace Serene_AMS.Controllers
            
             var check = objstructureRepository.validation(depname).FirstOrDefault();
             var check1 = objstructureRepository.validation1(obj.Position).FirstOrDefault();
-            
-            if(check !=null && check1 != null)
+            var check3 = objstructureRepository.validation2(obj.JobLevel).FirstOrDefault();
+
+            if (check !=null && check1 != null && check3 != null || check3 == null && check1 != null)
             {
                 SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
                 ViewBag.getdeplist = list;
@@ -206,28 +208,31 @@ namespace Serene_AMS.Controllers
                 );
                 ViewBag.getlevellist = levellist;
 
-                TempData["ErrorMessage9"] = "Position " +obj.Position + "Already Exists in Department " + depname + "";
+                TempData["ErrorMessage9"] = "Position " + obj.Position + " Already Exists";
             }
             else
             {
-                SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
-                ViewBag.getdeplist = list;
-                var levellist = new SelectList(new[]
-                {
+              
+                    SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+                    ViewBag.getdeplist = list;
+                    var levellist = new SelectList(new[]
+                    {
                 new {ID="1",Name="Low"},
                 new {ID="2",Name="Medium"},
                 new {ID="3",Name="High"}
                 },
-                "Name", "Name", "1"
-                );
-                ViewBag.getlevellist = levellist;
+                    "Name", "Name", "1"
+                    );
+                    ViewBag.getlevellist = levellist;
 
 
-                var add = objstructureRepository.Addpos(Convert.ToInt32(obj.DepartmentId), obj.JobLevel, obj.Position, Convert.ToDecimal(obj.BasicPay), Convert.ToDecimal(obj.IncomeTax));
-                objstructureRepository.Add(add);
-                objstructureRepository.Save();              
-                RedirectToAction("ViewPosition", "Admin");
-                TempData["SucessMessage9"] = "Position Created Sucessfully";
+                    var add = objstructureRepository.Addpos(Convert.ToInt32(obj.DepartmentId), obj.JobLevel, obj.Position, Convert.ToDecimal(obj.BasicPay), Convert.ToDecimal(obj.IncomeTax));
+                    objstructureRepository.Add(add);
+                    objstructureRepository.Save();
+
+                    TempData["SuccessMessage9"] = "Position Created Sucessfully";
+                    return RedirectToAction("ViewPosition", "Admin");
+                  
             }
            
             return View();

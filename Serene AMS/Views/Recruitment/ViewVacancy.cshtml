@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "View Vacancy";
+}
+<div class="page-heading">
+    <h1 class="page-title">View Vacancy</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="~/Views/Recruitment/ViewVacancy.cshtml"><i class="la la-home font-20"></i></a>
+        </li>
+        <li class="breadcrumb-item">View Vacancy</li>
+    </ol>
+</div>
+<div class="ibox">
+
+    <div class="ibox-body">
+        <table id="tblviewvac" class="table table-striped table-hover responsive table-responsive">
+            <thead>
+                <tr style="background-color:#0094ff; color:#ecf0f1">
+                   
+                    <th>Department</th>
+                    <th>Vacancy Name</th>
+                    <th>Job Level</th>
+                    <th>Passing Marks</th>
+                    <th>Download Test</th>
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                   
+                    <th>Department</th>
+                    <th>Vacancy Name</th>
+                    <th>Job Level</th>
+                    <th>Passing Marks</th>
+                    <th>Download Test</th>
+
+                </tr>
+            </tfoot>
+
+
+        </table>
+
+    </div>
+</div>
+@section scripts{
+
+
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+    </script>
+
+    <script type="text/javascript">
+        var Popup, dataTable2;
+        $(function () {
+
+            dataTable2 = $('#tblviewvac').DataTable({
+                pageLength: 10,
+                "ajax": {
+                    "url": '/recruitment/Getcreatedvaclist',
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                   
+                    { "data": "DepartmentName", "authowidth": false },
+                    { "data": "Position", "authowidth": false },
+                    { "data": "JobLevel", "authowidth": false },
+                    { "data": "MarksCriteria", "authowidth": false },
+
+                    {
+                        "data": "Testpaper", "render": function (data) {
+                            return '<a href="/TestPaper/' + data + '">View</a>'
+                        },
+                    }
+
+
+                ]
+
+
+            });
+
+
+        });
+
+    </script>
+
+
+
+
+
+}
+
+

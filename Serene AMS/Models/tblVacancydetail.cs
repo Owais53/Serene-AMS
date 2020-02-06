@@ -21,7 +21,9 @@ namespace Serene_AMS.Models
         public Nullable<int> PositionId { get; set; }
         public Nullable<int> Availableseats { get; set; }
         public Nullable<System.DateTime> SeatAvailablityDate { get; set; }
+        public Nullable<int> StructureId { get; set; }
     
         public virtual tblDepartment tblDepartment { get; set; }
+        public virtual tblStructuredetail tblStructuredetail { get; set; }
     }
 }

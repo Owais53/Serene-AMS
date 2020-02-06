@@ -66,6 +66,7 @@ namespace Serene_AMS.DAL.Repository
             return context.tblApplicants;
         }
 
+
         public tblApplicant GetById(int ApplicationId)
         {
             var getid = context.tblApplicants.Find(ApplicationId);
@@ -112,6 +113,52 @@ namespace Serene_AMS.DAL.Repository
             obj.Status = "Rejected";
             context.Entry(obj).State = EntityState.Modified;
 
+        }
+
+        public tblEmployee AddEmployee(int sid, int coc, int cic, string empname, string gender, int depid, DateTime dob, string contact, string email, string address, int posid)
+        {
+            var addemp = new tblEmployee()
+            {
+                Id = sid,
+                CompanyCode = coc,
+                CityCode = Convert.ToString(cic),
+                EmployeeName= empname,
+                Gender = gender,
+                DepartmentId = depid,
+                DateofBirth = dob,
+                Contact = contact,
+                Email = email,
+                Address = address,
+                PositionId = posid,
+
+            };
+            return addemp;
+
+        }
+
+       
+
+        public void Addemp(tblEmployee obj)
+        {
+            context.tblEmployees.Add(obj);
+        }
+
+        public void Addempdetail(tblEmployeeDetail obj)
+        {
+            context.tblEmployeeDetails.Add(obj);
+        }
+
+        public void updatetohired(int ApplicationId)
+        {
+            var obj = context.tblApplicants.Find(ApplicationId);
+            obj.Status = "Hired";
+            context.Entry(obj).State = EntityState.Modified;
+
+        }
+
+        public IEnumerable<tblVacancy> Getmarkscriteria(int vacantid)
+        {
+            return context.tblVacancies.Where(x => x.VacancyId == vacantid);
         }
     }
 

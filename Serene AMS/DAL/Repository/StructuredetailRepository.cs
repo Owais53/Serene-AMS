@@ -2,6 +2,7 @@
 using Serene_AMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -49,7 +50,44 @@ namespace Serene_AMS.DAL.Repository
         {
             return context.tblPositions.Where(x => x.Position == pos);
         }
+        public IEnumerable<tblPosition> validation2(string level)
+        {
+            return context.tblPositions.Where(x => x.JobLevel == level);
+        }
+        public IEnumerable<tblVacancy> GetstructId(int id)
+        {
+            var rd = (from d in context.tblVacancies                   
+                      where d.StructureId == id
+                      select new
+                      {
+                          d.StructureId
 
+                      }).Select(c => new tblVacancy()
+                      {
+                          StructureId = c.StructureId
+
+                      });
+
+
+            return rd;
+        }
+        public IEnumerable<tblVacancy> GetPostion(int id)
+        {
+            var rd = (from d in context.tblVacancies
+                      where d.PositionId == id
+                      select new
+                      {
+                          d.PositionId
+
+                      }).Select(c => new tblVacancy()
+                      {
+                          PositionId = c.PositionId
+
+                      });
+
+
+            return rd;
+        }
         public tblStructuredetail GetById(int Id)
         {
             throw new NotImplementedException();
@@ -59,7 +97,10 @@ namespace Serene_AMS.DAL.Repository
         {
             context.SaveChanges();
         }
-
+        public IEnumerable<tblVacancydetail> Get()
+        {
+            return context.tblVacancydetails;
+        }
         public void Update(tblStructuredetail obj)
         {
             throw new NotImplementedException();
@@ -91,6 +132,50 @@ namespace Serene_AMS.DAL.Repository
 
             return pos;
         }
+        public tblVacancy Addvac(int structid,string vacname, int comcode, int citycode, int posid, int depid, int noofvacant, string qualification, string joblevel,int marks, string test)
+        {
 
+            var vac = new tblVacancy()
+            {
+                StructureId=structid,
+                VacancyName = vacname,
+                CompanyCode=comcode,
+                CityCode=citycode,
+                PositionId=posid,
+                DepartmentId=depid,
+                NoofVacany=noofvacant,
+                RequiredQualification=qualification,
+                JobLevel=joblevel,
+                CreationDate=DateTime.Now,
+                MarksCriteria=marks,
+                Testpaper=test,
+
+            };
+
+            return vac;
+        }
+        public void Addvacant(tblVacancy obj)
+        {
+            context.tblVacancies.Add(obj);
+        }
+        public IEnumerable<tblVacancy> GetVacancies()
+        {
+            return context.tblVacancies;
+        }
+
+        public IEnumerable<tblVacancy> GetPosition(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+       
+
+        public void updateseats(int posid, int sid, int positionid, int structid)
+        {
+            var obj = context.tblVacancies.Where(x => x.PositionId == positionid).Where(a => a.StructureId == structid);
+            
+            context.Entry(obj).State = EntityState.Modified;
+
+        }
     }
 }

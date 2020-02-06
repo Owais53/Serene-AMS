@@ -78,6 +78,7 @@
           <Property Name="CityCode" Type="nvarchar(max)" />
           <Property Name="EmployeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeName" Type="nvarchar(max)" />
+          <Property Name="Gender" Type="varchar" MaxLength="50" />
           <Property Name="DepartmentId" Type="int" />
           <Property Name="DateofBirth" Type="date" />
           <Property Name="Contact" Type="nvarchar(max)" />
@@ -289,15 +290,18 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
             <PropertyRef Name="VacancyId" />
           </Key>
           <Property Name="VacancyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VacancyName" Type="varchar(max)" />
           <Property Name="CompanyCode" Type="int" />
           <Property Name="CityCode" Type="int" />
           <Property Name="PositionId" Type="int" />
           <Property Name="DepartmentId" Type="int" />
           <Property Name="NoofVacany" Type="int" />
           <Property Name="RequiredQualification" Type="nvarchar(max)" />
-          <Property Name="Experience" Type="nvarchar(max)" />
+          <Property Name="JobLevel" Type="varchar" MaxLength="50" />
           <Property Name="CreationDate" Type="date" />
-          <Property Name="LastDatetoApply" Type="date" />
+          <Property Name="MarksCriteria" Type="int" />
+          <Property Name="Testpaper" Type="varchar" MaxLength="200" />
+          <Property Name="StructureId" Type="int" />
         </EntityType>
         <EntityType Name="tblVacancydetails">
           <Key>
@@ -310,6 +314,7 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <Property Name="PositionId" Type="int" />
           <Property Name="Availableseats" Type="int" />
           <Property Name="SeatAvailablityDate" Type="date" />
+          <Property Name="StructureId" Type="int" />
         </EntityType>
         <EntityType Name="tblVendors">
           <Key>
@@ -597,6 +602,18 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblVacancies_tblstructure">
+          <End Role="tblStructuredetail" Type="Self.tblStructuredetail" Multiplicity="0..1" />
+          <End Role="tblVacancies" Type="Self.tblVacancies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStructuredetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblVacancies">
+              <PropertyRef Name="StructureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblVacancydetails_tblDepartment">
           <End Role="tblDepartments" Type="Self.tblDepartments" Multiplicity="0..1" />
           <End Role="tblVacancydetails" Type="Self.tblVacancydetails" Multiplicity="*" />
@@ -606,6 +623,18 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
             </Principal>
             <Dependent Role="tblVacancydetails">
               <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblVacancydetails_tblStructure">
+          <End Role="tblStructuredetail" Type="Self.tblStructuredetail" Multiplicity="0..1" />
+          <End Role="tblVacancydetails" Type="Self.tblVacancydetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStructuredetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblVacancydetails">
+              <PropertyRef Name="StructureId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -760,8 +789,16 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
             <End Role="tblDepartments" EntitySet="tblDepartments" />
             <End Role="tblVacancies" EntitySet="tblVacancies" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblVacancies_tblstructure" Association="Self.FK_tblVacancies_tblstructure">
+            <End Role="tblStructuredetail" EntitySet="tblStructuredetail" />
+            <End Role="tblVacancies" EntitySet="tblVacancies" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblVacancydetails_tblDepartment" Association="Self.FK_tblVacancydetails_tblDepartment">
             <End Role="tblDepartments" EntitySet="tblDepartments" />
+            <End Role="tblVacancydetails" EntitySet="tblVacancydetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblVacancydetails_tblStructure" Association="Self.FK_tblVacancydetails_tblStructure">
+            <End Role="tblStructuredetail" EntitySet="tblStructuredetail" />
             <End Role="tblVacancydetails" EntitySet="tblVacancydetails" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
@@ -861,7 +898,7 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           </Key>
           <Property Name="Id" Type="Int32" />
           <Property Name="CompanyCode" Type="Int32" />
-          <Property Name="CityCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CityCode" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DepartmentId" Type="Int32" />
@@ -878,6 +915,7 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <NavigationProperty Name="tblEmployeeDetail" Relationship="Self.FK_tblEmployeeDetail_tblEmployee" FromRole="tblEmployee" ToRole="tblEmployeeDetail" />
           <NavigationProperty Name="tblPayrolls" Relationship="Self.FK_tblPayroll_tblEmployee" FromRole="tblEmployee" ToRole="tblPayroll" />
           <NavigationProperty Name="tblRequestdetails" Relationship="Self.FK_tblRequestdetail_tblEmployee" FromRole="tblEmployee" ToRole="tblRequestdetail" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblEmployeeDetail">
           <Key>
@@ -1065,6 +1103,8 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <Property Name="CityCode" Type="Int32" />
           <Property Name="CityName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblEmployees" Relationship="Self.FK_tblEmployee_tblStructuredetails" FromRole="tblStructuredetail" ToRole="tblEmployee" />
+          <NavigationProperty Name="tblVacancies" Relationship="HrmsModel.FK_tblVacancies_tblstructure" FromRole="tblStructuredetail" ToRole="tblVacancy" />
+          <NavigationProperty Name="tblVacancydetails" Relationship="HrmsModel.FK_tblVacancydetails_tblStructure" FromRole="tblStructuredetail" ToRole="tblVacancydetail" />
         </EntityType>
         <EntityType Name="tblTest">
           <Key>
@@ -1104,11 +1144,15 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <Property Name="DepartmentId" Type="Int32" />
           <Property Name="NoofVacany" Type="Int32" />
           <Property Name="RequiredQualification" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Experience" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreationDate" Type="DateTime" Precision="0" />
-          <Property Name="LastDatetoApply" Type="DateTime" Precision="0" />
           <NavigationProperty Name="tblApplicants" Relationship="Self.FK_tblApplicant_tblVacancies" FromRole="tblVacancies" ToRole="tblApplicant" />
           <NavigationProperty Name="tblDepartment" Relationship="Self.FK_tblVacancies_tblDepartment" FromRole="tblVacancies" ToRole="tblDepartments" />
+          <Property Name="VacancyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MarksCriteria" Type="Int32" />
+          <Property Name="Testpaper" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="JobLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StructureId" Type="Int32" />
+          <NavigationProperty Name="tblStructuredetail" Relationship="HrmsModel.FK_tblVacancies_tblstructure" FromRole="tblVacancy" ToRole="tblStructuredetail" />
         </EntityType>
         <EntityType Name="tblVacancydetail">
           <Key>
@@ -1122,6 +1166,8 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <Property Name="Availableseats" Type="Int32" />
           <Property Name="SeatAvailablityDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="tblDepartment" Relationship="Self.FK_tblVacancydetails_tblDepartment" FromRole="tblVacancydetails" ToRole="tblDepartments" />
+          <Property Name="StructureId" Type="Int32" />
+          <NavigationProperty Name="tblStructuredetail" Relationship="HrmsModel.FK_tblVacancydetails_tblStructure" FromRole="tblVacancydetail" ToRole="tblStructuredetail" />
         </EntityType>
         <EntityType Name="tblVendor">
           <Key>
@@ -1587,7 +1633,39 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
             <End Role="tblRoles" EntitySet="tblRoles" />
             <End Role="tblUsers" EntitySet="tblUsers" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblVacancies_tblstructure" Association="HrmsModel.FK_tblVacancies_tblstructure">
+            <End Role="tblStructuredetail" EntitySet="tblStructuredetails" />
+            <End Role="tblVacancy" EntitySet="tblVacancies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblVacancydetails_tblStructure" Association="HrmsModel.FK_tblVacancydetails_tblStructure">
+            <End Role="tblStructuredetail" EntitySet="tblStructuredetails" />
+            <End Role="tblVacancydetail" EntitySet="tblVacancydetails" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_tblVacancies_tblstructure">
+          <End Type="HrmsModel.tblStructuredetail" Role="tblStructuredetail" Multiplicity="0..1" />
+          <End Type="HrmsModel.tblVacancy" Role="tblVacancy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStructuredetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblVacancy">
+              <PropertyRef Name="StructureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblVacancydetails_tblStructure">
+          <End Type="HrmsModel.tblStructuredetail" Role="tblStructuredetail" Multiplicity="0..1" />
+          <End Type="HrmsModel.tblVacancydetail" Role="tblVacancydetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStructuredetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblVacancydetail">
+              <PropertyRef Name="StructureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1667,6 +1745,7 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <EntitySetMapping Name="tblEmployees">
             <EntityTypeMapping TypeName="HrmsModel.tblEmployee">
               <MappingFragment StoreEntitySet="tblEmployee">
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CompanyCode" ColumnName="CompanyCode" />
                 <ScalarProperty Name="CityCode" ColumnName="CityCode" />
@@ -1888,6 +1967,11 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <EntitySetMapping Name="tblVacancies">
             <EntityTypeMapping TypeName="HrmsModel.tblVacancy">
               <MappingFragment StoreEntitySet="tblVacancies">
+                <ScalarProperty Name="StructureId" ColumnName="StructureId" />
+                <ScalarProperty Name="JobLevel" ColumnName="JobLevel" />
+                <ScalarProperty Name="Testpaper" ColumnName="Testpaper" />
+                <ScalarProperty Name="MarksCriteria" ColumnName="MarksCriteria" />
+                <ScalarProperty Name="VacancyName" ColumnName="VacancyName" />
                 <ScalarProperty Name="VacancyId" ColumnName="VacancyId" />
                 <ScalarProperty Name="CompanyCode" ColumnName="CompanyCode" />
                 <ScalarProperty Name="CityCode" ColumnName="CityCode" />
@@ -1895,15 +1979,14 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
                 <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
                 <ScalarProperty Name="NoofVacany" ColumnName="NoofVacany" />
                 <ScalarProperty Name="RequiredQualification" ColumnName="RequiredQualification" />
-                <ScalarProperty Name="Experience" ColumnName="Experience" />
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="LastDatetoApply" ColumnName="LastDatetoApply" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tblVacancydetails">
             <EntityTypeMapping TypeName="HrmsModel.tblVacancydetail">
               <MappingFragment StoreEntitySet="tblVacancydetails">
+                <ScalarProperty Name="StructureId" ColumnName="StructureId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CompanyCode" ColumnName="CompanyCode" />
                 <ScalarProperty Name="CityCode" ColumnName="CityCode" />

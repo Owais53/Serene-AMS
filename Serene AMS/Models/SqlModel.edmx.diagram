@@ -58,6 +58,8 @@
         <AssociationConnector Association="HrmsModel.FK_tblRequests_tblRequestdetail" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblResults_tblTest" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_Users_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="HrmsModel.FK_tblVacancies_tblstructure" />
+        <AssociationConnector Association="HrmsModel.FK_tblVacancydetails_tblStructure" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

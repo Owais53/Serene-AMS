@@ -26,13 +26,19 @@ namespace Serene_AMS.DAL.Interface
 
         IEnumerable<tblDepartment> validation(string dep);
         IEnumerable<tblPosition> validation1(string pos);
+        IEnumerable<tblPosition> validation2(string level);
+        IEnumerable<tblVacancydetail> Get();
+        IEnumerable<tblVacancy> GetVacancies();
+        IEnumerable<tblVacancy> GetstructId(int id);
+        IEnumerable<tblVacancy> GetPosition(int id);
 
-
+      
+        void Addvacant(tblVacancy obj);
         void Add(tblPosition obj);
         
         tblPosition Addpos(int depid, string joblevel, string position, decimal basicpay, decimal Incometax);
-
-
+        tblVacancy Addvac(int structid,string vacname,int comcode,int citycode,int posid,int depid,int noofvacant,string qualification,string joblevel,int marks,string test);
+        void updateseats(int posid,int sid,int positionid,int structid);
 
         void Delete(int Id);
 

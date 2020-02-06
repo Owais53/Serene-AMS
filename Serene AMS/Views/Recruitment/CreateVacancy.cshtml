@@ -1,0 +1,170 @@
+﻿@model Serene_AMS.ViewModels.VacancyVM
+@{
+    ViewBag.Title = "Create Vacancy";
+}
+
+<div class="page-heading">
+    <h1 class="page-title">Create Vacancy</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="~/Views/Recruitment/Create Vacancy.cshtml"><i class="la la-home font-20"></i></a>
+        </li>
+        <li class="breadcrumb-item">Create Vacancy</li>
+    </ol>
+</div>
+<div class="ibox">
+
+    <div class="ibox-body">
+
+        @using (Html.BeginForm("CreateVacancy", "Recruitment", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+
+
+            @Html.HiddenFor(model => model.Id)
+
+
+            <div class="col-sm-4 col-form-label" style="left:350px;">
+                <h4 style="color:blue;">Vacancy Details</h4>
+            </div>
+            <br />
+            <div class="form-group row" style="left:350px;">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Company:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.CompanyName)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row ">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    City:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px;">
+                        @Html.DisplayFor(model => model.CityName)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Department:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.DepartmentName)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Job Title:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.Position)
+                    </label>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+
+                @Html.EditorFor(a => a.Position, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+            </div>
+
+            
+            <div class="form-group">
+
+                @Html.EditorFor(a => a.StructureId, new { htmlAttributes = new { @class = "form-control",@type="hidden" } })
+
+            </div>
+            <div class="form-group">
+
+                @Html.EditorFor(a => a.CompanyCode, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+            </div>
+
+
+            <div class="form-group">
+
+                @Html.EditorFor(a => a.CityCode, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+            </div>
+
+
+            <div class="form-group">
+
+
+                @Html.EditorFor(a => a.DepartmentId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+            </div>
+
+            <div class="form-group">
+
+                @Html.EditorFor(a => a.PositionId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+            </div>
+
+
+            <div class="form-group">
+
+                @Html.EditorFor(a => a.Availableseats, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.RequiredQualification, "Qualification Required", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.RequiredQualification, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.RequiredQualification, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.JobLevel, "Job Level", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.JobLevel, new { htmlAttributes = new { @class = "form-control", @type = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.JobLevel, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.MarksCriteria, "Passing Marks for Test", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MarksCriteria, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MarksCriteria, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.Testpaper, "Upload Test", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    <input type="file" accept=".docx,.pdf" name="postedFile1" />
+                    @Html.ValidationMessage("CustomError")
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Create" />
+            </div>
+
+
+        }
+
+
+    </div>
+</div>
+@section scripts{
+    
+<script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage11"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+</script>
+    
+    
+    }

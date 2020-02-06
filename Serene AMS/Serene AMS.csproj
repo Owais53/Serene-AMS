@@ -246,8 +246,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ApplyVM.cs" />
+    <Compile Include="ViewModels\CandidateEmployeeVM.cs" />
     <Compile Include="ViewModels\EmployeeUserVM.cs" />
     <Compile Include="ViewModels\PositionVM.cs" />
+    <Compile Include="ViewModels\VacancyVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\alertifyjs\alertify.css" />
@@ -980,7 +982,6 @@
     <Content Include="Views\Recruitment\Apply.cshtml" />
     <Content Include="Views\Home\UnAuthorized.cshtml" />
     <Content Include="Views\Recruitment\ViewApplications.cshtml" />
-    <Content Include="Views\Recruitment\Approve.cshtml" />
     <Content Include="Views\Recruitment\ViewCandidate.cshtml" />
     <Content Include="Views\Recruitment\Marksupload.cshtml" />
     <Content Include="Views\Recruitment\ViewMarks.cshtml" />
@@ -1103,10 +1104,16 @@
     <Content Include="Views\Recruitment\Home.cshtml" />
     <Content Include="Views\Admin\Position.cshtml" />
     <Content Include="Views\Admin\ViewPosition.cshtml" />
+    <Content Include="Views\Recruitment\CreateVacancy.cshtml" />
+    <Content Include="Views\Recruitment\AvailableVacancy.cshtml" />
+    <Content Include="Views\Recruitment\ViewVacancy.cshtml" />
+    <Content Include="Views\Recruitment\ViewShortlistedcandidate.cshtml" />
+    <Content Include="Views\Recruitment\HireEmployee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="CV\" />
+    <Folder Include="TestPaper\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -33,6 +33,7 @@ namespace Serene_AMS.Models
         public string Address { get; set; }
         public Nullable<int> PositionId { get; set; }
         public Nullable<int> UserId { get; set; }
+        public string Gender { get; set; }
     
         public virtual tblDepartment tblDepartment { get; set; }
         public virtual tblPosition tblPosition { get; set; }
