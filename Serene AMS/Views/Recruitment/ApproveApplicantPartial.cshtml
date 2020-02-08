@@ -1,0 +1,138 @@
+﻿@model Serene_AMS.ViewModels.CandidateEmployeeVM
+
+<form name="form">
+
+
+    <div class="modal-content responsive" id="apmodal">
+        <div class="modal-header" style="background-color:#0026ff; color:white;">
+            <h4 class="modal-title">Approve Application</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+
+        <div class="modal-body" style="overflow: auto">
+            @Html.HiddenFor(c => c.ApplicationId)
+
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ApplicationId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.StructureId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.ValidationMessageFor(model => model.StructureId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Position, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DepartmentName, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CompanyCode, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CityCode, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeName, "Applicant Name", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmployeeName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+           
+            <div class="form-group row">
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DepartmentId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                </div>
+            </div>
+            <div class="form-group row">
+                
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DateofBirth, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.ValidationMessageFor(model => model.DateofBirth, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.Contact, "Contact", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.PositionId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.desc, "Description", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.desc, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="Approved()">Submit</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+
+</form>
+
+
+
+
+
+
+

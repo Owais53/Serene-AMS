@@ -1,4 +1,4 @@
-﻿@model Serene_AMS.Models.tblApplicant
+﻿
 @{
     ViewBag.Title = "ViewMarks";
 }
@@ -32,11 +32,12 @@
         <label style="color:red;" id="lblerror1"></label>
         <br />
         <button type="button" id="btnfilter1" class="btn btn-primary">Filter</button>
+        <form name="form1">
 
-        <div id="get">
 
-
-          
+            <input type="hidden" id="txtval1" />
+            <input type="hidden" id="txtval2" />
+        </form>
             <table id="tablem" class="table table-striped table-hover responsive table-responsive">
 
                 <thead>
@@ -67,20 +68,38 @@
 
 
             </table>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
 
+                        <div class="modal" id="Modalconfirm" tabindex="-1" data-backdrop="false">
+                            <div class="modal-dialog modal-sm">
+                                @Html.Partial("ConfirmPartial")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
 
-        </div>
+    </div>
 
 
 
 
 
     </div>
-            </div>
+            
       
 
 @section scripts{
-    
+<script>
+        $(function () {
+            var successMessage = '@TempData["UpdateMessage100"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+</script>
 <script type="text/javascript">
     var statusvalue =
         [
@@ -101,7 +120,7 @@
 
                 { "data": "ApplicantName", "authowidth": false },
                 { "data": "Phone", "authowidth": false },
-                { "data": "Email", "authowidth": false },               
+                { "data": "Email", "authowidth": false },
                 { "data": "Gender", "authowidth": false },
                 { "data": "Marks", "authowidth": false },
                 {
@@ -110,7 +129,7 @@
                         var month = date.getMonth() + 1;
                         return date.getFullYear() + "/" + month + "/" + date.getDate();
                     },
-                 },
+                },
                 {
                     "data": "TestStatus", "render": function (data) {
                         if (data == "Pending") {
@@ -127,18 +146,18 @@
                         }
                     },
                 },
-               
+
                 {
                     "data": "ApplicationId",
                     "render": function (d, t, r) {
-                        var $select = $("<select id='ddlId' onChange='javascript: getvalue(this);'></select>", {
+                        var $select = $("<select id='ddlId" + d+"' onChange='javascript: getvalue(this);'></select>", {
                             "id": r[6] + "start",
                             "value": d
                         });
                         $.each(statusvalue, function (k, v) {
                             var $option = $("<option></option>", {
                                 "text": v,
-                                "value": v
+                                "value": d
                             });
                             if (d === v) {
                                 $option.attr("selected", "selected")
@@ -149,20 +168,20 @@
                     },
                     "orderable": false,
                     "width": "150px"
-                
-                 },
+
+                },
 
                 {
                     "data": "ApplicationId", "render": function (data, type) {
-                        return "<a class='btn btn-primary' id='btnsub' type='submit' href='@Url.Action("PostStatus","Recruitment")?id=" + data+"'>Submit</a>"
+                        return "<button class='btn btn-primary' id='btnsub' onclick=poststatus('" + data+"') > Submit</button> "
 
                     },
                 }
             ]
 
-
+          
         });
-
+        
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
                 var min = $('#frmdate1').datepicker("getDate");
@@ -199,9 +218,70 @@
             }
         });
         $("#btnsub tablem").on('click', function () {
+           
+        });
+
+    });
+
+    function getvalue(sel) {
+
+       
+        var a = $("#txtval1").val(sel.value);
+        var b = $('#ddlId'+sel.value+' option:selected').text();
+            $("#txtval2").val(b);
+     
+       
+    }
+    function poststatus(id) {
+        $.get("/Recruitment/GetIdonConfirm", { id: id }, function (res) {
+
+            var ddlvalue = $("#txtval1").val();
+            var ddltext = $("#txtval2").val();
+
+            if (ddltext == "" && ddlvalue == "") {
+                $("#lblerror1").html("Please select option from Dropdown to Submit");
+            }         
+                   
+            else if (ddltext != "Select" && id != ddlvalue) {
+                $("#lblerror1").html("Please select option from Dropdown to Submit");
+
+            } 
+            else if (ddltext == "Select" && id == ddlvalue) {
+                   $("#lblerror1").html("Please select option from Dropdown to Submit");
+
+            }
+            else if (ddltext == "Select" && id != ddlvalue) {
+                $("#lblerror1").html("");
+                $("#confirmmodal").html(res);
+                var minDate = new Date();
+                $("#dateInterview").datepicker({ showAnim: 'drop', changeMonth: true, changeYear: false, minDate: minDate, dateFormat: "dd/MM/yyyy" });
+                $("#Modalconfirm").modal('show');
+            }
+            else if (ddltext != "Select" && id == ddlvalue )
+            {
+
+                $("#lblerror1").html("");
+                $("#confirmmodal").html(res);
+                var minDate = new Date();
+                $("#dateInterview").datepicker({ showAnim: 'drop', changeMonth: true, changeYear: false, minDate: minDate });
+                $("#Modalconfirm").modal('show');
+
+            }
+           
+        })
+
+    }
+    function StatusUpdate() {
+        var form1 = $('form[name="form2"]');
+        form1.validate();
+        if (!form1.valid()) {
+            return;
+        } else {
+            var data = form1.serialize();
             $.ajax({
                 url: "/Recruitment/PostStatus",
                 type: "Post",
+                data: data,
                 success: function (data) {
                     if (data.success) {
 
@@ -217,15 +297,9 @@
                 }
 
             });
-        });
 
-    });
-    function getvalue(sel) {
-        
-        $("#txtval1").val(sel.value);
-       
+        }
     }
-   
     
 </script>
     

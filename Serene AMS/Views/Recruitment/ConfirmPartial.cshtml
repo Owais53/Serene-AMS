@@ -1,0 +1,61 @@
+﻿@model Serene_AMS.ViewModels.CandidateEmployeeVM
+
+<form name="form2">
+
+
+    <div class="modal-content responsive" id="confirmmodal">
+        <div class="modal-header">
+            <h4 class="modal-title">Select Date of Interview</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+
+        <div class="modal-body" style="overflow: auto">
+
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ApplicationId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+             
+                    @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+              
+                    @Html.EditorFor(model => model.EmployeeName, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                                          
+                    @Html.EditorFor(model => model.DepartmentName, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+              
+                    @Html.EditorFor(model => model.Position, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+           
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    </div>               
+            </div>
+
+
+
+            <div class="form-group row">
+                <label class="control-label">Interview Date</label>
+                <div class="input-group date">
+                    <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
+                    @Html.EditorFor(model => model.interviewdate, new { htmlAttributes = new { @class = "datepicker",@id="dateInterview"} })
+                </div>
+            </div>
+
+
+        </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="StatusUpdate()">Proceed</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+
+</form>
+
+
+@section scripts{
+  
+
+
+}

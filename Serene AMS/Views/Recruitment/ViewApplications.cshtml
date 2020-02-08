@@ -14,56 +14,70 @@
 <div class="ibox">
 
     <div class="ibox-body">
-       
-                <div class="form-group row">
-                    <label>From Date</label>
-                    <div class="input-group date">
-                        <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
-                        <input id="frmdate" class="datepicker" />
-                    </div>           
-                    <br />                
-                        <label>To Date</label>
-                        <div class="input-group date">
-                            <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
-                            <input id="todate" class="datepicker" />
-                       </div>
-                    </div>
-               <label style="color:red;" id="lblerror"></label>
-               <br /> 
-             <button type="button" id="btnfilter" class="btn btn-primary">Filter</button>
+
+        <div class="form-group row">
+            <label>From Date</label>
+            <div class="input-group date">
+                <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
+                <input id="frmdate" class="datepicker" />
             </div>
-                      
-            <table id="applicant" class="table table-striped table-hover responsive table-responsive">
-                            <thead>
-                                <tr style="background-color:#0094ff; color:#ecf0f1">
-                                    <th>Name</th>
-                                    <th>Contact</th>
-                                    <th>Email</th>
-                                    <th>Date of Birth</th>
-                                    <th>Gender</th>
-                                    <th>Status</th>
-                                    <th>Submitted on</th>
-                                    <th>CV</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
+            <br />
+            <label>To Date</label>
+            <div class="input-group date">
+                <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
+                <input id="todate" class="datepicker" />
+            </div>
+        </div>
+        <label style="color:red;" id="lblerror"></label>
+        <br />
+        <button type="button" id="btnfilter" class="btn btn-primary">Filter</button>
+    
 
-                            <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Contact</th>
-                                    <th>Email</th>
-                                    <th>Date of Birth</th>
-                                    <th>Gender</th>
-                                    <th>Status</th>
-                                    <th>Submitted on</th>
-                                    <th>CV</th>
-                                </tr>
-                            </tfoot>
+    <table id="applicant" class="table table-striped table-hover responsive table-responsive">
+        <thead>
+            <tr style="background-color:#0094ff; color:#ecf0f1">
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Status</th>
+                <th>Submitted on</th>
+                <th>CV</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Status</th>
+                <th>Submitted on</th>
+                <th>CV</th>
+            </tr>
+        </tfoot>
 
 
-                        </table>
+    </table>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="modal" id="Modalap" tabindex="-1" data-backdrop="false">
+                    <div class="modal-dialog ">
+                        @Html.Partial("ApproveApplicantPartial")
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     </div>
+    </div>
        
 
 
@@ -71,7 +85,7 @@
         
 <script>
         $(function () {
-            var successMessage = '@TempData["UpdateMessage"]'
+            var successMessage = '@TempData["UpdateMessage00"]'
             if (successMessage != '')
                 alertify.success(successMessage);
         });
@@ -132,7 +146,7 @@
                     },
                     {
                         "data": "ApplicationId", "render": function (data, type, full) {
-                            return "<a href='@Url.Action("Approve","Recruitment")?id=" + data+"' class='btn btn-primary' id='getbtna'>Approve</a> <a href='@Url.Action("Reject","Recruitment")?id=" + data+"' class='btn btn-danger' id='getbtnb'>Reject</a>" 
+                            return "<button type='button' onclick=Approval('" + data+"') class='btn btn-primary' id='getbtna'>Approve</button> <a href='@Url.Action("Reject","Recruitment")?id=" + data+"' class='btn btn-danger' id='getbtnb'>Reject</a>" 
 
                         },
                         "orderable": false,
@@ -186,26 +200,7 @@
            
 
            
-                        $("#getbtna applicant").on('click', function () {
-                            $.ajax({
-                                url: "/Recruitment/Approve",
-                                type: "Post",
-                                success: function (data) {
-                                    if (data.success) {
-
-                                        $("#applicant").DataTable.ajax.reload();
-
-                                        $.notify(data.message, {
-                                            globalPosition: "top center",
-                                            className: "success"
-                                        })
-
-
-                                    }
-                                }
-
-                            });
-            });
+                       
 
             $("#getbtnb applicant").on('click', function () {
                 $.ajax({
@@ -229,6 +224,49 @@
             });
                    
         });
-       </script>
+
+
+        function Approval(id) {
+
+            $.get("/Recruitment/GetApproval", { id: id }, function (res) {
+
+                $("#apmodal").html(res);
+                $("#Modalap").modal('show');
+
+
+            })
+
+        }
+
+        function Approved() {
+            var modal = $("#Modalap");
+            var form = $('form[name="form"]');
+
+            form.validate();
+            if (!form.valid()) {
+                return;
+            } else {
+                var data = form.serialize();
+                $.post("/Recruitment/Approve", data, function (res) {
+                    if (res) {
+                        modal.modal('hide');
+
+                        $("#applicant").DataTable.ajax.reload();
+
+
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+
+                        });
+
+                    }
+
+                });
+
+            }
+        }
+
+    </script>
 
 }

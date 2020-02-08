@@ -6,99 +6,102 @@
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-@using (Html.BeginForm("Apply", "Recruitment", FormMethod.Post,new { enctype="multipart/form-data"}))
-{
+   <div class="unit-5 overlay" style="background-image: url('../../Website/images/hero_bg_2.jpg');">
+      <div class="container text-center">
+        <h2 class="mb-0">Apply for job</h2>
+        <p class="mb-0 unit-6"><a href="index.html">Home</a> <span class="sep">></span> <span>Apply</span></p>
+      </div>
+    </div>
+
+    
+    
+
+    <div class="site-section bg-light">
+      <div class="container">
+        <div class="row">
+       
+            <div class="col-md-12 col-lg-8 mb-5">
+                @using (Html.BeginForm("Apply", "Recruitment", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+
+                    @Html.AntiForgeryToken()
+
+                    <form id="form-sample-1" novalidate="novalidate" class="p-5 bg-white">
+                        <fieldset>
+                            <div class="row form-group">
+                                <div class="col-md-12 mb-3 mb-md-0">
+                                    <label class="font-weight-bold" for="fullname">Full Name</label>
+                                    @Html.EditorFor(model => model.ApplicantName, new { htmlAttributes = new { @id = "getname", @class = "form-control", @name = "name", @placeholder = "Full Name" } })
+                                    @Html.ValidationMessageFor(model => model.ApplicantName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="font-weight-bold" for="email">Email</label>
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "getEmail", @class = "form-control", @name = "email", @placeholder = "Email Address" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="font-weight-bold" for="email">Contact</label>
+                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @id = "getphone", @class = "form-control", @name = "phone" } })
+                                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="font-weight-bold" for="message">Date of Birth</label>
+                                    <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
+                                    @Html.EditorFor(model => model.Dob, new { @class = "form-control", placeholder = "Date of Birth", @readonly = "true" })
+                                    @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="font-weight-bold" for="message">Gender</label>
+                                    <label class="ui-radio ui-radio-inline">
+                                        @Html.RadioButtonFor(model => model.Gender, "Male")
+                                        <span class="input-span"></span>Male
+                                    </label>
+                                    <label class="ui-radio ui-radio-inline">
+                                        @Html.RadioButtonFor(model => model.Gender, "Female")
+                                        <span class="input-span"></span>Female
+                                    </label>
+                                    @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="font-weight-bold" for="message">Address</label>
+                                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @id = "getreasonreq", @class = "form-control", @name = "txtreason" } })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <label class="font-weight-bold" for="message">Select CV</label>
+                                    <input type="file" accept=".docx,.pdf" name="postedFile" />
+                                    @Html.ValidationMessage("CustomError")
+                                </div>
+                            </div>
 
 
-    @Html.AntiForgeryToken()
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <input type="submit" value="Submit" id="btnadd" class="btn btn-primary  py-2 px-4">
+                                </div>
+                            </div>
+                        </fieldset>
 
-    <form class="form-horizontal" id="form-sample-1" novalidate="novalidate">
-
-        <fieldset>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group row">
-                @Html.LabelFor(model => model.ApplicantName, "Name", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.ApplicantName, new { htmlAttributes = new { @id = "getname", @class = "form-control", @name = "name" } })
-                    @Html.ValidationMessageFor(model => model.ApplicantName, "", new { @class = "text-danger" })
+                    </form>
+                }
                 </div>
             </div>
+          </div>
+        </div>
 
-            <div class="form-group row">
-                @Html.LabelFor(model => model.Phone, "Contact", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @id = "getphone", @class = "form-control", @name = "phone" } })
-                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group row">
-                @Html.LabelFor(model => model.Email, "Email", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "getEmail", @class = "form-control", @name = "email" } })
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">
-                    Date of Birth
-                </label>
-                <div class="col-md-10">
-                    <div class="input-group date">
-
-                        <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
-                        @Html.EditorFor(model => model.Dob, new { @class = "form-control", placeholder = "Date of Birth", @readonly = "true" })
-                        @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
-                    </div>
-
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">
-                    Gender
-                </label>
-                <div class="col-md-10">
-                    <label class="ui-radio ui-radio-inline">
-                        @Html.RadioButtonFor(model => model.Gender, "Male")
-                        <span class="input-span"></span>Male
-                    </label>
-                    <label class="ui-radio ui-radio-inline">
-                        @Html.RadioButtonFor(model => model.Gender, "Female")
-                        <span class="input-span"></span>Female
-                    </label>
-                    @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">
-                    Address
-                </label>
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @id = "getreasonreq", @class = "form-control", @name = "txtreason" } })
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">
-                    Select CV
-                </label>
-                <div class="col-md-10">
-                    <input type="file" accept=".docx,.pdf" name="postedFile" />
-                    @Html.ValidationMessage("CustomError")
-                </div>
-            </div>
-            <br />
-            <br />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Submit" class="btn btn-primary" id="btnAdd" />
-                </div>
-            </div>
-        </fieldset>
-    </form>
-
-}
+   
 
 @section scripts{
 

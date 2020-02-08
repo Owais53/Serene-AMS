@@ -95,6 +95,79 @@ namespace Serene_AMS.Controllers
             var candidates = obj.GetById(Convert.ToInt32(id)) ?? new tblApplicant();
             return PartialView("Marksupload",candidates);
         }
+        public ActionResult GetCandidate1(int? id)
+        {
+            IRepository obj = new ApplicantRepository();
+            
+            var result = (from d in obj.GetAll()                    
+                      where d.ApplicationId == id
+                      select new
+                      {
+                         d.ApplicationId
+
+                      }).Select(c => new tblApplicant()
+                      {
+                          ApplicationId = (int)(c.ApplicationId)
+                          
+                      }).FirstOrDefault();
+
+            return View("ViewMarks",result);
+        }
+        public ActionResult GetApproval(int? id)
+        {
+            IRepository obj = new ApplicantRepository();
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            IDepartmentRepository deprepo = new DepartmentRepository();
+            var ap = (from d in obj.GetAll()
+                       join s in repo.GetVacancies() on d.VacancyId equals s.VacancyId
+                       join p in repo.GetAll() on s.StructureId equals p.Id
+                       join dep in deprepo.GetAll() on s.DepartmentId equals dep.DepartmentId
+                       join pos in repo.Getpos() on s.PositionId equals pos.Id
+                       where d.ApplicationId == id
+                       select new
+                       {
+                           s.CompanyCode,
+                           s.CityCode,
+                           p.CompanyName,
+                           d.ApplicantName,
+                           d.Gender,
+                           s.DepartmentId,
+                           s.PositionId,
+                           d.Dob,
+                           d.Phone,
+                           d.Email,
+                           d.Address,
+                           p.Id,
+                           d.ApplicationId,
+                           dep.DepartmentName,
+                           pos.Position
+
+
+                       }).Select(c => new CandidateEmployeeVM()
+                       {
+                           ApplicationId = (int)(c.ApplicationId),
+                           StructureId = (int)(c.Id),
+                           CompanyCode = (int)(c.CompanyCode),
+                           CityCode = (int)(c.CityCode),
+                           CompanyName = c.CompanyName,
+                           EmployeeName = c.ApplicantName,
+                           Gender = c.Gender,
+                           DepartmentId = (int)(c.DepartmentId),
+                           DepartmentName = c.DepartmentName,
+                           PositionId = (int)c.PositionId,
+                           DateofBirth = (DateTime)c.Dob,
+                           Contact = c.Phone,
+                           Email = c.Email,
+                           Address = c.Address,
+                           Position = c.Position
+
+
+
+                       }).FirstOrDefault();
+
+
+            return PartialView("ApproveApplicantPartial",ap);
+        }
         public ActionResult GetSlCandidates(int? id)
         {
             IRepository obj = new ApplicantRepository();
@@ -110,6 +183,7 @@ namespace Serene_AMS.Controllers
                       {
                           s.CompanyCode,
                           s.CityCode,
+                          p.CompanyName,
                           d.ApplicantName,
                           d.Gender,
                           s.DepartmentId,
@@ -130,6 +204,7 @@ namespace Serene_AMS.Controllers
                           StructureId = (int)(c.Id),
                           CompanyCode = (int)(c.CompanyCode),
                           CityCode = (int)(c.CityCode),
+                          CompanyName = c.CompanyName,
                           EmployeeName = c.ApplicantName,
                           Gender = c.Gender,
                           DepartmentId = (int)(c.DepartmentId),
@@ -240,15 +315,19 @@ namespace Serene_AMS.Controllers
             }
         }
      
-        public ActionResult Approve(int id)
+        public ActionResult Approve(CandidateEmployeeVM model)
         {
             IRepository objrepo = new ApplicantRepository();
-            objrepo.Update(id);
+            objrepo.Update(model.ApplicationId);
             objrepo.Save();
-            TempData["UpdateMessage"] = "Approved Successfully";
-            return View("ViewApplications");
             
-            
+            bool result = false;
+            result = SendEmail(model.Email, "Application Approved", " <p>Hi " + model.EmployeeName + ",<br/><br/>This is to Inform you that your Application for " + model.Position + " Position in " + model.DepartmentName + " Department has been accepted because " + model.desc + "<br/><br/>Regards " + model.CompanyName + " </p>");
+
+            TempData["UpdateMessage00"] = "Approved Successfully";
+            return Json(new { result, success = true, message = "Employee Hired" }, JsonRequestBehavior.AllowGet);
+
+
         }
         public ActionResult Reject(int id)
         {
@@ -276,22 +355,55 @@ namespace Serene_AMS.Controllers
             }
            
         }
-        
-        public ActionResult PostStatus(int id,tblApplicant form)
+        public ActionResult GetIdonConfirm(int? id)
+        {
+            IRepository obj = new ApplicantRepository();
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            IDepartmentRepository deprepo = new DepartmentRepository();
+
+            var result = (from d in obj.GetAll()
+                          join s in repo.GetVacancies() on d.VacancyId equals s.VacancyId
+                          join p in repo.GetAll() on s.StructureId equals p.Id
+                          join dep in deprepo.GetAll() on s.DepartmentId equals dep.DepartmentId
+                          where d.ApplicationId == id
+                          select new
+                          {
+                              d.ApplicationId,
+                              d.Email,
+                              d.Appliedfor,
+                              dep.DepartmentName,
+                              p.CompanyName,
+                              d.ApplicantName
+
+                          }).Select(c => new CandidateEmployeeVM()
+                          {
+                              ApplicationId = (int)(c.ApplicationId),
+                              Email = c.Email,
+                              Position = c.Appliedfor,
+                              DepartmentName = c.DepartmentName,
+                              CompanyName = c.CompanyName,
+                              EmployeeName = c.ApplicantName
+
+                          }).FirstOrDefault();
+
+
+            return PartialView("ConfirmPartial",result);
+        }
+        public JsonResult PostStatus(CandidateEmployeeVM Form)
         {
             IRepository repo = new ApplicantRepository();
 
-            if (form.Status == "Select")
-            {
-                return View("ViewMarks");
-            }
-            else
-            {
-                repo.update4(Convert.ToInt32(id));
+            
+                repo.update4(Convert.ToInt32(Form.ApplicationId));
                 repo.Save();
-            }
 
-            return View("ViewMarks");
+                bool result = false;
+                result = SendEmail(Form.Email, "Interview", " <p>Hi " + Form.EmployeeName + ",<br/><br/>This is to Inform you that you that you have been called for Interview on " + Form.interviewdate + " at " + Form.CompanyName + " HeadOffice  for Position of " + Form.Position + " Position in " + Form.DepartmentName + "<br/><br/>Regards " + Form.CompanyName + " </p>");
+
+                TempData["UpdateMessage100"] = "Mail Sent to Candidate";
+                return Json(new { result,success = true, message = "Employee Hired" }, JsonRequestBehavior.AllowGet);
+           
+
 
         }
 
@@ -299,7 +411,7 @@ namespace Serene_AMS.Controllers
         {
             IRepository obj = new ApplicantRepository();
 
-            var Data = obj.GetAll().Select(a=>new tblApplicant { ApplicantName=a.ApplicantName,Phone=a.Phone,Email=a.Email,Gender=a.Gender,Marks=a.Marks,Submittedon=a.Submittedon,TestStatus=a.TestStatus,ApplicationId=a.ApplicationId}).Where(x => x.TestStatus == "Pass").Where(x=>x.Status=="Approved").ToList();
+            var Data = obj.GetAll().Select(a=>new tblApplicant { ApplicantName=a.ApplicantName,Phone=a.Phone,Email=a.Email,Gender=a.Gender,Marks=a.Marks,Submittedon=a.Submittedon,TestStatus=a.TestStatus,ApplicationId=a.ApplicationId,Status=a.Status}).Where(x=>x.Status == "Approved").Where(x => x.TestStatus == "Pass").ToList();
 
 
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);

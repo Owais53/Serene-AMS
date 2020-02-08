@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -25,6 +26,11 @@ namespace Serene_AMS.ViewModels
         public int ApplicationId { get; set; }
         public string Position { get; set; }
         public string DepartmentName { get; set; }
+        [Required]
+        [DataType(DataType.MultilineText)]
+        public string desc { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyyy}")]
+        public DateTime interviewdate { get; set; }
 
     }
 }
