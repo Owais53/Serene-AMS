@@ -29,11 +29,12 @@ namespace Serene_AMS.Models
         public string Gender { get; set; }
         public string Appliedfor { get; set; }
         public string Status { get; set; }
+        public System.DateTime Submittedon { get; set; }
         public string Address { get; set; }
         public string CV { get; set; }
-        public Nullable<System.DateTime> Submittedon { get; set; }
         public Nullable<int> Marks { get; set; }
         public string TestStatus { get; set; }
+        public Nullable<System.DateTime> InterviewDate { get; set; }
     
         public virtual tblVacancy tblVacancy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

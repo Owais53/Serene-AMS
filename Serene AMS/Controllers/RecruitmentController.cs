@@ -1,10 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Serene_AMS.DAL.Interface;
 using Serene_AMS.DAL.Repository;
+using Serene_AMS.Infrastructure;
 using Serene_AMS.Models;
 using Serene_AMS.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,9 +23,15 @@ namespace Serene_AMS.Controllers
     public class RecruitmentController : Controller
     {
         [HttpGet]
-        public ActionResult Apply()
+        public ActionResult Apply(int? id)
         {
-            return View();
+            IStructuredetailRepository obj = new StructuredetailRepository();
+            var Data = obj.GetVacancies()
+                .Select(x=> new ApplyVM { VacancyId=x.VacancyId,Appliedfor=x.VacancyName})
+                .Where(x => x.VacancyId == id).FirstOrDefault();
+
+
+            return View(Data);
         }
 
         [HttpPost]
@@ -48,7 +58,7 @@ namespace Serene_AMS.Controllers
                         string fileName = Guid.NewGuid() + Path.GetExtension(postedFile.FileName);
                         postedFile.SaveAs(Path.Combine(Server.MapPath("~/CV"), fileName));
 
-                        var addmethod = objrepo.AddApplicant(model.ApplicantName, model.Phone, model.Email, model.Dob, model.Gender, model.Address, fileName);
+                        var addmethod = objrepo.AddApplicant(model.VacancyId,model.ApplicantName, model.Phone, model.Email, model.Dob, model.Gender,model.Appliedfor, model.Address, fileName);
                         objrepo.Add(addmethod);
                         objrepo.Save();
                         if (addmethod != null)
@@ -95,6 +105,7 @@ namespace Serene_AMS.Controllers
             var candidates = obj.GetById(Convert.ToInt32(id)) ?? new tblApplicant();
             return PartialView("Marksupload",candidates);
         }
+        
         public ActionResult GetCandidate1(int? id)
         {
             IRepository obj = new ApplicantRepository();
@@ -120,15 +131,13 @@ namespace Serene_AMS.Controllers
             IDepartmentRepository deprepo = new DepartmentRepository();
             var ap = (from d in obj.GetAll()
                        join s in repo.GetVacancies() on d.VacancyId equals s.VacancyId
-                       join p in repo.GetAll() on s.StructureId equals p.Id
                        join dep in deprepo.GetAll() on s.DepartmentId equals dep.DepartmentId
                        join pos in repo.Getpos() on s.PositionId equals pos.Id
                        where d.ApplicationId == id
                        select new
                        {
-                           s.CompanyCode,
-                           s.CityCode,
-                           p.CompanyName,
+                          
+                      
                            d.ApplicantName,
                            d.Gender,
                            s.DepartmentId,
@@ -137,7 +146,6 @@ namespace Serene_AMS.Controllers
                            d.Phone,
                            d.Email,
                            d.Address,
-                           p.Id,
                            d.ApplicationId,
                            dep.DepartmentName,
                            pos.Position
@@ -145,11 +153,7 @@ namespace Serene_AMS.Controllers
 
                        }).Select(c => new CandidateEmployeeVM()
                        {
-                           ApplicationId = (int)(c.ApplicationId),
-                           StructureId = (int)(c.Id),
-                           CompanyCode = (int)(c.CompanyCode),
-                           CityCode = (int)(c.CityCode),
-                           CompanyName = c.CompanyName,
+                           ApplicationId = (int)(c.ApplicationId),                           
                            EmployeeName = c.ApplicantName,
                            Gender = c.Gender,
                            DepartmentId = (int)(c.DepartmentId),
@@ -175,15 +179,12 @@ namespace Serene_AMS.Controllers
             IDepartmentRepository deprepo = new DepartmentRepository();
             var Emp = (from d in obj.GetAll()
                       join s in repo.GetVacancies() on d.VacancyId equals s.VacancyId
-                      join p in repo.GetAll() on s.StructureId equals p.Id
                       join dep in deprepo.GetAll() on s.DepartmentId equals dep.DepartmentId
                       join pos in repo.Getpos() on s.PositionId equals pos.Id
                       where d.ApplicationId == id
                       select new
                       {
-                          s.CompanyCode,
-                          s.CityCode,
-                          p.CompanyName,
+                          
                           d.ApplicantName,
                           d.Gender,
                           s.DepartmentId,
@@ -192,7 +193,6 @@ namespace Serene_AMS.Controllers
                           d.Phone,
                           d.Email,
                           d.Address,
-                          p.Id,
                           d.ApplicationId,
                           dep.DepartmentName,
                           pos.Position
@@ -201,10 +201,6 @@ namespace Serene_AMS.Controllers
                       }).Select(c => new CandidateEmployeeVM()
                       {
                           ApplicationId =(int)(c.ApplicationId),
-                          StructureId = (int)(c.Id),
-                          CompanyCode = (int)(c.CompanyCode),
-                          CityCode = (int)(c.CityCode),
-                          CompanyName = c.CompanyName,
                           EmployeeName = c.ApplicantName,
                           Gender = c.Gender,
                           DepartmentId = (int)(c.DepartmentId),
@@ -363,7 +359,6 @@ namespace Serene_AMS.Controllers
 
             var result = (from d in obj.GetAll()
                           join s in repo.GetVacancies() on d.VacancyId equals s.VacancyId
-                          join p in repo.GetAll() on s.StructureId equals p.Id
                           join dep in deprepo.GetAll() on s.DepartmentId equals dep.DepartmentId
                           where d.ApplicationId == id
                           select new
@@ -372,7 +367,6 @@ namespace Serene_AMS.Controllers
                               d.Email,
                               d.Appliedfor,
                               dep.DepartmentName,
-                              p.CompanyName,
                               d.ApplicantName
 
                           }).Select(c => new CandidateEmployeeVM()
@@ -381,7 +375,6 @@ namespace Serene_AMS.Controllers
                               Email = c.Email,
                               Position = c.Appliedfor,
                               DepartmentName = c.DepartmentName,
-                              CompanyName = c.CompanyName,
                               EmployeeName = c.ApplicantName
 
                           }).FirstOrDefault();
@@ -389,16 +382,17 @@ namespace Serene_AMS.Controllers
 
             return PartialView("ConfirmPartial",result);
         }
-        public JsonResult PostStatus(CandidateEmployeeVM Form)
+        
+        public ActionResult PostStatus(CandidateEmployeeVM model,FormCollection form)
         {
             IRepository repo = new ApplicantRepository();
 
-            
-                repo.update4(Convert.ToInt32(Form.ApplicationId));
+            var time = form["gettime"];
+                repo.update4(Convert.ToInt32(model.ApplicationId),model.interviewdate);
                 repo.Save();
 
                 bool result = false;
-                result = SendEmail(Form.Email, "Interview", " <p>Hi " + Form.EmployeeName + ",<br/><br/>This is to Inform you that you that you have been called for Interview on " + Form.interviewdate + " at " + Form.CompanyName + " HeadOffice  for Position of " + Form.Position + " Position in " + Form.DepartmentName + "<br/><br/>Regards " + Form.CompanyName + " </p>");
+                result = SendEmail(model.Email, "Interview", " <p>Hi " + model.EmployeeName + ",<br/><br/>This is to Inform you that you that you have been called for Interview on " + model.interviewdate + time + " at HeadOffice  for Position of " + model.Position + " Position in " + model.DepartmentName + "<br/><br/>Regards </p>");
 
                 TempData["UpdateMessage100"] = "Mail Sent to Candidate";
                 return Json(new { result,success = true, message = "Employee Hired" }, JsonRequestBehavior.AllowGet);
@@ -467,88 +461,69 @@ namespace Serene_AMS.Controllers
         }
         public ActionResult GetslcanList()
         {
+            HrmsEntities entities = new HrmsEntities();
             IRepository repo = new ApplicantRepository();
-
-            var Data = (from u in repo.GetAll()
-                        where u.Status == "Called for Interview"
-                        select new
-                        {
-                            u.ApplicantName,
-                            u.Phone,
-                            u.Email,
-                            u.Appliedfor,
-                            u.Status,
-                            u.ApplicationId,
-
-                        }).ToList();
+            var date = DateTime.Today.GetDateTimeFormats(); 
+            var Data = entities.tblApplicants.Where(x => x.Status == "Called for Interview" && DbFunctions.TruncateTime(x.InterviewDate) == DbFunctions.TruncateTime(DateTime.Today))
+                .AsEnumerable()
+                .Select(x => new { x.ApplicantName,x.Phone,x.Email,x.Appliedfor,x.Status,x.ApplicationId,x.InterviewDate}).ToList();
+            
 
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
         }
 
 
         [HttpGet]
-        public ActionResult CreateVacancy(int id = 0)
+        public ActionResult CreateVacancy()
         {
-            if(id == 0)
-            {
-                return View(new VacancyVM());
-            }
-            else
-            {
-                IStructuredetailRepository objrepo = new StructuredetailRepository();
-                IDepartmentRepository deprepo = new DepartmentRepository();
-
-                var rd = (from d in objrepo.Get()
-                          join s in objrepo.GetAll() on d.StructureId equals s.Id
-                          join pos in objrepo.Getpos() on d.PositionId equals pos.Id                         
-                          join dep in deprepo.GetAll() on d.DepartmentId equals dep.DepartmentId
-                          where d.Id == id
-                          select new
-                          {
-
-                              s.Id,
-                              d.CompanyCode,
-                              d.CityCode,
-                              s.CityName,
-                              s.CompanyName,
-                              d.DepartmentId,
-                              dep.DepartmentName,
-                              d.PositionId,
-                              pos.Position,
-                              pos.JobLevel,
-                              d.Availableseats
-                    
+            IStructuredetailRepository objstructureRepository = new StructuredetailRepository();
+            var deplist = objstructureRepository.Getdep().ToList();
+           
+            SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+            ViewBag.getdep1list = list;
 
 
-                          }).Select(c => new VacancyVM()
-                          {
-                              StructureId=(int)(c.Id),
-                              CompanyCode = (int)(c.CompanyCode),
-                              CityCode = (int)(c.CityCode),
-                              CityName = c.CityName,
-                              CompanyName = c.CompanyName,
-                              DepartmentId = (int)(c.DepartmentId),
-                              DepartmentName = c.DepartmentName,
-                              PositionId = (int)c.PositionId,
-                              Position = c.Position,                             
-                              JobLevel = c.JobLevel,
-                              Availableseats = (int)c.Availableseats
-                             
+            var levellist = new SelectList(new[]
+           {
+                new {ID="1",Name="1"},
+                new {ID="2",Name="2"},
+                new {ID="3",Name="3"},
+                new {ID="4",Name="4"},
+                new {ID="5",Name="5"}
+            },
+            "Name", "Name", "1"
+             );
+            ViewBag.getlevellist = levellist;
 
+            var city = new SelectList(new[]
+          {
+                new {ID="1",Name="Karachi"},
+                new {ID="2",Name="Lahore"}
 
-                          }).FirstOrDefault();
+            },
+           "Name", "Name", "1"
+            );
+            ViewBag.getcitylist = city;
 
-                return View(rd);
-            }
+            return View();
+            
            
         }
+        public JsonResult GetPositionbyId(int Id)
+        {
+            HrmsEntities db = new HrmsEntities();
+            IStructuredetailRepository repoobj = new StructuredetailRepository();
+            db.Configuration.ProxyCreationEnabled = false;
+            return Json(db.tblPositions.Where(p => p.DepartmentId == Id).Select(x=> new { x.Id,x.Position}), JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
-        public ActionResult CreateVacancy(VacancyVM model, HttpPostedFileBase postedFile1)
+        public ActionResult CreateVacancy(VacancyVM model, HttpPostedFileBase postedFile1,FormCollection form)
         {
             IStructuredetailRepository repo = new StructuredetailRepository();
-            var structid = repo.GetstructId(model.StructureId).FirstOrDefault();
+         
             var Positionid = repo.GetPosition(model.PositionId).FirstOrDefault();
-
+            var Posid = form["ddlpos"];
             if (postedFile1 == null)
             {
                 ModelState.AddModelError("CustomError", "Please select Test");
@@ -563,13 +538,40 @@ namespace Serene_AMS.Controllers
             else if (postedFile1 != null)
             {
               
-
                     if (ModelState.IsValid)
                     {
-                        string fileName1 = Guid.NewGuid() + Path.GetExtension(postedFile1.FileName);
+                    var deplist = repo.Getdep().ToList();
+                   
+                    SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+                    ViewBag.getdep1list = list;
+                  
+
+                    var levellist = new SelectList(new[]
+                   {
+                    new {ID="1",Name="1"},
+                    new {ID="2",Name="2"},
+                    new {ID="3",Name="3"},
+                    new {ID="4",Name="4"},
+                    new {ID="5",Name="5"}
+                   },
+                    "Name", "Name", "1"
+                     );
+                    ViewBag.getlevellist = levellist;
+
+                    var city = new SelectList(new[]
+                   {
+                    new {ID="Karachi",Name="Karachi"},
+                    new {ID="Lahore",Name="Lahore"}
+
+                   },
+                    "Name", "Name", "1"
+                    );
+                    ViewBag.getcitylist = city;
+
+                    string fileName1 = Guid.NewGuid() + Path.GetExtension(postedFile1.FileName);
                         postedFile1.SaveAs(Path.Combine(Server.MapPath("~/TestPaper"), fileName1));
 
-                        var AddVacant = repo.Addvac(model.StructureId, model.Position, model.CompanyCode, model.CityCode, model.PositionId, model.DepartmentId, model.Availableseats, model.RequiredQualification, model.JobLevel, model.MarksCriteria, fileName1);
+                        var AddVacant = repo.Addvac( model.Position,model.CityName ,Convert.ToInt32(Posid), model.DepartmentId, model.RequiredQualification, model.JobLevel, model.MarksCriteria, fileName1);
                         repo.Addvacant(AddVacant);
                         repo.Save();
                         TempData["SuccessMessage11"] = "Vacancy Created";
@@ -590,11 +592,63 @@ namespace Serene_AMS.Controllers
         public ActionResult ViewShortlistedcandidate()
         {
             return View();
-        } 
-        public ActionResult Home()
+        }
+        public JsonResult get_jobdata()
         {
-            return View();
+            JobListing obj = new JobListing();
+            DataSet ds = obj.Show_Jobdata();
+            List<tblVacancy> listvac = new List<tblVacancy>();
+
+            foreach(DataRow dr in ds.Tables[0].Rows)
+            {
+                listvac.Add(new tblVacancy
+                {
+                    VacancyId = Convert.ToInt32(dr["VacancyId"]),
+                    VacancyName =dr["VacancyName"].ToString(),
+                    CityName = dr["CityName"].ToString(),
+                    JobLevel = Convert.ToInt32(dr["JobLevel"])
+
+                });
+            }
+            return Json(listvac, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Home()
+        {
+
+            return View();
+        }
+        public ActionResult GetDetails(int? id)
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            IDepartmentRepository deprepo = new DepartmentRepository();
+
+            var data = (from d in repo.GetVacancies()
+                          join dep in deprepo.GetAll() on d.DepartmentId equals dep.DepartmentId
+                          where d.VacancyId == id
+                          select new
+                          {
+                              d.VacancyId,
+                              d.VacancyName,
+                              d.JobLevel,
+                              dep.DepartmentName,
+                              d.CityName,
+                              d.RequiredQualification
+
+                          }).Select(c => new VacancyVM()
+                          {
+                              VacancyId=c.VacancyId,
+                              JobLevel = (int)(c.JobLevel),                            
+                              Position = c.VacancyName,
+                              CityName=c.CityName,
+                              DepartmentName = c.DepartmentName,
+                              RequiredQualification= c.RequiredQualification
+
+                          }).FirstOrDefault();
+
+
+            return PartialView("JobDetailsPartial", data);
+
+        }
     }
 }

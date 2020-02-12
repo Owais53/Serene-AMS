@@ -28,6 +28,9 @@
 
                     <form id="form-sample-1" novalidate="novalidate" class="p-5 bg-white">
                         <fieldset>
+                            @Html.EditorFor(model => model.VacancyId, new { htmlAttributes = new { @id = "getname", @class = "form-control",@type="hidden"} })
+                            @Html.EditorFor(model => model.Appliedfor, new { htmlAttributes = new { @id = "getname", @class = "form-control",@type="hidden" } })
+
                             <div class="row form-group">
                                 <div class="col-md-12 mb-3 mb-md-0">
                                     <label class="font-weight-bold" for="fullname">Full Name</label>

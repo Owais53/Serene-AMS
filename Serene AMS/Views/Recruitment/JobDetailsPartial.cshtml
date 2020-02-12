@@ -1,0 +1,53 @@
+﻿@model Serene_AMS.ViewModels.VacancyVM
+
+<div class="modal-content responsive" id="detailmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">Job Details</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+    </div>
+
+    <div class="modal-body" style="overflow: auto">
+
+     <div style="margin-left:250px;">
+
+        <div class="form-group row">
+            <label class="control-label" style="color:red;">Position:</label>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Position, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label class="control-label" style="color:red;">Department:</label>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.DepartmentName, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label" style="color:red;">City:</label>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.CityName, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label" style="color:red;">Job Level:</label>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.JobLevel, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label" style="color:red;">Required Qualifcation:</label>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.RequiredQualification, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+         </div>
+
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-primary" type="submit" href="@Url.Action("Apply","Recruitment")/@Html.DisplayTextFor(model=>model.VacancyId)">Apply</a>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    </div>
+</div>

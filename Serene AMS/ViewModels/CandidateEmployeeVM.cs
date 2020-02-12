@@ -29,8 +29,9 @@ namespace Serene_AMS.ViewModels
         [Required]
         [DataType(DataType.MultilineText)]
         public string desc { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime interviewdate { get; set; }
+        public TimeSpan InterviewTime { get; set; }
 
     }
 }

@@ -141,6 +141,7 @@
     <Compile Include="DAL\Repository\ApplicantRepository.cs" />
     <Compile Include="DAL\Repository\DepartmentRepository.cs" />
     <Compile Include="DAL\Repository\EmployeeRepository.cs" />
+    <Compile Include="DAL\Repository\JobListing.cs" />
     <Compile Include="DAL\Repository\StructuredetailRepository.cs" />
     <Compile Include="DAL\Repository\UserRepository.cs" />
     <Compile Include="Global.asax.cs">
@@ -217,9 +218,6 @@
     <Compile Include="Models\tblRequestdetail.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tblResult.cs">
-      <DependentUpon>SqlModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\tblRole.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
@@ -227,9 +225,6 @@
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblStructuredetail.cs">
-      <DependentUpon>SqlModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblTest.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblUser.cs">
@@ -283,6 +278,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\font-awesome.min1.css" />
     <Content Include="Content\hamburgers.min.css" />
+    <Content Include="Content\jquery.timeselector.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\main.min.css" />
     <Content Include="Content\main1.css" />
@@ -333,6 +329,7 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Content\themify-icons.css" />
     <Content Include="Content\utils.css" />
+    <Content Include="Content\wickedpicker.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -656,8 +653,8 @@
     <Content Include="Login\vendor\select2\select2.min.js" />
     <Content Include="Models\SqlModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SqlModel.Context.cs</LastGenOutput>
       <DependentUpon>SqlModel.edmx</DependentUpon>
+      <LastGenOutput>SqlModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\SqlModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -746,8 +743,10 @@
     <Content Include="fonts\themify.eot" />
     <Content Include="fonts\themify.ttf" />
     <Content Include="fonts\themify.woff" />
+    <Content Include="Scripts\jquery.timeselector.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\wickedpicker.js" />
     <Content Include="Website\css\animate.css" />
     <Content Include="Website\css\aos.css" />
     <Content Include="Website\css\bootstrap-datepicker.css" />
@@ -973,6 +972,7 @@
     <Content Include="Website\scss\_site-base.scss" />
     <Content Include="Website\scss\_site-blocks.scss" />
     <Content Include="Website\scss\_site-navbar.scss" />
+    <Content Include="Views\Recruitment\JobDetailsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

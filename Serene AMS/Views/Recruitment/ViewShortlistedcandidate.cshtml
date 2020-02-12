@@ -23,6 +23,7 @@
                     <th>Phone</th>
                     <th>Email</th>
                     <th>Applied For</th>
+                    <th>Interview Date</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -34,6 +35,7 @@
                     <th>Phone</th>
                     <th>Email</th>
                     <th>Applied For</th>
+                    <th>Interview Date</th>
                     <th>Status</th>
 
                 </tr>
@@ -83,6 +85,13 @@
                     { "data": "Phone", "authowidth": false },
                     { "data": "Email", "authowidth": false },
                     { "data": "Appliedfor", "authowidth": false },
+                    {
+                        "data": "InterviewDate", "render": function (data) {
+                            var date = new Date(parseInt(data.substr(6)));
+                            var month = date.getMonth() + 1;
+                            return date.getFullYear() + "/" + month + "/" + date.getDate();
+                        },
+                    },
                     { "data": "Status", "authowidth": false },
                     {
                     "data": "ApplicationId", "render": function (data, type) {
@@ -90,7 +99,7 @@
 
                       },
                     }
-
+                   
 
                 ]
 

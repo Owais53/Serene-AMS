@@ -14,19 +14,11 @@ namespace Serene_AMS.Models
     
     public partial class tblCandidate
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public tblCandidate()
-        {
-            this.tblTests = new HashSet<tblTest>();
-        }
-    
         public int CandidateId { get; set; }
         public Nullable<int> ApplicationId { get; set; }
         public string Cname { get; set; }
         public string Status { get; set; }
     
         public virtual tblApplicant tblApplicant { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblTest> tblTests { get; set; }
     }
 }

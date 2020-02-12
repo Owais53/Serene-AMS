@@ -240,31 +240,22 @@
 
             if (ddltext == "" && ddlvalue == "") {
                 $("#lblerror1").html("Please select option from Dropdown to Submit");
-            }         
+            }
+            else {
+                if (ddltext == "Select" || ddltext == "Select" && id == ddlvalue || ddltext != "Select" && id != ddlvalue) {
+                    $("#lblerror1").html("Please select option from Dropdown to Submit");
+
+                }
+               else if (ddltext != "Select" || ddltext != "Select" && id == ddlvalue || ddltext != "Select" && id == id) {
+                    $("#lblerror1").html("");
+                    $("#confirmmodal").html(res);
+                    var minDate = new Date();
+                    $('input[type=datetime]').datepicker({ showAnim: 'drop', changeMonth: true, changeYear: false, minDate: minDate, dateFormat: "yy-mm-dd" }).datepicker("setDate", new Date);
+                    $('[name="time"]').timeselector({ min: '09:30', max: '18:30' })
+                    $("#Modalconfirm").modal('show');
                    
-            else if (ddltext != "Select" && id != ddlvalue) {
-                $("#lblerror1").html("Please select option from Dropdown to Submit");
-
-            } 
-            else if (ddltext == "Select" && id == ddlvalue) {
-                   $("#lblerror1").html("Please select option from Dropdown to Submit");
-
-            }
-            else if (ddltext == "Select" && id != ddlvalue) {
-                $("#lblerror1").html("");
-                $("#confirmmodal").html(res);
-                var minDate = new Date();
-                $("#dateInterview").datepicker({ showAnim: 'drop', changeMonth: true, changeYear: false, minDate: minDate, dateFormat: "dd/MM/yyyy" });
-                $("#Modalconfirm").modal('show');
-            }
-            else if (ddltext != "Select" && id == ddlvalue )
-            {
-
-                $("#lblerror1").html("");
-                $("#confirmmodal").html(res);
-                var minDate = new Date();
-                $("#dateInterview").datepicker({ showAnim: 'drop', changeMonth: true, changeYear: false, minDate: minDate });
-                $("#Modalconfirm").modal('show');
+                 }
+                 
 
             }
            
@@ -272,31 +263,30 @@
 
     }
     function StatusUpdate() {
+        var modal = $("#Modalconfirm");
         var form1 = $('form[name="form2"]');
         form1.validate();
         if (!form1.valid()) {
             return;
         } else {
             var data = form1.serialize();
-            $.ajax({
-                url: "/Recruitment/PostStatus",
-                type: "Post",
-                data: data,
-                success: function (data) {
-                    if (data.success) {
+            $.post("/Recruitment/PostStatus", data, function (res) {
+                if (res) {
+                    modal.modal('hide');
 
-                        $("#tablem").DataTable.ajax.reload();
-
-                        $.notify(data.message, {
-                            globalPosition: "top center",
-                            className: "success"
-                        })
+                    $("#tablem").DataTable.ajax.reload();
 
 
-                    }
+                    $.notify(data.message, {
+                        globalPosition: "top center",
+                        className: "success"
+
+                    });
+
                 }
 
             });
+
 
         }
     }

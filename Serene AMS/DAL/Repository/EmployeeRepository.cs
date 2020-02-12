@@ -10,14 +10,14 @@ namespace Serene_AMS.DAL.Repository
     public class EmployeeRepository : Interface.IEmployeeRepository
     {
 
-       private SqlEntities context;
+       private HrmsEntities context;
 
         public EmployeeRepository()
         {
-            context = new SqlEntities();
+            context = new HrmsEntities();
 
         }
-        public EmployeeRepository(SqlEntities context)
+        public EmployeeRepository(HrmsEntities context)
         {
             context = this.context;
         }

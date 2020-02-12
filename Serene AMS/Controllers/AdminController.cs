@@ -13,7 +13,7 @@ namespace Serene_AMS.Controllers
 {
     public class AdminController : Controller
     {
-        public SqlEntities db = new SqlEntities();
+        public HrmsEntities db = new HrmsEntities();
 
         [HttpGet]
         public ActionResult CreateUsers()
@@ -174,9 +174,11 @@ namespace Serene_AMS.Controllers
 
             var levellist = new SelectList(new[]
            {
-                new {ID="1",Name="Low"},
-                new {ID="2",Name="Medium"},
-                new {ID="3",Name="High"}
+                new {ID="1",Name="1"},
+                new {ID="2",Name="2"},
+                new {ID="3",Name="3"},
+                new {ID="4",Name="4"},
+                new {ID="5",Name="5"}
             },
             "Name", "Name", "1"
              );
@@ -200,9 +202,11 @@ namespace Serene_AMS.Controllers
                 ViewBag.getdeplist = list;
                 var levellist = new SelectList(new[]
                 {
-                new {ID="1",Name="Low"},
-                new {ID="2",Name="Medium"},
-                new {ID="3",Name="High"}
+                new {ID="1",Name="1"},
+                new {ID="2",Name="2"},
+                new {ID="3",Name="3"},
+                new {ID="4",Name="4"},
+                new {ID="5",Name="5"}
                 },
                 "Name", "Name", "1"
                 );

@@ -10,14 +10,14 @@ namespace Serene_AMS.DAL.Repository
     public class DepartmentRepository : IDepartmentRepository
     {
 
-        private SqlEntities context;
+        private HrmsEntities context;
 
         public DepartmentRepository()
         {
-            context = new SqlEntities();
+            context = new HrmsEntities();
 
         }
-        public DepartmentRepository(SqlEntities context)
+        public DepartmentRepository(HrmsEntities context)
         {
             context = this.context;
         }

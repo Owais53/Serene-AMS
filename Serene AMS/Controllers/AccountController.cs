@@ -10,7 +10,7 @@ namespace Serene_AMS.Controllers
     public class AccountController : Controller
     {
 
-        private  SqlEntities db = new SqlEntities();
+        private  HrmsEntities db = new HrmsEntities();
 
         [HttpGet]
         public ActionResult Login()

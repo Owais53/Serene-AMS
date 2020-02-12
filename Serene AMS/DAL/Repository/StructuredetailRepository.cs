@@ -11,13 +11,13 @@ namespace Serene_AMS.DAL.Repository
 {
     public class StructuredetailRepository : IStructuredetailRepository
     {
-        private SqlEntities context;
+        private HrmsEntities context;
 
         public StructuredetailRepository()
         {
-            context = new SqlEntities();
+            context = new HrmsEntities();
         }
-        public StructuredetailRepository(SqlEntities context)
+        public StructuredetailRepository(HrmsEntities context)
         {
             context = this.context;
         }
@@ -54,23 +54,7 @@ namespace Serene_AMS.DAL.Repository
         {
             return context.tblPositions.Where(x => x.JobLevel == level);
         }
-        public IEnumerable<tblVacancy> GetstructId(int id)
-        {
-            var rd = (from d in context.tblVacancies                   
-                      where d.StructureId == id
-                      select new
-                      {
-                          d.StructureId
-
-                      }).Select(c => new tblVacancy()
-                      {
-                          StructureId = c.StructureId
-
-                      });
-
-
-            return rd;
-        }
+      
         public IEnumerable<tblVacancy> GetPostion(int id)
         {
             var rd = (from d in context.tblVacancies
@@ -132,20 +116,17 @@ namespace Serene_AMS.DAL.Repository
 
             return pos;
         }
-        public tblVacancy Addvac(int structid,string vacname, int comcode, int citycode, int posid, int depid, int noofvacant, string qualification, string joblevel,int marks, string test)
+        public tblVacancy Addvac(string vacname,string cityname, int posid, int depid, string qualification, int joblevel,int marks, string test)
         {
 
             var vac = new tblVacancy()
             {
-                StructureId=structid,
+             
                 VacancyName = vacname,
-                CompanyCode=comcode,
-                CityCode=citycode,
                 PositionId=posid,
                 DepartmentId=depid,
-                NoofVacany=noofvacant,
                 RequiredQualification=qualification,
-                JobLevel=joblevel,
+                JobLevel=Convert.ToInt32(joblevel),
                 CreationDate=DateTime.Now,
                 MarksCriteria=marks,
                 Testpaper=test,
@@ -172,7 +153,7 @@ namespace Serene_AMS.DAL.Repository
 
         public void updateseats(int posid, int sid, int positionid, int structid)
         {
-            var obj = context.tblVacancies.Where(x => x.PositionId == positionid).Where(a => a.StructureId == structid);
+            var obj = context.tblVacancies.Where(x => x.PositionId == positionid);
             
             context.Entry(obj).State = EntityState.Modified;
 

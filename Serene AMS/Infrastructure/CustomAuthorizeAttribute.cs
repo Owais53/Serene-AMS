@@ -21,7 +21,7 @@ namespace Serene_AMS.Infrastructure
             bool authorize = false;
             var userName = Convert.ToString(httpContext.Session["UserName"]);
             if(!string.IsNullOrEmpty(userName))
-                using(var context = new SqlEntities())
+                using(var context = new HrmsEntities())
                 {
                     var userRole = (from u in context.tblUsers
                                     join r in context.tblRoles on u.RoleId equals r.Id

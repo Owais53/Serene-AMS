@@ -18,7 +18,6 @@ namespace Serene_AMS.Models
         public tblStructuredetail()
         {
             this.tblEmployees = new HashSet<tblEmployee>();
-            this.tblVacancies = new HashSet<tblVacancy>();
             this.tblVacancydetails = new HashSet<tblVacancydetail>();
         }
     
@@ -30,8 +29,6 @@ namespace Serene_AMS.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblEmployee> tblEmployees { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblVacancy> tblVacancies { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblVacancydetail> tblVacancydetails { get; set; }
     }

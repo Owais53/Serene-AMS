@@ -27,7 +27,7 @@
                     <hr />
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
-                        @Html.LabelFor(model => model.DepartmentId, "DepartmentId", htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.DepartmentId, "Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.DropDownListFor(model => model.DepartmentId, (SelectList)ViewBag.getdeplist, "Select Department", new { @id = "getId", @class = "form-control select2_demo_2", @onchange = "ddltextchange()" })
                             @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })

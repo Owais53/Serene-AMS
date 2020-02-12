@@ -12,14 +12,14 @@ namespace Serene_AMS.DAL.Repository
     public class ApplicantRepository : IRepository
     {
 
-        private SqlEntities context;
+        private HrmsEntities context;
 
         public ApplicantRepository()
         {
-            context = new SqlEntities();
+            context = new HrmsEntities();
 
         }
-        public ApplicantRepository(SqlEntities context)
+        public ApplicantRepository(HrmsEntities context)
         {
             context = this.context;
         }
@@ -27,16 +27,18 @@ namespace Serene_AMS.DAL.Repository
         {
             context.tblApplicants.Add(obj);
         }
-        public tblApplicant AddApplicant(string name, string phone, string email, DateTime dob, string gender, string address, string cv)
+        public tblApplicant AddApplicant(int vacid,string name, string phone, string email, DateTime dob, string gender,string Appliedfor, string address, string cv)
         {
 
             var addapplicant = new tblApplicant()
             {
+                VacancyId = vacid,
                 ApplicantName = name,
                 Phone = phone,
                 Email = email,
                 Dob = dob,
                 Gender = gender,
+                Appliedfor=Appliedfor,
                 Status = "Pending",
                 Address = address,
                 Submittedon = DateTime.Now.Date,
@@ -92,12 +94,13 @@ namespace Serene_AMS.DAL.Repository
             obj.TestStatus = "Fail";
             context.Entry(obj).State = EntityState.Modified;
         }
-        public void update4(int Applicationid)
+        public void update4(int Applicationid,DateTime date)
         {
+           
             var obj = context.tblApplicants.Find(Applicationid);
             obj.Status = "Called for Interview";
+            obj.InterviewDate = date;
             context.Entry(obj).State = EntityState.Modified;
-            
             
         }
         public void Update(int ApplicationId)

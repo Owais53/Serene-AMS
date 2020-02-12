@@ -10,14 +10,14 @@ namespace Serene_AMS.DAL.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private SqlEntities context;
+        private HrmsEntities context;
 
         public UserRepository()
         {
-            context = new SqlEntities();
+            context = new HrmsEntities();
 
         }
-        public UserRepository(SqlEntities context)
+        public UserRepository(HrmsEntities context)
         {
             context = this.context;
         }

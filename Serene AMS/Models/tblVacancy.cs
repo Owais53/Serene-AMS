@@ -21,22 +21,19 @@ namespace Serene_AMS.Models
         }
     
         public int VacancyId { get; set; }
-        public Nullable<int> CompanyCode { get; set; }
-        public Nullable<int> CityCode { get; set; }
+        public string VacancyName { get; set; }
+        public string CityName { get; set; }
         public Nullable<int> PositionId { get; set; }
         public Nullable<int> DepartmentId { get; set; }
         public Nullable<int> NoofVacany { get; set; }
         public string RequiredQualification { get; set; }
+        public Nullable<int> JobLevel { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
-        public string VacancyName { get; set; }
         public Nullable<int> MarksCriteria { get; set; }
         public string Testpaper { get; set; }
-        public string JobLevel { get; set; }
-        public Nullable<int> StructureId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblApplicant> tblApplicants { get; set; }
         public virtual tblDepartment tblDepartment { get; set; }
-        public virtual tblStructuredetail tblStructuredetail { get; set; }
     }
 }

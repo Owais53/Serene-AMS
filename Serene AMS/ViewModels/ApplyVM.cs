@@ -14,7 +14,8 @@ namespace Serene_AMS.ViewModels
         public string Phone { get; set; }
         [Required]
         public string Email { get; set; }
-
+        public int VacancyId { get; set; }
+        public string Appliedfor { get; set; }
         [Required]
         [Display(Name = "Date Of Birth")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyyy}")]

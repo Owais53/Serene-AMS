@@ -13,10 +13,10 @@ namespace Serene_AMS.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class SqlEntities : DbContext
+    public partial class HrmsEntities : DbContext
     {
-        public SqlEntities()
-            : base("name=SqlEntities")
+        public HrmsEntities()
+            : base("name=HrmsEntities")
         {
         }
     
@@ -42,11 +42,9 @@ namespace Serene_AMS.Models
         public virtual DbSet<tblQuestion> tblQuestions { get; set; }
         public virtual DbSet<tblRequestdetail> tblRequestdetails { get; set; }
         public virtual DbSet<tblRequest> tblRequests { get; set; }
-        public virtual DbSet<tblResult> tblResults { get; set; }
         public virtual DbSet<tblRole> tblRoles { get; set; }
         public virtual DbSet<tblStock> tblStocks { get; set; }
         public virtual DbSet<tblStructuredetail> tblStructuredetails { get; set; }
-        public virtual DbSet<tblTest> tblTests { get; set; }
         public virtual DbSet<tblUser> tblUsers { get; set; }
         public virtual DbSet<tblVacancy> tblVacancies { get; set; }
         public virtual DbSet<tblVacancydetail> tblVacancydetails { get; set; }
