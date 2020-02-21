@@ -24,6 +24,5 @@ namespace Serene_AMS.Models
         public Nullable<int> StructureId { get; set; }
     
         public virtual tblDepartment tblDepartment { get; set; }
-        public virtual tblStructuredetail tblStructuredetail { get; set; }
     }
 }

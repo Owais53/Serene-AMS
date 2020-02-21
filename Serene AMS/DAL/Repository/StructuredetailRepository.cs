@@ -22,20 +22,13 @@ namespace Serene_AMS.DAL.Repository
             context = this.context;
         }
 
-        public void Add(tblStructuredetail obj)
-        {
-            context.tblStructuredetails.Add(obj);
-        }
-
+       
         public void Delete(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<tblStructuredetail> GetAll()
-        {
-            return context.tblStructuredetails;
-        }
+        
         public IEnumerable<tblPosition> Getpos()
         {
             return context.tblPositions;
@@ -72,10 +65,7 @@ namespace Serene_AMS.DAL.Repository
 
             return rd;
         }
-        public tblStructuredetail GetById(int Id)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public void Save()
         {
@@ -85,10 +75,7 @@ namespace Serene_AMS.DAL.Repository
         {
             return context.tblVacancydetails;
         }
-        public void Update(tblStructuredetail obj)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public IEnumerable<tblRole> Getroles()
         {
@@ -123,7 +110,8 @@ namespace Serene_AMS.DAL.Repository
             {
              
                 VacancyName = vacname,
-                PositionId=posid,
+                CityName=cityname,
+                PositionId =posid,
                 DepartmentId=depid,
                 RequiredQualification=qualification,
                 JobLevel=Convert.ToInt32(joblevel),
@@ -157,6 +145,59 @@ namespace Serene_AMS.DAL.Repository
             
             context.Entry(obj).State = EntityState.Modified;
 
+        }
+
+        public tblRequest Addreqt(int Employeeid, int posid,string citytrans, string ReasonofReq)
+        {
+            var addreq = new tblRequest()
+            {
+                EmployeeId=Employeeid,
+                PositionId=posid,
+                CitytoTranser=citytrans,
+                RequestType ="Transfer",
+                DateofRequest=DateTime.Now.Date,
+                Status="Pending",
+                ReasonofRequest=ReasonofReq,
+                AuthorizedRole="DGM",
+            };
+            return addreq;
+        }
+
+        public void AddReq(tblRequest obj)
+        {
+            context.tblRequests.Add(obj);
+        }
+
+        public IEnumerable<tblRequest> GetReq()
+        {
+            return context.tblRequests;
+        }
+
+        public void updatetransapp(int empid, string city,int posid)
+        {
+            var obj = context.tblEmployees.Find(empid);
+            obj.CityName = city;
+            obj.PositionId = posid;
+            context.Entry(obj).State = EntityState.Modified;
+
+        }
+
+        public void updatereqt(int reqid,string resby)
+        {
+            var obj = context.tblRequests.Find(reqid);
+            obj.Status = "Accepted";
+            obj.Respondedby = resby;
+            obj.ResponseDate = DateTime.Today;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void updatereqtrej(int reqid, string resby)
+        {
+            var obj = context.tblRequests.Find(reqid);
+            obj.Status = "Rejected";
+            obj.Respondedby = resby;
+            obj.ResponseDate = DateTime.Today;
+            context.Entry(obj).State = EntityState.Modified;
         }
     }
 }

@@ -32,6 +32,10 @@ namespace Serene_AMS.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime interviewdate { get; set; }
         public TimeSpan InterviewTime { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public Nullable<DateTime> JoiningDate { get; set; }
+        [Required]
+        public decimal Salary { get; set; }
 
     }
 }

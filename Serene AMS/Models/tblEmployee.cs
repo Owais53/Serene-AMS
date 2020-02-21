@@ -17,13 +17,10 @@ namespace Serene_AMS.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblEmployee()
         {
-            this.tblPayrolls = new HashSet<tblPayroll>();
             this.tblRequestdetails = new HashSet<tblRequestdetail>();
         }
     
-        public Nullable<int> Id { get; set; }
-        public Nullable<int> CompanyCode { get; set; }
-        public string CityCode { get; set; }
+        public string CityName { get; set; }
         public int EmployeeId { get; set; }
         public string EmployeeName { get; set; }
         public string Gender { get; set; }
@@ -37,11 +34,7 @@ namespace Serene_AMS.Models
     
         public virtual tblDepartment tblDepartment { get; set; }
         public virtual tblPosition tblPosition { get; set; }
-        public virtual tblStructuredetail tblStructuredetail { get; set; }
-        public virtual tblUser tblUser { get; set; }
         public virtual tblEmployeeDetail tblEmployeeDetail { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPayroll> tblPayrolls { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblRequestdetail> tblRequestdetails { get; set; }
     }

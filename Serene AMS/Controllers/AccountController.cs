@@ -32,7 +32,7 @@ namespace Serene_AMS.Controllers
                             join a in db.tblAdminchecks on u.AdminId equals a.AdminId
                             join r in db.tblRoles on u.RoleId equals r.Id
                             join e in db.tblEmployees on u.EmployeeId equals e.EmployeeId
-                            join s in db.tblStructuredetails on e.Id equals s.Id
+                            join req in db.tblRequests on e.EmployeeId equals req.EmployeeId
                             where u.UserName == model.UserName && u.Password == model.Password
                             select new
                             {
@@ -41,14 +41,12 @@ namespace Serene_AMS.Controllers
                                 d.DepartmentName,
                                 a.desc,
                                 r.RoleName,
-                                e.CompanyCode,
-                                s.CompanyName,
-                                e.CityCode,
-                                s.CityName,
                                 e.EmployeeName,
                                 e.PositionId,
                                 d.DepartmentId,
-                                e.EmployeeId
+                                e.EmployeeId,
+                                e.CityName,
+                                req.RequestId
 
                             }).FirstOrDefault();
 
@@ -61,16 +59,13 @@ namespace Serene_AMS.Controllers
                     Session["DepartmentName"] = user.DepartmentName;
                     Session["RoleName"] = user.RoleName;
                     Session["isAdmin"] = user.desc;
-                    Session["CompanyName"] = user.CompanyName;
-                    Session["CityName"] = user.CityName;
-                    Session["CompanyCode"] = user.CompanyCode;
-                    Session["CityCode"] = user.CityCode;
                     Session["Employeename"] = user.EmployeeName;
                     Session["Position"] = user.PositionId;
                     Session["DepartmentId"] = user.DepartmentId;
                     Session["EmployeeId"] = user.EmployeeId;
+                    Session["CityName"] = user.CityName;
+                    Session["RequestId"] = user.RequestId;
 
-                    
                     return RedirectToAction("Index", "Home");
 
                 }
@@ -83,10 +78,29 @@ namespace Serene_AMS.Controllers
             }
             else
             {
-                ViewBag.Text = "User is not Active.Please Login Again.";
+                ViewBag.Text = "User is not Active or Invalid UserName or Password.Please Login Again.";
             }
 
             return View();
         }
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            Session["UserName"] = string.Empty;
+            Session["UserId"] = string.Empty;
+            Session["DepartmentName"] = string.Empty;
+            Session["RoleName"] = string.Empty;
+            Session["isAdmin"] = string.Empty;
+            Session["CompanyName"] = string.Empty;
+            Session["CityName"] = string.Empty;
+            Session["Employeename"] = string.Empty;
+            Session["Position"] = string.Empty;
+            Session["DepartmentId"] = string.Empty;
+            Session["EmployeeId"] = string.Empty;
+
+
+            return RedirectToAction("Login", "Account");
+        }
+
     }
 }

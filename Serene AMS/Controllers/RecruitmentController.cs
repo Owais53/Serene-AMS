@@ -75,7 +75,7 @@ namespace Serene_AMS.Controllers
            
                 return View();
         }
-
+        [CustomAuthorize("Recruitment Officer", "Admin")]
         public ActionResult ViewApplications()
         {
             return View();
@@ -99,6 +99,7 @@ namespace Serene_AMS.Controllers
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
 
         }
+        [CustomAuthorize("Recruitment Officer")]
         public ActionResult GetCandidates(int? id)
         {
             IRepository obj = new ApplicantRepository();
@@ -219,6 +220,49 @@ namespace Serene_AMS.Controllers
 
             return PartialView("HireEmployee",Emp);
         }
+        public ActionResult GetConfirmation(int? id)
+        {
+            IRepository obj = new ApplicantRepository();
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            IDepartmentRepository deprepo = new DepartmentRepository();
+
+            var Data = (from d in obj.GetAll()
+                        join s in repo.GetVacancies() on d.VacancyId equals s.VacancyId
+                        where d.ApplicationId == id
+                        select new
+                        {
+
+                            d.ApplicantName,
+                            d.Gender,
+                            s.DepartmentId,
+                            s.PositionId,
+                            d.Dob,
+                            d.Phone,
+                            d.Email,
+                            d.Address,
+                            d.ApplicationId,
+                            d.JoiningDate,
+                            s.CityName
+                            
+
+                        }).Select(c => new CandidateEmployeeVM()
+                        {
+                            ApplicationId = (int)(c.ApplicationId),
+                            EmployeeName = c.ApplicantName,
+                            Gender = c.Gender,
+                            DepartmentId = (int)(c.DepartmentId),
+                            PositionId = (int)c.PositionId,
+                            DateofBirth = (DateTime)c.Dob,
+                            Contact = c.Phone,
+                            Email = c.Email,
+                            Address = c.Address,
+                            JoiningDate=(Nullable<DateTime>)c.JoiningDate,
+                            CityName=c.CityName
+
+                        }).FirstOrDefault();
+
+            return PartialView("ConfirmEmployeePartial",Data);
+        }
         public ActionResult UploadMarks(tblApplicant obj)
         {
             IRepository repo = new ApplicantRepository();
@@ -257,18 +301,42 @@ namespace Serene_AMS.Controllers
         public JsonResult employeehire(CandidateEmployeeVM model)
         {
             IRepository objrepo = new ApplicantRepository();
-            var add = objrepo.AddEmployee(model.StructureId,model.CompanyCode,model.CityCode,model.EmployeeName,model.Gender,model.DepartmentId,model.DateofBirth,model.Contact,model.Email,model.Address,model.PositionId);
-            objrepo.Addemp(add);
-            objrepo.Save();
-
             objrepo.updatetohired(model.ApplicationId);
             objrepo.Save();
 
-            bool result = false;
-            result = SendEmail(model.Email,"Appointment Letter", " <p>Hi " + model.EmployeeName + ",<br/>This is to Inform you that you have been hired as a " + model.Position + " in " + model.DepartmentName + " Department<br/>Regards</p>");
+            var add = objrepo.AddEmployee(model.CityName,model.EmployeeName,model.Gender,model.DepartmentId,model.DateofBirth,model.Contact,model.Email,model.Address,model.PositionId);
+            objrepo.Addemp(add);
+            objrepo.Save();
+
+            var add1 = objrepo.AddempDetail(add.EmployeeId,(Nullable<DateTime>)model.JoiningDate);
+            objrepo.Addempdetail(add1);
+            objrepo.Save();
+
+           
+
+            TempData["SuccessMessage25"] = "Success";
+            return Json(new { success = true, message = "Employee Hired" }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult updateappointstatus(CandidateEmployeeVM model)
+        {
+            IRepository objrepo = new ApplicantRepository();
+            objrepo.statusappoint(model.ApplicationId);
+            objrepo.Save();
+        
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+
+        }
+        public JsonResult JoindSalary(CandidateEmployeeVM model)
+        {
+
+            IRepository objrepo = new ApplicantRepository();
+          
+            objrepo.UpdateEmp(model.ApplicationId,model.JoiningDate,model.Salary);
+            objrepo.Save();
 
 
-            return Json(new {result, success = true, message = "Employee Hired" }, JsonRequestBehavior.AllowGet);
+            TempData["SuccessMessage25"] = "Success";
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
         public bool SendEmail(string toEmail,string subject,string emailbody)
         {
@@ -295,6 +363,8 @@ namespace Serene_AMS.Controllers
                 return false;
             }
         }
+
+        [CustomAuthorize("Recruitment Officer", "Admin")]
         [HttpGet]
         public ActionResult ViewCandidate(int id=0)
         {
@@ -321,7 +391,7 @@ namespace Serene_AMS.Controllers
             result = SendEmail(model.Email, "Application Approved", " <p>Hi " + model.EmployeeName + ",<br/><br/>This is to Inform you that your Application for " + model.Position + " Position in " + model.DepartmentName + " Department has been accepted because " + model.desc + "<br/><br/>Regards " + model.CompanyName + " </p>");
 
             TempData["UpdateMessage00"] = "Approved Successfully";
-            return Json(new { result, success = true, message = "Employee Hired" }, JsonRequestBehavior.AllowGet);
+            return Json(new { result, success = true }, JsonRequestBehavior.AllowGet);
 
 
         }
@@ -333,6 +403,7 @@ namespace Serene_AMS.Controllers
             TempData["UpdateMessage"] = "Rejected Successfully";
             return View("ViewApplications");
         }
+        [CustomAuthorize("Recruitment Officer", "Admin")]
         public ActionResult ViewMarks()
         {
             return View();
@@ -420,13 +491,11 @@ namespace Serene_AMS.Controllers
             IDepartmentRepository objrepo = new DepartmentRepository();
 
             var Data = (from u in repo.Get()
-                        join r in repo.GetAll() on u.StructureId equals r.Id
                         join a in objrepo.GetAll() on u.DepartmentId equals a.DepartmentId
                         join b in repo.Getpos() on u.PositionId equals b.Id
                         select new
                         {
-                            r.CompanyName,
-                            r.CityName,
+            
                             a.DepartmentName,
                             b.Position,
                             u.Availableseats,
@@ -463,8 +532,10 @@ namespace Serene_AMS.Controllers
         {
             HrmsEntities entities = new HrmsEntities();
             IRepository repo = new ApplicantRepository();
-            var date = DateTime.Today.GetDateTimeFormats(); 
-            var Data = entities.tblApplicants.Where(x => x.Status == "Called for Interview" && DbFunctions.TruncateTime(x.InterviewDate) == DbFunctions.TruncateTime(DateTime.Today))
+            var date = DateTime.Today.GetDateTimeFormats();
+            var today = DateTime.Now;
+            var tommorrow = DateTime.Now.AddDays(1).Date;
+            var Data = entities.tblApplicants.Where(x => x.Status == "Called for Interview" && DbFunctions.TruncateTime(x.InterviewDate) == DbFunctions.TruncateTime(today) || DbFunctions.TruncateTime(x.InterviewDate)== DbFunctions.TruncateTime(tommorrow))
                 .AsEnumerable()
                 .Select(x => new { x.ApplicantName,x.Phone,x.Email,x.Appliedfor,x.Status,x.ApplicationId,x.InterviewDate}).ToList();
             
@@ -472,7 +543,7 @@ namespace Serene_AMS.Controllers
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
         }
 
-
+        [CustomAuthorize("Recruitment Manager", "Admin")]
         [HttpGet]
         public ActionResult CreateVacancy()
         {
@@ -496,9 +567,10 @@ namespace Serene_AMS.Controllers
             ViewBag.getlevellist = levellist;
 
             var city = new SelectList(new[]
-          {
+            {
                 new {ID="1",Name="Karachi"},
-                new {ID="2",Name="Lahore"}
+                new {ID="2",Name="Lahore"},
+                new {ID="3",Name="Islamabad"}
 
             },
            "Name", "Name", "1"
@@ -521,9 +593,37 @@ namespace Serene_AMS.Controllers
         public ActionResult CreateVacancy(VacancyVM model, HttpPostedFileBase postedFile1,FormCollection form)
         {
             IStructuredetailRepository repo = new StructuredetailRepository();
-         
-            var Positionid = repo.GetPosition(model.PositionId).FirstOrDefault();
-            var Posid = form["ddlpos"];
+            var city = new SelectList(new[]
+           {
+                    new {ID="1",Name="Karachi"},
+                    new {ID="2",Name="Lahore"},
+                    new {ID="3",Name="Islamabad"}
+                   },
+               "Name", "Name", "1"
+           );
+            ViewBag.getcitylist = city;
+
+
+            var deplist = repo.Getdep().ToList();
+
+            SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+            ViewBag.getdep1list = list;
+
+
+            var levellist = new SelectList(new[]
+           {
+                    new {ID="1",Name="1"},
+                    new {ID="2",Name="2"},
+                    new {ID="3",Name="3"},
+                    new {ID="4",Name="4"},
+                    new {ID="5",Name="5"}
+                   },
+            "Name", "Name", "1"
+             );
+            ViewBag.getlevellist = levellist;
+
+
+
             if (postedFile1 == null)
             {
                 ModelState.AddModelError("CustomError", "Please select Test");
@@ -537,58 +637,29 @@ namespace Serene_AMS.Controllers
             }
             else if (postedFile1 != null)
             {
-              
-                    if (ModelState.IsValid)
-                    {
-                    var deplist = repo.Getdep().ToList();
-                   
-                    SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
-                    ViewBag.getdep1list = list;
-                  
-
-                    var levellist = new SelectList(new[]
-                   {
-                    new {ID="1",Name="1"},
-                    new {ID="2",Name="2"},
-                    new {ID="3",Name="3"},
-                    new {ID="4",Name="4"},
-                    new {ID="5",Name="5"}
-                   },
-                    "Name", "Name", "1"
-                     );
-                    ViewBag.getlevellist = levellist;
-
-                    var city = new SelectList(new[]
-                   {
-                    new {ID="Karachi",Name="Karachi"},
-                    new {ID="Lahore",Name="Lahore"}
-
-                   },
-                    "Name", "Name", "1"
-                    );
-                    ViewBag.getcitylist = city;
-
-                    string fileName1 = Guid.NewGuid() + Path.GetExtension(postedFile1.FileName);
+                             
+                       string fileName1 = Guid.NewGuid() + Path.GetExtension(postedFile1.FileName);
                         postedFile1.SaveAs(Path.Combine(Server.MapPath("~/TestPaper"), fileName1));
 
-                        var AddVacant = repo.Addvac( model.Position,model.CityName ,Convert.ToInt32(Posid), model.DepartmentId, model.RequiredQualification, model.JobLevel, model.MarksCriteria, fileName1);
+                        var AddVacant = repo.Addvac( model.VacancyName,model.CityName,model.PositionId, model.DepartmentId, model.RequiredQualification, model.JobLevel, model.MarksCriteria, fileName1);
                         repo.Addvacant(AddVacant);
                         repo.Save();
-                        TempData["SuccessMessage11"] = "Vacancy Created";
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("CustomError", "ViewModel not Valid");
-                    }
+
+
+                     TempData["SuccessMessage11"] = "Vacancy Created";
+
+                  
                 
             }
             return View();
 
         }
+        [CustomAuthorize("Admin")]
         public ActionResult ViewVacancy()
         {
             return View();
         }
+        [CustomAuthorize("DGM", "Admin")]
         public ActionResult ViewShortlistedcandidate()
         {
             return View();
@@ -639,7 +710,7 @@ namespace Serene_AMS.Controllers
                           {
                               VacancyId=c.VacancyId,
                               JobLevel = (int)(c.JobLevel),                            
-                              Position = c.VacancyName,
+                              VacancyName = c.VacancyName,
                               CityName=c.CityName,
                               DepartmentName = c.DepartmentName,
                               RequiredQualification= c.RequiredQualification

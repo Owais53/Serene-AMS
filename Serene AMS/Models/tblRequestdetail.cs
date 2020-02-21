@@ -14,12 +14,6 @@ namespace Serene_AMS.Models
     
     public partial class tblRequestdetail
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public tblRequestdetail()
-        {
-            this.tblRequests = new HashSet<tblRequest>();
-        }
-    
         public int RequestId { get; set; }
         public Nullable<int> CompanyCode { get; set; }
         public Nullable<int> CityCode { get; set; }
@@ -32,7 +26,5 @@ namespace Serene_AMS.Models
         public Nullable<System.DateTime> LastWorkingDate { get; set; }
     
         public virtual tblEmployee tblEmployee { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblRequest> tblRequests { get; set; }
     }
 }

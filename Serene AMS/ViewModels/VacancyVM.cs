@@ -9,7 +9,7 @@ namespace Serene_AMS.ViewModels
 {
     public class VacancyVM
     {
-        public int StructureId { get; set; }
+        
         public string VacancyName { get; set; }
         
         public int CompanyCode { get; set; }
@@ -31,7 +31,6 @@ namespace Serene_AMS.ViewModels
         public string CompanyName { get; set; }
         public string CityName { get; set; }
         public string DepartmentName { get; set; }
-        public string Position { get; set; }
         public DateTime SeatAvailablityDate { get; set; }
         public int Availableseats { get; set; }
         public int Id { get; set; }

@@ -1,0 +1,100 @@
+﻿@model Serene_AMS.ViewModels.RequestVM
+@{
+               
+       ViewBag.Title = "Request Transfer";
+   
+   
+}
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Transfer Request
+        </li>
+    </ol>
+</nav>
+
+<div class="ibox">
+
+    <div class="ibox-body">
+
+
+        @using (Html.BeginForm("RequestTransfer", "Requests", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.EditorFor(model => model.positionid, new { htmlAttributes = new { @class = "form-control", @id = "getpos", @Value = ViewBag.currentpos, @type = "hidden" } })
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.CitytoTransfer, "City", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.CitytoTransfer, (SelectList)ViewBag.getcitylist, "Select City", new { @id = "getCity", @class = "form-control select2_demo_2", @onchange = "javascript: ddlgetposition(this);" })
+                    @Html.ValidationMessageFor(model => model.CitytoTransfer, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Positionsid, "Position", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Positionsid, (SelectList)ViewBag.getposlist, "Select Position", new { @id = "getId", @class = "form-control select2_demo_2", @onchange = "javascript: ddlgetposition(this);" })
+                    @Html.ValidationMessageFor(model => model.Positionsid, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ReasonofRequest, "Reason of Transfer", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ReasonofRequest, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ReasonofRequest, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+    
+
+
+
+@section scripts{
+<script type="text/javascript">
+       
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage101"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+
+
+        function ddlgetposition(id) {
+
+            var a = id.value;
+            $("#getpos").val(a);
+
+        }
+    </script>
+    
+    
+    
+}
+
+
+
+
+
+
+
+

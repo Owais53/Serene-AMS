@@ -20,7 +20,8 @@ namespace Serene_AMS.DAL.Interface
         
         tblApplicant AddApplicant(int vacid,string name,string phone,string email,DateTime dob,string gender,string Appliedfor,string address,string cv);
 
-        tblEmployee AddEmployee(int sid,int coc,int cic,string empname,string gender,int depid,DateTime dob,string contact,string email,string address,int posid);
+        tblEmployee AddEmployee(string city,string empname,string gender,int depid,DateTime dob,string contact,string email,string address,int posid);
+        tblEmployeeDetail AddempDetail(int empid, Nullable<DateTime> joiningdate);
 
         void updatetohired(int ApplicationId);
         void Update(int ApplicationId);
@@ -30,7 +31,9 @@ namespace Serene_AMS.DAL.Interface
         void update3(int Applicationid, int Marks);
         void update4(int Applicationid,DateTime date);
         void Addemp(tblEmployee obj);
+        void statusappoint(int Applicationid);
         void Addempdetail(tblEmployeeDetail obj);
+        void UpdateEmp(int Applicationid, Nullable<DateTime> joindate, decimal salary);
         IEnumerable<tblVacancy> Getmarkscriteria(int vacantid);
 
         void Save();

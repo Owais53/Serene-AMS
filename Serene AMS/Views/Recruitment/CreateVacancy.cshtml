@@ -3,15 +3,16 @@
     ViewBag.Title = "Create Vacancy";
 }
 
-<div class="page-heading">
-    <h1 class="page-title">Create Vacancy</h1>
+<nav>
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="~/Recruitment/CreateVacancy.cshtml">Create Vacancy<i class="la la-home font-20"></i></a>
+            <a href="@Url.Action("Index","Home")">Dashboard</a>
         </li>
-        <li class="breadcrumb-item">Create Vacancy</li>
+        <li class="breadcrumb-item active">
+            Create Vacancy
+        </li>
     </ol>
-</div>
+</nav>
 <div class="ibox">
 
     <div class="ibox-body">
@@ -24,12 +25,12 @@
             <div id="appendinput">
 
             </div>
-
-
+            @Html.EditorFor(model => model.PositionId, new { htmlAttributes = new { @class = "form-control",@id="getposid",@type="hidden" } })
+            @Html.EditorFor(model => model.VacancyName, new { htmlAttributes = new { @class = "form-control",@id="getvac",@type="hidden" } })
             <div class="form-group">
                 @Html.LabelFor(model => model.CityName, "City", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.CityName, (SelectList)ViewBag.getcitylist, "Select City", new { @id = "getId", @class = "form-control select2_demo_2", @onchange = "ddltextchange()" })
+                    @Html.DropDownListFor(model => model.CityName, (SelectList)ViewBag.getcitylist, "Select City", new {@id="getCity", @class = "form-control select2_demo_2" })
                     @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -39,19 +40,17 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.DepartmentId, "Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.DepartmentId, (SelectList)ViewBag.getdep1list, "Select Department", new { @id = "getdepartmId", @class = "form-control select2_demo_2", @onchange= "javascript: ddlgetpos(this);" })
+                    @Html.DropDownListFor(model => model.DepartmentId, (SelectList)ViewBag.getdep1list, "Select Department", new { @id = "getdepartmId", @class = "form-control select2_demo_2", @onchange = "javascript: ddlgetpos(this);" })
                     @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
-               
+
                 <label class="control-label col-md-2">Position</label>
-             
+
                 <div class="col-md-10">
-                    
-                    <select class="form-control select2_demo_2" id="ddlpos">
-                        
-                    </select>
+
+                    <select onchange="javascript: ddlposition(this);" class="form-control select2_demo_2" id="ddlpos"></select>
                 </div>
             </div>
 
@@ -127,7 +126,11 @@
             })
 
         }
-       
+        function ddlposition(id) {
+            $("#getposid").val(id.value);
+            var a = $("#ddlpos option:selected").text();
+            $("#getvac").val(a);
+        }
 
 
     </script>

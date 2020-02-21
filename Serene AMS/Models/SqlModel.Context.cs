@@ -33,22 +33,17 @@ namespace Serene_AMS.Models
         public virtual DbSet<tblDocument> tblDocuments { get; set; }
         public virtual DbSet<tblEmployee> tblEmployees { get; set; }
         public virtual DbSet<tblEmployeeDetail> tblEmployeeDetails { get; set; }
-        public virtual DbSet<tblExpens> tblExpenses { get; set; }
         public virtual DbSet<tblItem> tblItems { get; set; }
-        public virtual DbSet<tblPayroll> tblPayrolls { get; set; }
         public virtual DbSet<tblPosition> tblPositions { get; set; }
         public virtual DbSet<tblPurchase> tblPurchases { get; set; }
         public virtual DbSet<tblPurchaseitem> tblPurchaseitems { get; set; }
-        public virtual DbSet<tblQuestion> tblQuestions { get; set; }
-        public virtual DbSet<tblRequestdetail> tblRequestdetails { get; set; }
         public virtual DbSet<tblRequest> tblRequests { get; set; }
         public virtual DbSet<tblRole> tblRoles { get; set; }
         public virtual DbSet<tblStock> tblStocks { get; set; }
-        public virtual DbSet<tblStructuredetail> tblStructuredetails { get; set; }
         public virtual DbSet<tblUser> tblUsers { get; set; }
         public virtual DbSet<tblVacancy> tblVacancies { get; set; }
         public virtual DbSet<tblVacancydetail> tblVacancydetails { get; set; }
         public virtual DbSet<tblVendor> tblVendors { get; set; }
-        public virtual DbSet<tblOrganizationStructure> tblOrganizationStructures { get; set; }
+        public virtual DbSet<tblRequestdetail> tblRequestdetails { get; set; }
     }
 }

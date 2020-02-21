@@ -117,14 +117,19 @@ namespace Serene_AMS.DAL.Repository
             context.Entry(obj).State = EntityState.Modified;
 
         }
+        public void UpdateEmp(int Applicationid, Nullable<DateTime> joindate, decimal salary)
+        {
+            var obj = context.tblApplicants.Find(Applicationid);
+            obj.JoiningDate = joindate;
+            obj.Salary = salary;
+            context.Entry(obj).State = EntityState.Modified;
 
-        public tblEmployee AddEmployee(int sid, int coc, int cic, string empname, string gender, int depid, DateTime dob, string contact, string email, string address, int posid)
+        }
+        public tblEmployee AddEmployee(string city,string empname, string gender, int depid, DateTime dob, string contact, string email, string address, int posid)
         {
             var addemp = new tblEmployee()
             {
-                Id = sid,
-                CompanyCode = coc,
-                CityCode = Convert.ToString(cic),
+                CityName=city,
                 EmployeeName= empname,
                 Gender = gender,
                 DepartmentId = depid,
@@ -138,7 +143,7 @@ namespace Serene_AMS.DAL.Repository
             return addemp;
 
         }
-
+       
        
 
         public void Addemp(tblEmployee obj)
@@ -162,6 +167,27 @@ namespace Serene_AMS.DAL.Repository
         public IEnumerable<tblVacancy> Getmarkscriteria(int vacantid)
         {
             return context.tblVacancies.Where(x => x.VacancyId == vacantid);
+        }
+
+       
+
+        public tblEmployeeDetail AddempDetail(int empid, Nullable<DateTime> joiningdate)
+        {
+            var adddetail = new tblEmployeeDetail()
+            {
+                EmployeeId = empid,
+                EmployeeStatus = "Active",
+                Dateofjoining = joiningdate,
+            };
+            return adddetail;
+        }
+
+        public void statusappoint(int Applicationid)
+        {
+            var obj = context.tblApplicants.Find(Applicationid);
+            obj.Status = "Appointment Rejected";
+            context.Entry(obj).State = EntityState.Modified;
+
         }
     }
 

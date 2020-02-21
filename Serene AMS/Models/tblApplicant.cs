@@ -35,6 +35,8 @@ namespace Serene_AMS.Models
         public Nullable<int> Marks { get; set; }
         public string TestStatus { get; set; }
         public Nullable<System.DateTime> InterviewDate { get; set; }
+        public Nullable<System.DateTime> JoiningDate { get; set; }
+        public Nullable<decimal> Salary { get; set; }
     
         public virtual tblVacancy tblVacancy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

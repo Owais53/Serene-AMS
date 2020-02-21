@@ -2,15 +2,16 @@
 @{
    ViewBag.Title = "View Applications";
 }
-<div class="page-heading">
-    <h1 class="page-title">View Applications</h1>
+<nav>
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="~/Views/Recruitment/ViewApplications.cshtml"><i class="la la-home font-20"></i></a>
+            <a href="@Url.Action("Index","Home")">Dashboard</a>
         </li>
-        <li class="breadcrumb-item">View Applications</li>
+        <li class="breadcrumb-item active">
+            View Applications
+        </li>
     </ol>
-</div>
+</nav>
 <div class="ibox">
 
     <div class="ibox-body">

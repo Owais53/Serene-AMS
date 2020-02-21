@@ -1,0 +1,142 @@
+﻿@model Serene_AMS.ViewModels.RequestVM
+@{
+    ViewBag.Title = "TransferResponse";
+}
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Transfer Requests
+        </li>
+    </ol>
+</nav>
+
+
+<div class="ibox">
+
+    <div class="ibox-body">
+        @using (Html.BeginForm("TransferResponse", "Requests", FormMethod.Post))
+        {
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.RequestId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.EditorFor(model => model.EmployeeId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.EditorFor(model => model.CitytoTransfer, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.EditorFor(model => model.PositiontoTransfer, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.EditorFor(model => model.positionid, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-form-label" style="left:350px;">
+                <h4 style="color:blue;">Transfer Request Details</h4>
+            </div>
+            <br />
+            <div class="form-group row" style="left:350px;">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Employee Name:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.EmployeeName)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row ">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Current City:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px;">
+                        @Html.DisplayFor(model => model.CityName)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    City to Transfer:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.CitytoTransfer)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Designation:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.Position)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Position to Transfer:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.PositiontoTransfer)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Reason of Transfer:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.ReasonofRequest)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Request Date:
+                </label>
+                <div class="col-md-10">
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.DateofRequest)
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">Approve</button>
+
+        }
+        @using (Html.BeginForm("TransferResponseReject", "Requests", FormMethod.Post))
+        {
+            @Html.EditorFor(model => model.RequestId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+            <button type="submit" class="btn btn-danger">Reject</button>
+        }
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage101"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+    </script>
+
+
+
+
+}

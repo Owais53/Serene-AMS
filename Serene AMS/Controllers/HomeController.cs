@@ -25,6 +25,12 @@ namespace Serene_AMS.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+
+        }
+        public ActionResult UnAuthorized()
+        {
+            
+            return View();
         }
     }
 }

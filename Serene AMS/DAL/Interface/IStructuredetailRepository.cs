@@ -10,16 +10,10 @@ namespace Serene_AMS.DAL.Interface
 {
     public interface IStructuredetailRepository
     {
-        IEnumerable<tblStructuredetail> GetAll();
-
+       
         IEnumerable<tblPosition> Getpos();
 
-        tblStructuredetail GetById(int Id);
-
-        void Add(tblStructuredetail obj);
-
-        void Update(tblStructuredetail obj);
-
+       
         IEnumerable<tblRole> Getroles();
 
         IEnumerable<tblDepartment> Getdep();
@@ -29,7 +23,8 @@ namespace Serene_AMS.DAL.Interface
         IEnumerable<tblPosition> validation2(string level);
         IEnumerable<tblVacancydetail> Get();
         IEnumerable<tblVacancy> GetVacancies();
-        
+        IEnumerable<tblRequest> GetReq();
+
         IEnumerable<tblVacancy> GetPosition(int id);
 
       
@@ -38,8 +33,13 @@ namespace Serene_AMS.DAL.Interface
         
         tblPosition Addpos(int depid, string joblevel, string position, decimal basicpay, decimal Incometax);
         tblVacancy Addvac(string vacname,string cityname,int posid,int depid,string qualification,int joblevel,int marks,string test);
+        void updatetransapp(int empid, string city,int posid);
+       
+        void updatereqt(int reqid,string resby);
+        void updatereqtrej(int reqid, string resby);
         void updateseats(int posid,int sid,int positionid,int structid);
-
+        tblRequest Addreqt(int Employeeid, int posid,string citytrans,string ReasonofReq);
+        void AddReq(tblRequest obj);
         void Delete(int Id);
 
         void Save();
