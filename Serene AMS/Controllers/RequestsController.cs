@@ -31,7 +31,7 @@ namespace Serene_AMS.Controllers
                 },
                    "Name", "Name", "1"
                );
-                ViewBag.getcitylist = cityname;
+                ViewBag.CitytoTransfer = cityname;
 
             }
             else if(city == "Lahore")
@@ -46,7 +46,7 @@ namespace Serene_AMS.Controllers
                   "Name", "Name", "1"
               );
                 
-                ViewBag.getcitylist = cityname;
+                ViewBag.CitytoTransfer = cityname;
 
             }
             else if(city == "Islamabad")
@@ -60,7 +60,7 @@ namespace Serene_AMS.Controllers
                 },
                  "Name", "Name", "1"
              );
-                ViewBag.getcitylist = cityname;
+                ViewBag.CitytoTransfer = cityname;
 
             }
             var CurrentPosition = Session["Position"].ToString();
@@ -75,58 +75,79 @@ namespace Serene_AMS.Controllers
             IStructuredetailRepository obj = new StructuredetailRepository();
             var poslist = obj.Getpos().ToList();
             var city = Session["CityName"].ToString();
-            SelectList list = new SelectList(poslist, "Id", "Position");
-            ViewBag.getposlist = list;
-            if (city == "Karachi")
-            {
-                var cityname = new SelectList(new[]
-               {
-
-                new {ID="1",Name="Lahore"},
-                new {ID="2",Name="Islamabad"}
-
-                },
-                   "Name", "Name", "1"
-               );
-                ViewBag.getcitylist = cityname;
-
-            }
-            else if (city == "Lahore")
-            {
-                var cityname = new SelectList(new[]
-              {
-
-                new {ID="1",Name="Karachi"},
-                new {ID="2",Name="Islamabad"}
-
-                },
-                  "Name", "Name", "1"
-              );
-
-                ViewBag.getcitylist = cityname;
-
-            }
-            else if (city == "Islamabad")
-            {
-                var cityname = new SelectList(new[]
-             {
-
-                new {ID="1",Name="Karachi"},
-                new {ID="2",Name="Lahore"}
-
-                },
-                 "Name", "Name", "1"
-             );
-                ViewBag.getcitylist = cityname;
-
-            }
-
             var empid = Session["EmployeeId"].ToString();
-            var add= obj.Addreqt(Convert.ToInt32(empid),model.positionid,model.CitytoTransfer,model.ReasonofRequest);
-            obj.AddReq(add);
-            obj.Save();
-            TempData["SuccessMessage101"] = "Successfully Submitted";
+            var role = Session["RoleName"].ToString();
+            var checkempid= obj.GetReq().Where(x=>x.EmployeeId == Convert.ToInt32(empid)).FirstOrDefault();
 
+           
+
+           
+                SelectList list = new SelectList(poslist, "Id", "Position");
+                ViewBag.getposlist = list;
+                if (city == "Karachi")
+                {
+                    var cityname = new SelectList(new[]
+                   {
+
+                         new {ID="1",Name="Lahore"},
+                         new {ID="2",Name="Islamabad"}
+
+                        },
+                       "Name", "Name", "1"
+                   );
+                    ViewBag.CitytoTransfer = cityname;
+
+                }
+                else if (city == "Lahore")
+                {
+                    var cityname1 = new SelectList(new[]
+                  {
+
+                        new {ID="1",Name="Karachi"},
+                        new {ID="2",Name="Islamabad"}
+
+                     },
+                      "Name", "Name", "1"
+                  );
+
+                    ViewBag.CitytoTransfer = cityname1;
+
+                }
+                else if (city == "Islamabad")
+                {
+                    var cityname2 = new SelectList(new[]
+                 {
+
+                       new {ID="1",Name="Karachi"},
+                       new {ID="2",Name="Lahore"}
+
+                      },
+                     "Name", "Name", "1"
+                 );
+                    ViewBag.CitytoTransfer = cityname2;
+
+                }
+
+
+                if (role != "DGM")
+                {                   
+
+
+                    var add = obj.Addreqt(Convert.ToInt32(empid), model.positionid, model.CitytoTransfer, model.ReasonofRequest);
+                    obj.AddReq(add);
+                    obj.Save();
+                    TempData["SuccessMessage101"] = "Successfully Submitted";
+                }
+                else
+                {                  
+
+
+                    var add = obj.Addreqtfordgm(Convert.ToInt32(empid), model.positionid, model.CitytoTransfer, model.ReasonofRequest);
+                    obj.AddReq(add);
+                    obj.Save();
+                    TempData["SuccessMessage101"] = "Successfully Submitted";
+                }
+            
             return View();
         }
         [HttpGet]
@@ -170,11 +191,11 @@ namespace Serene_AMS.Controllers
             obj.updatetransapp(model.EmployeeId,model.CitytoTransfer,model.positionid);
             obj.Save();
 
-            obj.updatereqt(model.RequestId,empname);
+            obj.updatereqt(model.RequestId,empname,model.ResponseReason);
             obj.Save();
             TempData["SuccessMessage101"] = "Successfully Approved";
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
         [HttpPost]
         public ActionResult TransferResponseReject(RequestVM model)
@@ -183,11 +204,47 @@ namespace Serene_AMS.Controllers
             var empname = Session["Employeename"].ToString();
             IStructuredetailRepository obj = new StructuredetailRepository();
           
-            obj.updatereqtrej(model.RequestId, empname);
+            obj.updatereqtrej(model.RequestId, empname,model.ResponseReasonrej);
             obj.Save();
             TempData["SuccessMessage101"] = "Rejected";
 
-            return View("TransferResponse");
+            return RedirectToAction("Index","Home");
         }
+        [HttpGet]
+        public ActionResult ViewTransferResponse(int? id)
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            IDepartmentRepository deprepo = new DepartmentRepository();
+            IEmployeeRepository emprepo = new EmployeeRepository();
+
+            var Data = (from req in repo.GetReq()
+                        join emp in emprepo.GetAll() on req.EmployeeId equals emp.EmployeeId
+                        join pos in repo.Getpos() on req.PositionId equals pos.Id
+                        join cupos in repo.Getpos() on emp.PositionId equals cupos.Id
+                        join dep in deprepo.GetAll() on emp.DepartmentId equals dep.DepartmentId
+                        where req.RequestId == id
+                        select new RequestVM
+                        {
+                            EmployeeId = (int)req.EmployeeId,
+                            EmployeeName = emp.EmployeeName,
+                            CityName = emp.CityName,
+                            DateofRequest = (DateTime)req.DateofRequest,
+                            RequestId = req.RequestId,
+                            Position = cupos.Position,
+                            DepartmentName = dep.DepartmentName,
+                            PositiontoTransfer = pos.Position,
+                            positionid = (int)req.PositionId,
+                            CitytoTransfer = req.CitytoTranser,
+                            ReasonofRequest = req.ReasonofRequest,
+                            Status=req.Status,
+                            ResponseReason=req.ResponseReason
+
+
+                        }).FirstOrDefault();
+
+            return View(Data);
+        }
+
+
     }
 }

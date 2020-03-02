@@ -53,7 +53,13 @@
 @section scripts{
 
 <script type="text/javascript">
+     $(function () {
+            var successMessage = '@TempData["SuccessMessage101"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+      });
     var Popup, dataTable2;
+
     $(function () {
 
         dataTable2 = $('#tblcandid1').DataTable({

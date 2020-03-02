@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="HrmsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HrmsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tblAdmincheck">
           <Key>
             <PropertyRef Name="AdminId" />
@@ -100,6 +100,20 @@
           <Property Name="DateofPromotion" Type="datetime" />
           <Property Name="LastLeaveDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="tblExpenses">
+          <Key>
+            <PropertyRef Name="ExpenseId" />
+          </Key>
+          <Property Name="ExpenseId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Month" Type="int" />
+          <Property Name="CompanyCode" Type="varchar" MaxLength="50" />
+          <Property Name="CityCode" Type="varchar" MaxLength="50" />
+          <Property Name="ExpenseType" Type="varchar" MaxLength="50" />
+          <Property Name="PurchaseId" Type="int" />
+          <Property Name="PayrollId" Type="int" />
+          <Property Name="Amount" Type="money" />
+        </EntityType>
         <EntityType Name="tblItem">
           <Key>
             <PropertyRef Name="ItemId" />
@@ -110,6 +124,35 @@
           <Property Name="StorageLocation" Type="varchar" MaxLength="50" />
           <Property Name="ReorderPoint" Type="int" />
           <Property Name="ItemPrice" Type="money" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblOrganizationStructure">
+          <Key>
+            <PropertyRef Name="CompanyCode" />
+          </Key>
+          <Property Name="CompanyCode" Type="int" Nullable="false" />
+          <Property Name="CityCode" Type="int" />
+          <Property Name="StorageLocation" Type="nvarchar(max)" />
+          <Property Name="PurchaseOrganization" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="tblPayroll">
+          <Key>
+            <PropertyRef Name="PayrollId" />
+          </Key>
+          <Property Name="PayrollId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FortheMonth" Type="varchar" MaxLength="50" />
+          <Property Name="Year" Type="int" />
+          <Property Name="CompanyCode" Type="int" />
+          <Property Name="CityCode" Type="int" />
+          <Property Name="EmployeeId" Type="int" />
+          <Property Name="BasicSalary" Type="money" />
+          <Property Name="GrossSalary" Type="money" />
+          <Property Name="Bonuses" Type="money" />
+          <Property Name="IncomeTax" Type="money" />
+          <Property Name="MedicalAllowance" Type="money" />
+          <Property Name="TotalDeduction" Type="money" />
+          <Property Name="NetSalary" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="tblPosition">
           <Key>
@@ -175,6 +218,8 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="ResponseDate" Type="datetime" />
           <Property Name="ReasonofRequest" Type="varchar(max)" />
           <Property Name="AuthorizedRole" Type="varchar" MaxLength="75" />
+          <Property Name="ResponseReason" Type="varchar(max)" />
+          <Property Name="IsSeen" Type="bit" />
         </EntityType>
         <EntityType Name="tblRoles">
           <Key>
@@ -191,6 +236,16 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="ItemId" Type="int" />
           <Property Name="TotalStockCapacity" Type="int" />
           <Property Name="AvailableStock" Type="int" />
+        </EntityType>
+        <EntityType Name="tblStructuredetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyCode" Type="int" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar(max)" />
+          <Property Name="CityCode" Type="int" />
+          <Property Name="CityName" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="tblUsers">
           <Key>
@@ -340,6 +395,42 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblExpenses_tblPayroll">
+          <End Role="tblPayroll" Type="Self.tblPayroll" Multiplicity="0..1" />
+          <End Role="tblExpenses" Type="Self.tblExpenses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPayroll">
+              <PropertyRef Name="PayrollId" />
+            </Principal>
+            <Dependent Role="tblExpenses">
+              <PropertyRef Name="PayrollId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblExpenses_tblPurchase">
+          <End Role="tblPurchase" Type="Self.tblPurchase" Multiplicity="0..1" />
+          <End Role="tblExpenses" Type="Self.tblExpenses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPurchase">
+              <PropertyRef Name="PurchaseId" />
+            </Principal>
+            <Dependent Role="tblExpenses">
+              <PropertyRef Name="PurchaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPayroll_tblEmployee">
+          <End Role="tblEmployee" Type="Self.tblEmployee" Multiplicity="0..1" />
+          <End Role="tblPayroll" Type="Self.tblPayroll" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmployee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="tblPayroll">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblPosition_tblDepartment">
           <End Role="tblDepartments" Type="Self.tblDepartments" Multiplicity="0..1" />
           <End Role="tblPosition" Type="Self.tblPosition" Multiplicity="*" />
@@ -436,6 +527,18 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblVacancydetails_tblStructure">
+          <End Role="tblStructuredetail" Type="Self.tblStructuredetail" Multiplicity="0..1" />
+          <End Role="tblVacancydetails" Type="Self.tblVacancydetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStructuredetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblVacancydetails">
+              <PropertyRef Name="StructureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Users_Roles">
           <End Role="tblRoles" Type="Self.tblRoles" Multiplicity="0..1" />
           <End Role="tblUsers" Type="Self.tblUsers" Multiplicity="*" />
@@ -460,6 +563,12 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="getcountnoti" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="role" Type="varchar" Mode="In" />
+          <Parameter Name="requestId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_BackEndAvailablity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spGetAllUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="HrmsModelStoreContainer">
           <EntitySet Name="tblAdmincheck" EntityType="Self.tblAdmincheck" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblApplicant" EntityType="Self.tblApplicant" Schema="dbo" store:Type="Tables" />
@@ -469,17 +578,28 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySet Name="tblDocument" EntityType="Self.tblDocument" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblEmployee" EntityType="Self.tblEmployee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblEmployeeDetail" EntityType="Self.tblEmployeeDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblExpenses" EntityType="Self.tblExpenses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblItem" EntityType="Self.tblItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPayroll" EntityType="Self.tblPayroll" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPosition" EntityType="Self.tblPosition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchase" EntityType="Self.tblPurchase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseitem" EntityType="Self.tblPurchaseitem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblRequests" EntityType="Self.tblRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblRoles" EntityType="Self.tblRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblStock" EntityType="Self.tblStock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblStructuredetail" EntityType="Self.tblStructuredetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblUsers" EntityType="Self.tblUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVacancies" EntityType="Self.tblVacancies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVacancydetails" EntityType="Self.tblVacancydetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVendors" EntityType="Self.tblVendors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblOrganizationStructure" EntityType="Self.tblOrganizationStructure" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblOrganizationStructure].[CompanyCode] AS [CompanyCode], 
+    [tblOrganizationStructure].[CityCode] AS [CityCode], 
+    [tblOrganizationStructure].[StorageLocation] AS [StorageLocation], 
+    [tblOrganizationStructure].[PurchaseOrganization] AS [PurchaseOrganization]
+    FROM [dbo].[tblOrganizationStructure] AS [tblOrganizationStructure]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="tblRequestdetail" EntityType="Self.tblRequestdetail" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [tblRequestdetail].[RequestId] AS [RequestId], 
@@ -526,6 +646,18 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <End Role="tblEmployee" EntitySet="tblEmployee" />
             <End Role="tblEmployeeDetail" EntitySet="tblEmployeeDetail" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblExpenses_tblPayroll" Association="Self.FK_tblExpenses_tblPayroll">
+            <End Role="tblPayroll" EntitySet="tblPayroll" />
+            <End Role="tblExpenses" EntitySet="tblExpenses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblExpenses_tblPurchase" Association="Self.FK_tblExpenses_tblPurchase">
+            <End Role="tblPurchase" EntitySet="tblPurchase" />
+            <End Role="tblExpenses" EntitySet="tblExpenses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPayroll_tblEmployee" Association="Self.FK_tblPayroll_tblEmployee">
+            <End Role="tblEmployee" EntitySet="tblEmployee" />
+            <End Role="tblPayroll" EntitySet="tblPayroll" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblPosition_tblDepartment" Association="Self.FK_tblPosition_tblDepartment">
             <End Role="tblDepartments" EntitySet="tblDepartments" />
             <End Role="tblPosition" EntitySet="tblPosition" />
@@ -556,6 +688,10 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           </AssociationSet>
           <AssociationSet Name="FK_tblVacancydetails_tblDepartment" Association="Self.FK_tblVacancydetails_tblDepartment">
             <End Role="tblDepartments" EntitySet="tblDepartments" />
+            <End Role="tblVacancydetails" EntitySet="tblVacancydetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblVacancydetails_tblStructure" Association="Self.FK_tblVacancydetails_tblStructure">
+            <End Role="tblStructuredetail" EntitySet="tblStructuredetail" />
             <End Role="tblVacancydetails" EntitySet="tblVacancydetails" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
@@ -669,6 +805,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <NavigationProperty Name="tblDepartment" Relationship="Self.FK_tblEmployee_tblDepartment" FromRole="tblEmployee" ToRole="tblDepartments" />
           <NavigationProperty Name="tblPosition" Relationship="Self.FK_tblEmployee_tblPosition" FromRole="tblEmployee" ToRole="tblPosition" />
           <NavigationProperty Name="tblEmployeeDetail" Relationship="Self.FK_tblEmployeeDetail_tblEmployee" FromRole="tblEmployee" ToRole="tblEmployeeDetail" />
+          <NavigationProperty Name="tblPayrolls" Relationship="Self.FK_tblPayroll_tblEmployee" FromRole="tblEmployee" ToRole="tblPayroll" />
           <NavigationProperty Name="tblRequestdetails" Relationship="Self.FK_tblRequestdetail_tblEmployee" FromRole="tblEmployee" ToRole="tblRequestdetail" />
         </EntityType>
         <EntityType Name="tblEmployeeDetail">
@@ -684,6 +821,22 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="LastLeaveDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="tblEmployee" Relationship="Self.FK_tblEmployeeDetail_tblEmployee" FromRole="tblEmployeeDetail" ToRole="tblEmployee" />
         </EntityType>
+        <EntityType Name="tblExpens">
+          <Key>
+            <PropertyRef Name="ExpenseId" />
+          </Key>
+          <Property Name="ExpenseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="CompanyCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CityCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ExpenseType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PurchaseId" Type="Int32" />
+          <Property Name="PayrollId" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="tblPayroll" Relationship="Self.FK_tblExpenses_tblPayroll" FromRole="tblExpenses" ToRole="tblPayroll" />
+          <NavigationProperty Name="tblPurchase" Relationship="Self.FK_tblExpenses_tblPurchase" FromRole="tblExpenses" ToRole="tblPurchase" />
+        </EntityType>
         <EntityType Name="tblItem">
           <Key>
             <PropertyRef Name="ItemId" />
@@ -697,6 +850,26 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <NavigationProperty Name="tblDocuments" Relationship="Self.FK_tblDocument_tblItem" FromRole="tblItem" ToRole="tblDocument" />
           <NavigationProperty Name="tblPurchaseitems" Relationship="Self.FK_tblPurchaseitem_tblItem" FromRole="tblItem" ToRole="tblPurchaseitem" />
           <NavigationProperty Name="tblStocks" Relationship="Self.FK_tblStock_tblItem" FromRole="tblItem" ToRole="tblStock" />
+        </EntityType>
+        <EntityType Name="tblPayroll">
+          <Key>
+            <PropertyRef Name="PayrollId" />
+          </Key>
+          <Property Name="PayrollId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FortheMonth" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="CompanyCode" Type="Int32" />
+          <Property Name="CityCode" Type="Int32" />
+          <Property Name="EmployeeId" Type="Int32" />
+          <Property Name="BasicSalary" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="GrossSalary" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Bonuses" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="IncomeTax" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="MedicalAllowance" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TotalDeduction" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="NetSalary" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="tblEmployee" Relationship="Self.FK_tblPayroll_tblEmployee" FromRole="tblPayroll" ToRole="tblEmployee" />
+          <NavigationProperty Name="tblExpenses" Relationship="Self.FK_tblExpenses_tblPayroll" FromRole="tblPayroll" ToRole="tblExpenses" />
         </EntityType>
         <EntityType Name="tblPosition">
           <Key>
@@ -722,6 +895,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="ReturnDate" Type="DateTime" Precision="0" />
           <Property Name="OrderedDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="tblDocument" Relationship="Self.FK_tblPurchase_tblDocument" FromRole="tblPurchase" ToRole="tblDocument" />
+          <NavigationProperty Name="tblExpenses" Relationship="Self.FK_tblExpenses_tblPurchase" FromRole="tblPurchase" ToRole="tblExpenses" />
           <NavigationProperty Name="tblPurchaseitems" Relationship="Self.FK_tblPurchaseitem_tblPurchase" FromRole="tblPurchase" ToRole="tblPurchaseitem" />
         </EntityType>
         <EntityType Name="tblPurchaseitem">
@@ -744,13 +918,15 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="EmployeeId" Type="Int32" />
           <Property Name="PositionId" Type="Int32" />
           <Property Name="RequestType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CitytoTranser" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
           <Property Name="DateofRequest" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Respondedby" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ResponseDate" Type="DateTime" Precision="3" />
           <Property Name="ReasonofRequest" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="AuthorizedRole" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-          <Property Name="CitytoTranser" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="ResponseReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsSeen" Type="Boolean" />
         </EntityType>
         <EntityType Name="tblRole">
           <Key>
@@ -769,6 +945,17 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="TotalStockCapacity" Type="Int32" />
           <Property Name="AvailableStock" Type="Int32" />
           <NavigationProperty Name="tblItem" Relationship="Self.FK_tblStock_tblItem" FromRole="tblStock" ToRole="tblItem" />
+        </EntityType>
+        <EntityType Name="tblStructuredetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyCode" Type="Int32" Nullable="false" />
+          <Property Name="CompanyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CityCode" Type="Int32" />
+          <Property Name="CityName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblVacancydetails" Relationship="Self.FK_tblVacancydetails_tblStructure" FromRole="tblStructuredetail" ToRole="tblVacancydetails" />
         </EntityType>
         <EntityType Name="tblUser">
           <Key>
@@ -816,6 +1003,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="SeatAvailablityDate" Type="DateTime" Precision="0" />
           <Property Name="StructureId" Type="Int32" />
           <NavigationProperty Name="tblDepartment" Relationship="Self.FK_tblVacancydetails_tblDepartment" FromRole="tblVacancydetails" ToRole="tblDepartments" />
+          <NavigationProperty Name="tblStructuredetail" Relationship="Self.FK_tblVacancydetails_tblStructure" FromRole="tblVacancydetails" ToRole="tblStructuredetail" />
         </EntityType>
         <EntityType Name="tblVendor">
           <Key>
@@ -827,6 +1015,15 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="ItemType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="tblDocuments" Relationship="Self.FK_tblDocument_tblVendors" FromRole="tblVendors" ToRole="tblDocument" />
+        </EntityType>
+        <EntityType Name="tblOrganizationStructure">
+          <Key>
+            <PropertyRef Name="CompanyCode" />
+          </Key>
+          <Property Name="CompanyCode" Type="Int32" Nullable="false" />
+          <Property Name="CityCode" Type="Int32" />
+          <Property Name="StorageLocation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaseOrganization" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblRequestdetail">
           <Key>
@@ -1000,6 +1197,18 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblPayroll_tblEmployee">
+          <End Role="tblEmployee" Type="Self.tblEmployee" Multiplicity="0..1" />
+          <End Role="tblPayroll" Type="Self.tblPayroll" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmployee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="tblPayroll">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblRequestdetail_tblEmployee">
           <End Role="tblEmployee" Type="Self.tblEmployee" Multiplicity="0..1" />
           <End Role="tblRequestdetail" Type="Self.tblRequestdetail" Multiplicity="*" />
@@ -1009,6 +1218,30 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             </Principal>
             <Dependent Role="tblRequestdetail">
               <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblExpenses_tblPayroll">
+          <End Role="tblPayroll" Type="Self.tblPayroll" Multiplicity="0..1" />
+          <End Role="tblExpenses" Type="Self.tblExpens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPayroll">
+              <PropertyRef Name="PayrollId" />
+            </Principal>
+            <Dependent Role="tblExpenses">
+              <PropertyRef Name="PayrollId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblExpenses_tblPurchase">
+          <End Role="tblPurchase" Type="Self.tblPurchase" Multiplicity="0..1" />
+          <End Role="tblExpenses" Type="Self.tblExpens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPurchase">
+              <PropertyRef Name="PurchaseId" />
+            </Principal>
+            <Dependent Role="tblExpenses">
+              <PropertyRef Name="PurchaseId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1060,6 +1293,18 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblVacancydetails_tblStructure">
+          <End Role="tblStructuredetail" Type="Self.tblStructuredetail" Multiplicity="0..1" />
+          <End Role="tblVacancydetails" Type="Self.tblVacancydetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStructuredetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblVacancydetails">
+              <PropertyRef Name="StructureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="HrmsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tblAdminchecks" EntityType="Self.tblAdmincheck" />
           <EntitySet Name="tblApplicants" EntityType="Self.tblApplicant" />
@@ -1069,17 +1314,21 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySet Name="tblDocuments" EntityType="Self.tblDocument" />
           <EntitySet Name="tblEmployees" EntityType="Self.tblEmployee" />
           <EntitySet Name="tblEmployeeDetails" EntityType="Self.tblEmployeeDetail" />
+          <EntitySet Name="tblExpenses" EntityType="Self.tblExpens" />
           <EntitySet Name="tblItems" EntityType="Self.tblItem" />
+          <EntitySet Name="tblPayrolls" EntityType="Self.tblPayroll" />
           <EntitySet Name="tblPositions" EntityType="Self.tblPosition" />
           <EntitySet Name="tblPurchases" EntityType="Self.tblPurchase" />
           <EntitySet Name="tblPurchaseitems" EntityType="Self.tblPurchaseitem" />
           <EntitySet Name="tblRequests" EntityType="Self.tblRequest" />
           <EntitySet Name="tblRoles" EntityType="Self.tblRole" />
           <EntitySet Name="tblStocks" EntityType="Self.tblStock" />
+          <EntitySet Name="tblStructuredetails" EntityType="Self.tblStructuredetail" />
           <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
           <EntitySet Name="tblVacancies" EntityType="Self.tblVacancy" />
           <EntitySet Name="tblVacancydetails" EntityType="Self.tblVacancydetail" />
           <EntitySet Name="tblVendors" EntityType="Self.tblVendor" />
+          <EntitySet Name="tblOrganizationStructures" EntityType="Self.tblOrganizationStructure" />
           <EntitySet Name="tblRequestdetails" EntityType="Self.tblRequestdetail" />
           <AssociationSet Name="FK_Users_tbladmincheck" Association="Self.FK_Users_tbladmincheck">
             <End Role="tblAdmincheck" EntitySet="tblAdminchecks" />
@@ -1133,9 +1382,21 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <End Role="tblEmployee" EntitySet="tblEmployees" />
             <End Role="tblEmployeeDetail" EntitySet="tblEmployeeDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblPayroll_tblEmployee" Association="Self.FK_tblPayroll_tblEmployee">
+            <End Role="tblEmployee" EntitySet="tblEmployees" />
+            <End Role="tblPayroll" EntitySet="tblPayrolls" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblRequestdetail_tblEmployee" Association="Self.FK_tblRequestdetail_tblEmployee">
             <End Role="tblEmployee" EntitySet="tblEmployees" />
             <End Role="tblRequestdetail" EntitySet="tblRequestdetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblExpenses_tblPayroll" Association="Self.FK_tblExpenses_tblPayroll">
+            <End Role="tblPayroll" EntitySet="tblPayrolls" />
+            <End Role="tblExpenses" EntitySet="tblExpenses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblExpenses_tblPurchase" Association="Self.FK_tblExpenses_tblPurchase">
+            <End Role="tblPurchase" EntitySet="tblPurchases" />
+            <End Role="tblExpenses" EntitySet="tblExpenses" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPurchaseitem_tblItem" Association="Self.FK_tblPurchaseitem_tblItem">
             <End Role="tblItem" EntitySet="tblItems" />
@@ -1153,6 +1414,16 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <End Role="tblRoles" EntitySet="tblRoles" />
             <End Role="tblUsers" EntitySet="tblUsers" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblVacancydetails_tblStructure" Association="Self.FK_tblVacancydetails_tblStructure">
+            <End Role="tblStructuredetail" EntitySet="tblStructuredetails" />
+            <End Role="tblVacancydetails" EntitySet="tblVacancydetails" />
+          </AssociationSet>
+          <FunctionImport Name="getcountnoti" ReturnType="Collection(Int32)">
+            <Parameter Name="role" Mode="In" Type="String" />
+            <Parameter Name="requestId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_BackEndAvailablity" />
+          <FunctionImport Name="spGetAllUsers" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -1263,6 +1534,21 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tblExpenses">
+            <EntityTypeMapping TypeName="HrmsModel.tblExpens">
+              <MappingFragment StoreEntitySet="tblExpenses">
+                <ScalarProperty Name="ExpenseId" ColumnName="ExpenseId" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="CompanyCode" ColumnName="CompanyCode" />
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="ExpenseType" ColumnName="ExpenseType" />
+                <ScalarProperty Name="PurchaseId" ColumnName="PurchaseId" />
+                <ScalarProperty Name="PayrollId" ColumnName="PayrollId" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblItems">
             <EntityTypeMapping TypeName="HrmsModel.tblItem">
               <MappingFragment StoreEntitySet="tblItem">
@@ -1272,6 +1558,25 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
                 <ScalarProperty Name="StorageLocation" ColumnName="StorageLocation" />
                 <ScalarProperty Name="ReorderPoint" ColumnName="ReorderPoint" />
                 <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPayrolls">
+            <EntityTypeMapping TypeName="HrmsModel.tblPayroll">
+              <MappingFragment StoreEntitySet="tblPayroll">
+                <ScalarProperty Name="PayrollId" ColumnName="PayrollId" />
+                <ScalarProperty Name="FortheMonth" ColumnName="FortheMonth" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="CompanyCode" ColumnName="CompanyCode" />
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="BasicSalary" ColumnName="BasicSalary" />
+                <ScalarProperty Name="GrossSalary" ColumnName="GrossSalary" />
+                <ScalarProperty Name="Bonuses" ColumnName="Bonuses" />
+                <ScalarProperty Name="IncomeTax" ColumnName="IncomeTax" />
+                <ScalarProperty Name="MedicalAllowance" ColumnName="MedicalAllowance" />
+                <ScalarProperty Name="TotalDeduction" ColumnName="TotalDeduction" />
+                <ScalarProperty Name="NetSalary" ColumnName="NetSalary" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1313,17 +1618,19 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblRequests">
             <EntityTypeMapping TypeName="HrmsModel.tblRequest">
               <MappingFragment StoreEntitySet="tblRequests">
-                <ScalarProperty Name="CitytoTranser" ColumnName="CitytoTranser" />
-                <ScalarProperty Name="AuthorizedRole" ColumnName="AuthorizedRole" />
+                <ScalarProperty Name="IsSeen" ColumnName="IsSeen" />
+                <ScalarProperty Name="ResponseReason" ColumnName="ResponseReason" />
                 <ScalarProperty Name="RequestId" ColumnName="RequestId" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="PositionId" ColumnName="PositionId" />
                 <ScalarProperty Name="RequestType" ColumnName="RequestType" />
+                <ScalarProperty Name="CitytoTranser" ColumnName="CitytoTranser" />
                 <ScalarProperty Name="DateofRequest" ColumnName="DateofRequest" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Respondedby" ColumnName="Respondedby" />
                 <ScalarProperty Name="ResponseDate" ColumnName="ResponseDate" />
                 <ScalarProperty Name="ReasonofRequest" ColumnName="ReasonofRequest" />
+                <ScalarProperty Name="AuthorizedRole" ColumnName="AuthorizedRole" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1342,6 +1649,17 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="TotalStockCapacity" ColumnName="TotalStockCapacity" />
                 <ScalarProperty Name="AvailableStock" ColumnName="AvailableStock" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStructuredetails">
+            <EntityTypeMapping TypeName="HrmsModel.tblStructuredetail">
+              <MappingFragment StoreEntitySet="tblStructuredetail">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CompanyCode" ColumnName="CompanyCode" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1401,6 +1719,16 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tblOrganizationStructures">
+            <EntityTypeMapping TypeName="HrmsModel.tblOrganizationStructure">
+              <MappingFragment StoreEntitySet="tblOrganizationStructure">
+                <ScalarProperty Name="CompanyCode" ColumnName="CompanyCode" />
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="StorageLocation" ColumnName="StorageLocation" />
+                <ScalarProperty Name="PurchaseOrganization" ColumnName="PurchaseOrganization" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblRequestdetails">
             <EntityTypeMapping TypeName="HrmsModel.tblRequestdetail">
               <MappingFragment StoreEntitySet="tblRequestdetail">
@@ -1417,6 +1745,9 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="getcountnoti" FunctionName="HrmsModel.Store.getcountnoti" />
+          <FunctionImportMapping FunctionImportName="sp_BackEndAvailablity" FunctionName="HrmsModel.Store.sp_BackEndAvailablity" />
+          <FunctionImportMapping FunctionImportName="spGetAllUsers" FunctionName="HrmsModel.Store.spGetAllUsers" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

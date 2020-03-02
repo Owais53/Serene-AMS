@@ -38,7 +38,7 @@ namespace Serene_AMS.Controllers
         public ActionResult Apply(ApplyVM model,HttpPostedFileBase postedFile)
         {
             IRepository objrepo = new ApplicantRepository();
-
+            
            
                 if (postedFile == null)
                 {

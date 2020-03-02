@@ -4,27 +4,31 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="0230bd199cac44e68317b27746cbc294" Name="Diagram1" ZoomLevel="64">
-        <EntityTypeShape EntityType="HrmsModel.tblAdmincheck" Width="1.5" PointX="9.75" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblApplicant" Width="1.5" PointX="5.25" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblCandidate" Width="1.5" PointX="7.5" PointY="18.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblDepartment" Width="1.5" PointX="0.75" PointY="11" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblDoctype" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblDocument" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblEmployee" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblEmployeeDetail" Width="1.5" PointX="7.5" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblItem" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblPosition" Width="1.5" PointX="3" PointY="13.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblPurchase" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblPurchaseitem" Width="1.5" PointX="7.5" PointY="3.875" IsExpanded="true" />
+      <Diagram DiagramId="f482e7bdad6b4bf0893efd903af4f4a1" Name="Diagram1" ZoomLevel="62">
+        <EntityTypeShape EntityType="HrmsModel.tblAdmincheck" Width="1.5" PointX="5.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblApplicant" Width="1.5" PointX="5.25" PointY="24.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblCandidate" Width="1.5" PointX="7.5" PointY="26.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblDepartment" Width="1.5" PointX="0.75" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblDoctype" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblDocument" Width="1.5" PointX="5.25" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblEmployee" Width="1.5" PointX="5.25" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblEmployeeDetail" Width="1.5" PointX="7.5" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblExpens" Width="1.5" PointX="9.75" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblItem" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblPayroll" Width="1.5" PointX="7.5" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblPosition" Width="1.5" PointX="3" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblPurchase" Width="1.5" PointX="7.5" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblPurchaseitem" Width="1.5" PointX="9.75" PointY="5.875" IsExpanded="true" />
         <EntityTypeShape EntityType="HrmsModel.tblRequest" Width="1.5" PointX="9.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblRole" Width="1.5" PointX="9.75" PointY="6.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblStock" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblUser" Width="1.5" PointX="12" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblVacancy" Width="1.5" PointX="3" PointY="17.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblVacancydetail" Width="1.5" PointX="3" PointY="22.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblVendor" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HrmsModel.tblRequestdetail" Width="1.5" PointX="7.5" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblRole" Width="1.5" PointX="5.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblStock" Width="1.5" PointX="5.25" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblStructuredetail" Width="1.5" PointX="0.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblUser" Width="1.5" PointX="8" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblVacancy" Width="1.5" PointX="3" PointY="25.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblVacancydetail" Width="1.5" PointX="3" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblVendor" Width="1.5" PointX="3" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblOrganizationStructure" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HrmsModel.tblRequestdetail" Width="1.5" PointX="7.5" PointY="20.875" IsExpanded="true" />
         <AssociationConnector Association="HrmsModel.FK_Users_tbladmincheck" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblApplicant_tblVacancies" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblCandidates_tblApplicant" ManuallyRouted="false" />
@@ -38,11 +42,15 @@
         <AssociationConnector Association="HrmsModel.FK_tblPurchase_tblDocument" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblEmployee_tblPosition" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblEmployeeDetail_tblEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="HrmsModel.FK_tblPayroll_tblEmployee" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblRequestdetail_tblEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="HrmsModel.FK_tblExpenses_tblPayroll" ManuallyRouted="false" />
+        <AssociationConnector Association="HrmsModel.FK_tblExpenses_tblPurchase" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblPurchaseitem_tblItem" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblStock_tblItem" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblPurchaseitem_tblPurchase" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_Users_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="HrmsModel.FK_tblVacancydetails_tblStructure" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

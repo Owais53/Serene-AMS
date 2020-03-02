@@ -33,7 +33,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.CitytoTransfer, "City", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.CitytoTransfer, (SelectList)ViewBag.getcitylist, "Select City", new { @id = "getCity", @class = "form-control select2_demo_2", @onchange = "javascript: ddlgetposition(this);" })
+                    @Html.DropDownListFor(model => model.CitytoTransfer, (SelectList)ViewBag.CitytoTransfer, "Select City", new { @id = "getCity", @class = "form-control select2_demo_2", @onchange = "javascript: ddlgetposition(this);" })
                     @Html.ValidationMessageFor(model => model.CitytoTransfer, "", new { @class = "text-danger" })
                 </div>
 
@@ -77,7 +77,11 @@
             if (successMessage != '')
                 alertify.success(successMessage);
         });
-
+     $(function () {
+            var errorMessage = '@TempData["ErrorMessage101"]'
+         if (errorMessage != '')
+             alertify.error(errorMessage);
+        });
 
         function ddlgetposition(id) {
 

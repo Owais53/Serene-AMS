@@ -26,6 +26,10 @@ namespace Serene_AMS.ViewModels
         public string PositiontoTransfer { get; set; }
         public string CitytoTransfer { get; set; }
         public string Status { get; set; }
+        [Required]
+        [DataType(DataType.MultilineText)]
+        public string ResponseReason { get; set; }
+        public string ResponseReasonrej { get; set; }
 
     }
 }

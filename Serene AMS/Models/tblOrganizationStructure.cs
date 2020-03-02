@@ -12,18 +12,11 @@ namespace Serene_AMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tblVacancydetail
+    public partial class tblOrganizationStructure
     {
-        public int Id { get; set; }
-        public Nullable<int> CompanyCode { get; set; }
+        public int CompanyCode { get; set; }
         public Nullable<int> CityCode { get; set; }
-        public Nullable<int> DepartmentId { get; set; }
-        public Nullable<int> PositionId { get; set; }
-        public Nullable<int> Availableseats { get; set; }
-        public Nullable<System.DateTime> SeatAvailablityDate { get; set; }
-        public Nullable<int> StructureId { get; set; }
-    
-        public virtual tblDepartment tblDepartment { get; set; }
-        public virtual tblStructuredetail tblStructuredetail { get; set; }
+        public string StorageLocation { get; set; }
+        public string PurchaseOrganization { get; set; }
     }
 }

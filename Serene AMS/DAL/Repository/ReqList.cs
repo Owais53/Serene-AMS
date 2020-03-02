@@ -36,7 +36,7 @@ namespace Serene_AMS.DAL.Repository
         {
             var req = System.Web.HttpContext.Current.Session["RequestId"].ToString();
 
-            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestId='" + req + "'", con);
+            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestId='" + req + "' and IsSeen='False'", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -47,7 +47,7 @@ namespace Serene_AMS.DAL.Repository
         {
             var req = System.Web.HttpContext.Current.Session["RequestId"].ToString();
 
-            SqlCommand com = new SqlCommand("select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestId='" + req + "'", con);
+            SqlCommand com = new SqlCommand("select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestId='" + req + "' and IsSeen='False'", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -58,12 +58,14 @@ namespace Serene_AMS.DAL.Repository
         {
             var req = System.Web.HttpContext.Current.Session["RequestId"].ToString();
             var roles = System.Web.HttpContext.Current.Session["RoleName"].ToString();
-
-            SqlCommand com = new SqlCommand("select Totalcount = (select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and AuthorizedRole='" + roles + "') +(select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestId='"+req+"')", con);
-            SqlDataAdapter da = new SqlDataAdapter(com);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-            return ds;
+           
+                SqlCommand com = new SqlCommand("select Totalcount = (select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and AuthorizedRole='" + roles + "') +(select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestId='" + req + "' and IsSeen='False')", con);
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                return ds;
+            
+           
         }
     }
 }

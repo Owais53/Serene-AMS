@@ -12,26 +12,30 @@ namespace Serene_AMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tblPurchase
+    public partial class tblPayroll
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public tblPurchase()
+        public tblPayroll()
         {
             this.tblExpenses = new HashSet<tblExpens>();
-            this.tblPurchaseitems = new HashSet<tblPurchaseitem>();
         }
     
-        public int PurchaseId { get; set; }
-        public Nullable<int> DocumentNo { get; set; }
-        public string PurchaseOrg { get; set; }
-        public Nullable<System.DateTime> DeliveryDate { get; set; }
-        public Nullable<System.DateTime> ReturnDate { get; set; }
-        public Nullable<System.DateTime> OrderedDate { get; set; }
+        public int PayrollId { get; set; }
+        public string FortheMonth { get; set; }
+        public Nullable<int> Year { get; set; }
+        public Nullable<int> CompanyCode { get; set; }
+        public Nullable<int> CityCode { get; set; }
+        public Nullable<int> EmployeeId { get; set; }
+        public Nullable<decimal> BasicSalary { get; set; }
+        public Nullable<decimal> GrossSalary { get; set; }
+        public Nullable<decimal> Bonuses { get; set; }
+        public Nullable<decimal> IncomeTax { get; set; }
+        public Nullable<decimal> MedicalAllowance { get; set; }
+        public Nullable<decimal> TotalDeduction { get; set; }
+        public string NetSalary { get; set; }
     
-        public virtual tblDocument tblDocument { get; set; }
+        public virtual tblEmployee tblEmployee { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblExpens> tblExpenses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPurchaseitem> tblPurchaseitems { get; set; }
     }
 }

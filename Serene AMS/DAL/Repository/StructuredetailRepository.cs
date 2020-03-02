@@ -155,10 +155,11 @@ namespace Serene_AMS.DAL.Repository
                 PositionId=posid,
                 CitytoTranser=citytrans,
                 RequestType ="Transfer",
-                DateofRequest=DateTime.Now.Date,
+                DateofRequest=DateTime.Now,
                 Status="Pending",
                 ReasonofRequest=ReasonofReq,
                 AuthorizedRole="DGM",
+                IsSeen=false,
             };
             return addreq;
         }
@@ -182,22 +183,51 @@ namespace Serene_AMS.DAL.Repository
 
         }
 
-        public void updatereqt(int reqid,string resby)
+        public void updatereqt(int reqid,string resby,string resreason)
         {
             var obj = context.tblRequests.Find(reqid);
             obj.Status = "Accepted";
             obj.Respondedby = resby;
-            obj.ResponseDate = DateTime.Today;
+            obj.ResponseDate = DateTime.Now;
+            obj.ResponseReason = resreason;
             context.Entry(obj).State = EntityState.Modified;
         }
 
-        public void updatereqtrej(int reqid, string resby)
+        public void updatereqtrej(int reqid, string resby,string resreason)
         {
             var obj = context.tblRequests.Find(reqid);
             obj.Status = "Rejected";
             obj.Respondedby = resby;
-            obj.ResponseDate = DateTime.Today;
+            obj.ResponseDate = DateTime.Now;
+            obj.ResponseReason = resreason;
             context.Entry(obj).State = EntityState.Modified;
         }
+
+        public tblRequest Addreqtfordgm(int Employeeid, int posid, string citytrans, string ReasonofReq)
+        {
+            var addreq = new tblRequest()
+            {
+                EmployeeId = Employeeid,
+                PositionId = posid,
+                CitytoTranser = citytrans,
+                RequestType = "Transfer",
+                DateofRequest = DateTime.Now,
+                Status = "Pending",
+                ReasonofRequest = ReasonofReq,
+                AuthorizedRole = "CEO",
+                IsSeen=false,
+            };
+            return addreq;
+        }
+
+        public void updateseen(int reqid)
+        {
+            var obj = context.tblRequests.Find(reqid);
+            obj.IsSeen = true;
+            context.Entry(obj).State = EntityState.Modified;
+
+        }
+
+      
     }
 }

@@ -24,14 +24,15 @@ namespace Serene_AMS.Controllers
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 listreq.Add(new RequestVM
-                {              
-                    CityName = dr["CityName"].ToString(),                  
-                    RequestId= Convert.ToInt32(dr["RequestId"]),
+                {
+                    CityName = dr["CityName"].ToString(),
+                    RequestId = Convert.ToInt32(dr["RequestId"]),
                     EmployeeId = Convert.ToInt32(dr["EmployeeId"]),
-                    EmployeeName=dr["EmployeeName"].ToString(),
-                    DateofRequest=Convert.ToDateTime(dr["DateofRequest"]),
-                    RequestType= dr["RequestType"].ToString(),
-                    Position=dr["Position"].ToString()
+                    EmployeeName = dr["EmployeeName"].ToString(),
+                    DateofRequest = Convert.ToDateTime(dr["DateofRequest"]),
+                    RequestType = dr["RequestType"].ToString(),
+                    Position = dr["Position"].ToString()
+                    
                 });
             }
             return Json(listreq, JsonRequestBehavior.AllowGet);
@@ -89,6 +90,13 @@ namespace Serene_AMS.Controllers
             }
             return Json(listreq, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult UpdateSeen(RequestVM model)
+        {
+            IStructuredetailRepository obj = new StructuredetailRepository();
+            obj.updateseen(Convert.ToInt32(model.RequestId));
+            obj.Save();
 
+            return Json(new { success = true}, JsonRequestBehavior.AllowGet);
+        }
     }
 }

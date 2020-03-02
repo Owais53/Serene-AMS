@@ -1,6 +1,6 @@
 ﻿@model Serene_AMS.ViewModels.RequestVM
 @{
-    ViewBag.Title = "TransferResponse";
+    ViewBag.Title = "View Transfer Response";
 }
 
 <nav>
@@ -18,8 +18,9 @@
 <div class="ibox">
 
     <div class="ibox-body">
-        @using (Html.BeginForm("TransferResponse", "Requests", FormMethod.Post))
+        @using (Html.BeginForm("ViewTransferResponse", "Requests", FormMethod.Get, new { name = "formrestrans" }))
         {
+
             <div class="form-group row">
 
                 <div class="col-md-10">
@@ -93,11 +94,11 @@
 
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
-                    Reason of Transfer:
+                    Status:
                 </label>
                 <div class="col-md-10">
                     <label class="col-sm-2 col-form-label" style="left:350px; ">
-                        @Html.DisplayFor(model => model.ReasonofRequest)
+                        @Html.DisplayFor(model => model.Status)
                     </label>
                 </div>
             </div>
@@ -112,51 +113,46 @@
                     </label>
                 </div>
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.ResponseReason, "Reason", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="left:320px; color:red;">
+                    Reason of Approval/Rejection:
+                </label>
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.ResponseReason, new { htmlAttributes = new { @class = "form-control", @id = "getresreq" } })
-                    @Html.ValidationMessageFor(model => model.ResponseReason, "", new { @class = "text-danger" })
+                    <label class="col-sm-2 col-form-label" style="left:350px; ">
+                        @Html.DisplayFor(model => model.ResponseReason)
+                    </label>
                 </div>
             </div>
 
 
-            <button type="submit" class="btn-primary">Approve</button>
 
         }
-        @using (Html.BeginForm("TransferResponseReject", "Requests", FormMethod.Post))
-        {
-            @Html.EditorFor(model => model.ResponseReasonrej, new { htmlAttributes = new { @class = "form-control", @id = "getresreq1", @type="hidden" } })
-            @Html.EditorFor(model => model.RequestId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
-            <button type="submit" class="btn btn-danger">Reject</button>
-        }
+
     </div>
 </div>
-
-
-
 @section scripts{
+    
+    
+ <script type="text/javascript">
+     $(function () {
+         var form = $('form[name="formrestrans"]');
+        
+         form.validate();
+         if (!form.valid()) {
+             return;
+         } else {
+             var data = form.serialize();
+             $.post("/Notifications/UpdateSeen", data, function (res) {
+                 if (res) {
 
-    <script>
-        $(function () {
-            var successMessage = '@TempData["SuccessMessage101"]'
-            if (successMessage != '')
-                alertify.success(successMessage);
-        });
-        $(function () {
-            $('#getresreq').keyup(function () {
-                var text = $("#getresreq").val();
-                $("#getresreq1").val(text);
+                 }
 
-            });
-           
-
-        });
-
-
-    </script>
-
-
-
-
-}
+             })
+         }
+         
+     })
+    </script>   
+    
+    
+    
+ }

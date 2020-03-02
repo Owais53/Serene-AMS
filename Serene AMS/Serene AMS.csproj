@@ -193,7 +193,16 @@
     <Compile Include="Models\tblEmployeeDetail.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblExpens.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblItem.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblOrganizationStructure.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblPayroll.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblPosition.cs">
@@ -215,6 +224,9 @@
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblStock.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblStructuredetail.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblUser.cs">
@@ -968,6 +980,7 @@
     <Content Include="Views\Recruitment\ConfirmEmployeePartial.cshtml" />
     <Content Include="Views\Requests\RequestTransfer.cshtml" />
     <Content Include="Views\Requests\TransferResponse.cshtml" />
+    <Content Include="Views\Requests\ViewTransferResponse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

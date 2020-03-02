@@ -35,10 +35,12 @@ namespace Serene_AMS.DAL.Interface
         tblVacancy Addvac(string vacname,string cityname,int posid,int depid,string qualification,int joblevel,int marks,string test);
         void updatetransapp(int empid, string city,int posid);
        
-        void updatereqt(int reqid,string resby);
-        void updatereqtrej(int reqid, string resby);
+        void updatereqt(int reqid,string resby,string resreason);
+        void updatereqtrej(int reqid, string resby,string resreason);
         void updateseats(int posid,int sid,int positionid,int structid);
         tblRequest Addreqt(int Employeeid, int posid,string citytrans,string ReasonofReq);
+        tblRequest Addreqtfordgm(int Employeeid, int posid, string citytrans, string ReasonofReq);
+        void updateseen(int reqid);
         void AddReq(tblRequest obj);
         void Delete(int Id);
 
