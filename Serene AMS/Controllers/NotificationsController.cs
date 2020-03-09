@@ -321,9 +321,7 @@ namespace Serene_AMS.Controllers
                             emp.PositionId,        
                             pos.Position,
                             pos.BasicPay
-                          
-                           
-
+                                      
 
                         }).Where(x => x.EmployeeId == Id).Select(c => new PositionVM()
                         {

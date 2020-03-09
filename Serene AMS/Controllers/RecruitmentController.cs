@@ -197,8 +197,8 @@ namespace Serene_AMS.Controllers
                           d.ApplicationId,
                           dep.DepartmentName,
                           pos.Position,
-                          d.Salary
-                       
+                          pos.BasicPay
+                                             
 
                       }).Select(c => new CandidateEmployeeVM()
                       {
@@ -213,10 +213,9 @@ namespace Serene_AMS.Controllers
                           Email = c.Email,
                           Address = c.Address,
                           Position = c.Position,
-                          Salary=(decimal)c.Salary
-
-
-
+                          Salary=(decimal)c.BasicPay,
+                          PosSalary=(decimal)c.BasicPay
+                         
                       }).FirstOrDefault();
 
 
@@ -244,7 +243,9 @@ namespace Serene_AMS.Controllers
                             d.Address,
                             d.ApplicationId,
                             d.JoiningDate,
-                            s.CityName
+                            s.CityName,
+                            d.Salary
+                            
                             
 
                         }).Select(c => new CandidateEmployeeVM()
@@ -259,7 +260,9 @@ namespace Serene_AMS.Controllers
                             Email = c.Email,
                             Address = c.Address,
                             JoiningDate=(Nullable<DateTime>)c.JoiningDate,
-                            CityName=c.CityName
+                            CityName=c.CityName,
+                            PosSalary=(decimal?)c.Salary
+                           
 
                         }).FirstOrDefault();
 
@@ -334,14 +337,22 @@ namespace Serene_AMS.Controllers
             IRepository objrepo = new ApplicantRepository();
             IStructuredetailRepository repo = new StructuredetailRepository();
 
-           
+            var checksalarylimit = repo.Getpos().Where(x => x.BasicPay > model.Salary).FirstOrDefault();
 
-            objrepo.UpdateEmp(model.ApplicationId,model.JoiningDate,model.Salary);
-            objrepo.Save();
+            if (checksalarylimit == null)
+            {
 
+                objrepo.UpdateEmp(model.ApplicationId, model.JoiningDate, model.Salary);
+                objrepo.Save();
 
-            TempData["SuccessMessage25"] = "Success";
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                TempData["SuccessMessage25"] = "Success";
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                TempData["ErrorMessage25"] = "Salary can not be less than " +model.PosSalary+ " for Position " +model.Position+ "";
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
         }
         public bool SendEmail(string toEmail,string subject,string emailbody)
         {

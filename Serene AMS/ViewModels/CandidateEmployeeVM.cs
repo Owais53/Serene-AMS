@@ -36,6 +36,6 @@ namespace Serene_AMS.ViewModels
         public Nullable<DateTime> JoiningDate { get; set; }
         [Required]
         public decimal Salary { get; set; }
-
+        public decimal? PosSalary { get; set; }
     }
 }

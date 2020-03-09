@@ -178,6 +178,7 @@ namespace Serene_AMS.DAL.Repository
                 EmployeeId = empid,
                 EmployeeStatus = "Active",
                 Dateofjoining = joiningdate,
+                IsSalaryset=true,
                 EmployeeSalary=salary,
             };
             return adddetail;

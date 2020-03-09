@@ -34,7 +34,7 @@
     <label style="color:red;" id="lblerror"></label>
     <br />
     <button type="button" id="btnfilter" class="btn btn-primary">Filter</button>
-   
+
     <table id="tblslcandid" class="table table-striped table-hover responsive table-responsive">
         <thead>
             <tr style="background-color:#0094ff; color:#ecf0f1">
@@ -99,6 +99,13 @@
                 alertify.success(successMessage);
         });
     </script>
+    <script>
+        $(function () {
+            var successMessage = '@TempData["ErrorMessage25"]'
+            if (successMessage != '')
+                alertify.error(successMessage);
+        });
+    </script>
 
     <script type="text/javascript">
         var Popup, dataTable2;
@@ -131,8 +138,8 @@
 
                         },
                     }
-                   
-                   
+
+
 
                 ]
 
@@ -195,16 +202,15 @@
                 $("#confirmmodal").html(res);
                 var datejoin = $("#getdatejoin").val();
 
-                if (datejoin == "" ) {
+                if (datejoin == "") {
                     $("#lblerror").html("Joining Date not defined");
 
                 }
-                else
-                {
+                else {
                     $("#Modalconfirm").modal('show');
 
                 }
-               
+
 
             })
         }
