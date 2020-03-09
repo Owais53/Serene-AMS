@@ -262,6 +262,61 @@ namespace Serene_AMS.Controllers
             TempData["SuccessMessage11"] = "Success";
             return Json(new { success=true},JsonRequestBehavior.AllowGet);
         }
+        public ActionResult SetPromotedEmployeeSalary()
+        {
+            return View();
+        }
+        public ActionResult GetPromotedEmployeesList()
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
 
+            var Data = (from emp in repo.Getemp()
+                        join empdetail in repo.Getempdet() on emp.EmployeeId equals empdetail.EmployeeId
+                        join pos in repo.Getpos() on emp.PositionId equals pos.Id
+                        select new
+                        {
+                            emp.EmployeeId,
+                            emp.EmployeeName,
+                            empdetail.DateofPromotion,
+                            empdetail.IsSalaryset,
+                            pos.Position,
+                            pos.BasicPay
+
+                        }).Where(a => a.IsSalaryset == false).ToList();
+
+            return Json(new { data=Data},JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetPromotedEmpSalary(int? Id)
+        {
+
+            IStructuredetailRepository repo = new StructuredetailRepository();
+
+            var data = (from emp in repo.Getemp()
+                        join pos in repo.Getpos() on emp.PositionId equals pos.Id
+                        select new
+                        {
+                            emp.EmployeeId,
+                            emp.EmployeeName,
+                            emp.PositionId,        
+                            pos.Position,
+                            pos.BasicPay
+                          
+                           
+
+
+                        }).Where(x => x.EmployeeId == Id).Select(c => new PositionVM()
+                        {
+                            EmployeeName = c.EmployeeName,
+                            EmployeeId = (int)c.EmployeeId,
+                            PositionId = (int)c.PositionId,
+                            Position = c.Position,
+                            BasicPay=(decimal)c.BasicPay
+                          
+
+                        }).FirstOrDefault();
+
+
+            return PartialView("EmployeePromotionSalaryPartial", data);
+        }
     }
 }

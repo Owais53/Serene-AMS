@@ -984,8 +984,8 @@
     <Content Include="Views\Requests\ViewTransferResponse.cshtml" />
     <Content Include="Views\Notifications\Promotions.cshtml" />
     <Content Include="Views\Notifications\EmployeePromotionPartial.cshtml" />
-    <Content Include="Views\Notifications\SetPromotedEmployeeSalary.cshtml" />
     <Content Include="Views\Notifications\EmployeePromotionSalaryPartial.cshtml" />
+    <Content Include="Views\Notifications\SetPromotedEmployeeSalary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
