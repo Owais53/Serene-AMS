@@ -22,10 +22,11 @@ namespace Serene_AMS.Models
     
         public int Id { get; set; }
         public Nullable<int> DepartmentId { get; set; }
-        public string JobLevel { get; set; }
+        public Nullable<int> JobLevel { get; set; }
         public string Position { get; set; }
         public Nullable<decimal> BasicPay { get; set; }
         public Nullable<decimal> IncomeTax { get; set; }
+        public string Experience { get; set; }
     
         public virtual tblDepartment tblDepartment { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

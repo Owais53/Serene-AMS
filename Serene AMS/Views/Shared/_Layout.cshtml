@@ -208,11 +208,13 @@
                             <span class="nav-label">Recruitment</span><i class="fa fa-angle-left arrow"></i>
                         </a>
                         <ul class="nav-2-level collapse">
-                            @if (Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                            @if (Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Create Vacancy", "CreateVacancy", "Recruitment")</li>
                                 <li>@Html.ActionLink("View Vacancy", "ViewVacancy", "Recruitment")</li>
                                 <li>@Html.ActionLink("Create Position", "Position", "Admin")</li>
+                                <li>@Html.ActionLink("Promotions", "Promotions", "Notifications")</li>
+                                <li>@Html.ActionLink("View Promoted Employees", "SetPromotedEmployeeSalary", "Notifications")</li>
                                 <li>@Html.ActionLink("View Applications", "ViewApplications", "Recruitment")</li>
                                 <li>@Html.ActionLink("View Candidate", "ViewCandidate", "Recruitment")</li>
                                 <li>@Html.ActionLink("View Marks", "ViewMarks", "Recruitment")</li>
@@ -245,7 +247,7 @@
                             @if (Session["RoleName"].ToString() == "DGM")
                             {
                                 <li>@Html.ActionLink("View ShortListed Candidates", "ViewShortlistedcandidate", "Recruitment")</li>
-                               
+
                                 <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                             }
 

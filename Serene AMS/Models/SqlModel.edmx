@@ -99,6 +99,9 @@
           <Property Name="DateofTransfer" Type="datetime" />
           <Property Name="DateofPromotion" Type="datetime" />
           <Property Name="LastLeaveDate" Type="datetime" />
+          <Property Name="EmployeeSalary" Type="money" />
+          <Property Name="IsSalaryset" Type="bit" />
+          <Property Name="IsSeenPromotion" Type="bit" />
         </EntityType>
         <EntityType Name="tblExpenses">
           <Key>
@@ -160,10 +163,11 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DepartmentId" Type="int" />
-          <Property Name="JobLevel" Type="varchar" MaxLength="75" />
+          <Property Name="JobLevel" Type="int" />
           <Property Name="Position" Type="varchar(max)" />
           <Property Name="BasicPay" Type="money" />
           <Property Name="IncomeTax" Type="money" />
+          <Property Name="Experience" Type="nvarchar" MaxLength="75" />
         </EntityType>
         <EntityType Name="tblPurchase">
           <Key>
@@ -820,6 +824,9 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="DateofPromotion" Type="DateTime" Precision="3" />
           <Property Name="LastLeaveDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="tblEmployee" Relationship="Self.FK_tblEmployeeDetail_tblEmployee" FromRole="tblEmployeeDetail" ToRole="tblEmployee" />
+          <Property Name="EmployeeSalary" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="IsSalaryset" Type="Boolean" />
+          <Property Name="IsSeenPromotion" Type="Boolean" />
         </EntityType>
         <EntityType Name="tblExpens">
           <Key>
@@ -877,12 +884,13 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DepartmentId" Type="Int32" />
-          <Property Name="JobLevel" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="JobLevel" Type="Int32" />
           <Property Name="Position" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="BasicPay" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="IncomeTax" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="tblDepartment" Relationship="Self.FK_tblPosition_tblDepartment" FromRole="tblPosition" ToRole="tblDepartments" />
           <NavigationProperty Name="tblEmployees" Relationship="Self.FK_tblEmployee_tblPosition" FromRole="tblPosition" ToRole="tblEmployee" />
+          <Property Name="Experience" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblPurchase">
           <Key>
@@ -1524,6 +1532,9 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblEmployeeDetails">
             <EntityTypeMapping TypeName="HrmsModel.tblEmployeeDetail">
               <MappingFragment StoreEntitySet="tblEmployeeDetail">
+                <ScalarProperty Name="IsSeenPromotion" ColumnName="IsSeenPromotion" />
+                <ScalarProperty Name="IsSalaryset" ColumnName="IsSalaryset" />
+                <ScalarProperty Name="EmployeeSalary" ColumnName="EmployeeSalary" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
                 <ScalarProperty Name="Dateofjoining" ColumnName="Dateofjoining" />
@@ -1583,6 +1594,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblPositions">
             <EntityTypeMapping TypeName="HrmsModel.tblPosition">
               <MappingFragment StoreEntitySet="tblPosition">
+                <ScalarProperty Name="Experience" ColumnName="Experience" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
                 <ScalarProperty Name="JobLevel" ColumnName="JobLevel" />

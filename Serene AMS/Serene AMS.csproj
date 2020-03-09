@@ -136,6 +136,7 @@
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\RecruitmentController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
+    <Compile Include="DAL\Classes\DataTableparams.cs" />
     <Compile Include="DAL\Interface\IDepartmentRepository.cs" />
     <Compile Include="DAL\Interface\IEmployeeRepository.cs" />
     <Compile Include="DAL\Interface\ILogin.cs" />
@@ -981,12 +982,15 @@
     <Content Include="Views\Requests\RequestTransfer.cshtml" />
     <Content Include="Views\Requests\TransferResponse.cshtml" />
     <Content Include="Views\Requests\ViewTransferResponse.cshtml" />
+    <Content Include="Views\Notifications\Promotions.cshtml" />
+    <Content Include="Views\Notifications\EmployeePromotionPartial.cshtml" />
+    <Content Include="Views\Notifications\SetPromotedEmployeeSalary.cshtml" />
+    <Content Include="Views\Notifications\EmployeePromotionSalaryPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="CV\" />
     <Folder Include="TestPaper\" />
-    <Folder Include="Views\Notifications\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

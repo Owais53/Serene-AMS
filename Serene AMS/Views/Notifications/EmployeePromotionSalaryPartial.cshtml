@@ -1,0 +1,62 @@
+﻿@model Serene_AMS.ViewModels.PositionVM
+
+<form name="formEmpProsal">
+
+
+    <div class="modal-content responsive" id="empprosalmodal">
+        <div class="modal-header">
+            <h4 class="modal-title">Set Promoted Employee Salary</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+
+        <div class="modal-body" style="overflow: auto">
+
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    <label>Employee Name:</label>
+                    @Html.EditorFor(model => model.EmployeeName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+                @Html.EditorFor(model => model.EmployeeId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+
+
+                @Html.EditorFor(model => model.PositionId, new { htmlAttributes = new { @class = "form-control", @id = "PosID", @type = "hidden" } })
+
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    <label>Current Position:</label>
+                    @Html.EditorFor(model => model.Position, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    <label>Minimum Salary:</label>
+                    @Html.EditorFor(model => model.BasicPay, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    <label>Salary:</label>
+                    @Html.EditorFor(model => model.Employeesalary, new { htmlAttributes = new { @class = "form-control"} })
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="Updateemppos()">Submit</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+
+</form>

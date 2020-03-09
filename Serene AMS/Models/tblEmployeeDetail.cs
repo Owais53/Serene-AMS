@@ -21,6 +21,9 @@ namespace Serene_AMS.Models
         public Nullable<System.DateTime> DateofTransfer { get; set; }
         public Nullable<System.DateTime> DateofPromotion { get; set; }
         public Nullable<System.DateTime> LastLeaveDate { get; set; }
+        public Nullable<decimal> EmployeeSalary { get; set; }
+        public Nullable<bool> IsSalaryset { get; set; }
+        public Nullable<bool> IsSeenPromotion { get; set; }
     
         public virtual tblEmployee tblEmployee { get; set; }
     }

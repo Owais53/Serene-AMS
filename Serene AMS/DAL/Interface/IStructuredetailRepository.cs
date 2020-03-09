@@ -20,18 +20,19 @@ namespace Serene_AMS.DAL.Interface
 
         IEnumerable<tblDepartment> validation(string dep);
         IEnumerable<tblPosition> validation1(string pos);
-        IEnumerable<tblPosition> validation2(string level);
+        IEnumerable<tblPosition> validation2(int level);
         IEnumerable<tblVacancydetail> Get();
         IEnumerable<tblVacancy> GetVacancies();
         IEnumerable<tblRequest> GetReq();
 
         IEnumerable<tblVacancy> GetPosition(int id);
+        IEnumerable<tblEmployee> Getemp();
+        IEnumerable<tblEmployeeDetail> Getempdet();
 
-      
         void Addvacant(tblVacancy obj);
         void Add(tblPosition obj);
         
-        tblPosition Addpos(int depid, string joblevel, string position, decimal basicpay, decimal Incometax);
+        tblPosition Addpos(int depid, int joblevel, string position, decimal basicpay, decimal Incometax,string exp);
         tblVacancy Addvac(string vacname,string cityname,int posid,int depid,string qualification,int joblevel,int marks,string test);
         void updatetransapp(int empid, string city,int posid);
        
@@ -41,6 +42,9 @@ namespace Serene_AMS.DAL.Interface
         tblRequest Addreqt(int Employeeid, int posid,string citytrans,string ReasonofReq);
         tblRequest Addreqtfordgm(int Employeeid, int posid, string citytrans, string ReasonofReq);
         void updateseen(int reqid);
+        void updatepos(int empid,int posid);
+        void updateempdetailpro(int empid);
+        void setProEmpsalary(int empid,decimal salary);
         void AddReq(tblRequest obj);
         void Delete(int Id);
 

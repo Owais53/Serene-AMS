@@ -230,7 +230,7 @@ namespace Serene_AMS.Controllers
                     ViewBag.getlevellist = levellist;
 
 
-                    var add = objstructureRepository.Addpos(Convert.ToInt32(obj.DepartmentId), obj.JobLevel, obj.Position, Convert.ToDecimal(obj.BasicPay), Convert.ToDecimal(obj.IncomeTax));
+                    var add = objstructureRepository.Addpos(Convert.ToInt32(obj.DepartmentId), obj.JobLevel, obj.Position, Convert.ToDecimal(obj.BasicPay), Convert.ToDecimal(obj.IncomeTax),obj.Experience);
                     objstructureRepository.Add(add);
                     objstructureRepository.Save();
 

@@ -111,14 +111,24 @@
 
         function ddlgetpos(id) {
 
-            $.get("/Recruitment/GetPositionbyId", { id: id.value }, function (res) {
+            $.get("/Recruitment/GetPositiontoremove", { id: id.value }, function (res) {
 
+                $.each(res, function (index, row) {
+
+                    $('#' + row.Id + '').remove();
+
+                });
+
+            })
+
+            $.get("/Recruitment/GetPositionbyId", { id: id.value }, function (res) {
 
                 $.each(res, function (index, row) {
                    
-                        $('#' + row.Id + '').remove();
+                        
                         $("#ddlpos").append("<option id='" + row.Id + "' value='" + row.Id + "'>" + row.Position + "</option>")
 
+                  
                     
                    
                 });

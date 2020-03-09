@@ -1,7 +1,5 @@
 ﻿using Serene_AMS.DAL.Interface;
 using Serene_AMS.DAL.Repository;
-using Serene_AMS.Infrastructure;
-using Serene_AMS.Models;
 using Serene_AMS.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,7 +12,6 @@ namespace Serene_AMS.Controllers
 {
     public class NotificationsController : Controller
     {
-        
         public JsonResult GetReqNoti()
         {
             ReqList obj = new ReqList();
@@ -32,7 +29,7 @@ namespace Serene_AMS.Controllers
                     DateofRequest = Convert.ToDateTime(dr["DateofRequest"]),
                     RequestType = dr["RequestType"].ToString(),
                     Position = dr["Position"].ToString()
-                    
+
                 });
             }
             return Json(listreq, JsonRequestBehavior.AllowGet);
@@ -54,7 +51,7 @@ namespace Serene_AMS.Controllers
                     DateofRequest = Convert.ToDateTime(dr["DateofRequest"]),
                     RequestType = dr["RequestType"].ToString(),
                     Position = dr["Position"].ToString(),
-                    Status=dr["Status"].ToString()
+                    Status = dr["Status"].ToString()
                 });
             }
             return Json(listreq, JsonRequestBehavior.AllowGet);
@@ -69,8 +66,8 @@ namespace Serene_AMS.Controllers
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 listreq.Add(new RequestVM
-                {                 
-                    count = Convert.ToInt32(dr["Totalcount"])                 
+                {
+                    count = Convert.ToInt32(dr["Totalcount"])
                 });
             }
             return Json(listreq, JsonRequestBehavior.AllowGet);
@@ -96,7 +93,175 @@ namespace Serene_AMS.Controllers
             obj.updateseen(Convert.ToInt32(model.RequestId));
             obj.Save();
 
-            return Json(new { success = true}, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult Promotions()
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            var deplist = repo.Getdep().ToList();
+
+            SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+            ViewBag.getdep1list = list;
+
+            return View();
+        }
+        public ActionResult GetempposList(int? Id)
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            IDepartmentRepository deprepo = new DepartmentRepository();
+
+            var data = (from emp in repo.Getemp()
+                        join pos in repo.Getpos() on emp.PositionId equals pos.Id
+                        select new
+                        {
+                            emp.EmployeeId,
+                            emp.EmployeeName,
+                            emp.PositionId,
+                            emp.CityName,
+                            emp.Contact,
+                            emp.Email,
+                            emp.DateofBirth,
+                            emp.Gender,
+                            pos.Position,
+                            pos.Experience
+
+
+                        }).Where(x=>x.PositionId==Id).Select(c => new PositionVM()
+                        {
+                            EmployeeName = c.EmployeeName,
+                            EmployeeId = (int)c.EmployeeId,
+                            Gender = c.Gender,
+                            Experience = c.Experience,
+                            CityName = c.CityName,
+                            Contact = c.Contact,
+                            Email = c.Email,
+                            DateofBirth = (DateTime)c.DateofBirth,
+                            PositionId = (int)c.PositionId,
+                            Position = c.Position
+
+
+                        });
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+
+        }
+        public ActionResult RemoveTable(int? Id)
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            IDepartmentRepository deprepo = new DepartmentRepository();
+
+            var data = (from emp in repo.Getemp()
+                        join pos in repo.Getpos() on emp.PositionId equals pos.Id
+                        select new
+                        {
+                            emp.EmployeeId,
+                            emp.EmployeeName,
+                            emp.PositionId,
+                            emp.CityName,
+                            emp.Contact,
+                            emp.Email,
+                            emp.DateofBirth,
+                            emp.Gender,
+                            pos.Position,
+                            pos.Experience
+
+
+                        }).Where(x => x.PositionId != Id).Select(c => new PositionVM()
+                        {
+                            EmployeeName = c.EmployeeName,
+                            EmployeeId = (int)c.EmployeeId,
+                            Gender = c.Gender,
+                            Experience = c.Experience,
+                            CityName = c.CityName,
+                            Contact = c.Contact,
+                            Email = c.Email,
+                            DateofBirth = (DateTime)c.DateofBirth,
+                            PositionId = (int)c.PositionId,
+                            Position = c.Position
+
+
+                        });
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+
+        }
+        public ActionResult GetEmployeeforpro(int? Id)
+        {
+
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            
+
+            var data = (from emp in repo.Getemp()
+                        join pos in repo.Getpos() on emp.PositionId equals pos.Id
+                        select new
+                        {
+                            emp.EmployeeId,
+                            emp.EmployeeName,
+                            emp.PositionId,
+                            emp.CityName,
+                            emp.Contact,
+                            emp.Email,
+                            emp.DateofBirth,
+                            emp.Gender,
+                            pos.Position,
+                            pos.Experience,
+                            emp.DepartmentId,
+                            pos.JobLevel
+
+
+                        }).Where(x => x.EmployeeId == Id).Select(c => new PositionVM()
+                        {
+                            EmployeeName = c.EmployeeName,
+                            EmployeeId = (int)c.EmployeeId,
+                            Gender = c.Gender,
+                            Experience = c.Experience,
+                            CityName = c.CityName,
+                            Contact = c.Contact,
+                            Email = c.Email,
+                            DateofBirth = (DateTime)c.DateofBirth,
+                            PositionId = (int)c.PositionId,
+                            Position = c.Position,
+                            JobLevel=(int)c.JobLevel,
+                            DepartmentId=(int)c.DepartmentId
+
+
+                        }).FirstOrDefault();
+
+            
+            return PartialView("EmployeePromotionPartial",data);
+        }
+        public ActionResult GetPositionbyposId(int? Id,int? depid,int? joblevel)
+        {
+            IStructuredetailRepository obj = new StructuredetailRepository();
+            var Data = (from pos in obj.Getpos()
+                        select new
+                        {
+                            pos.Id,
+                            pos.DepartmentId,
+                            pos.JobLevel,
+                            pos.Position
+                           
+
+
+                        }).Where(x => x.Id != Id).Where(a => a.DepartmentId == depid && a.JobLevel > joblevel).Select(x=> new PositionVM { Id=x.Id,Position=x.Position});
+
+
+            return Json(Data, JsonRequestBehavior.AllowGet);
+
+        }
+        public ActionResult EmployeePositionUpdate(PositionVM model)
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+
+            repo.updatepos(model.EmployeeId,model.posidtopro);
+            repo.Save();
+            repo.updateempdetailpro(model.EmployeeId);
+            repo.Save();
+
+
+            TempData["SuccessMessage11"] = "Success";
+            return Json(new { success=true},JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

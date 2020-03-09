@@ -43,7 +43,7 @@ namespace Serene_AMS.DAL.Repository
         {
             return context.tblPositions.Where(x => x.Position == pos);
         }
-        public IEnumerable<tblPosition> validation2(string level)
+        public IEnumerable<tblPosition> validation2(int level)
         {
             return context.tblPositions.Where(x => x.JobLevel == level);
         }
@@ -89,7 +89,7 @@ namespace Serene_AMS.DAL.Repository
         {
             context.tblPositions.Add(obj);
         }
-        public tblPosition Addpos(int depid, string joblevel, string position, decimal basicpay, decimal Incometax)
+        public tblPosition Addpos(int depid, int joblevel, string position, decimal basicpay, decimal Incometax,string exp)
         {
             var pos = new tblPosition()
             {
@@ -98,6 +98,7 @@ namespace Serene_AMS.DAL.Repository
                Position = position,
                BasicPay = basicpay,
                IncomeTax = Incometax,
+               Experience=exp+ " Years",
 
             };
 
@@ -228,6 +229,41 @@ namespace Serene_AMS.DAL.Repository
 
         }
 
-      
+        public IEnumerable<tblEmployee> Getemp()
+        {
+            return context.tblEmployees;
+        }
+
+        public IEnumerable<tblEmployeeDetail> Getempdet()
+        {
+            return context.tblEmployeeDetails;
+        }
+
+        public void updatepos(int empid,int posid)
+        {
+            var obj = context.tblEmployees.Find(empid);
+            obj.PositionId = posid;
+            context.Entry(obj).State = EntityState.Modified;
+
+        }
+
+        public void updateempdetailpro(int empid)
+        {
+            var obj = context.tblEmployeeDetails.Find(empid);
+            obj.DateofPromotion = DateTime.Now.Date;
+            obj.IsSalaryset = false;
+            obj.IsSeenPromotion = false;
+           
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void setProEmpsalary(int empid, decimal salary)
+        {
+            var obj = context.tblEmployeeDetails.Find(empid);
+            obj.EmployeeSalary = salary;
+            obj.IsSalaryset = true;
+
+            context.Entry(obj).State = EntityState.Modified;
+        }
     }
 }

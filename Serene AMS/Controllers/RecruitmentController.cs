@@ -581,14 +581,18 @@ namespace Serene_AMS.Controllers
             
            
         }
-        public JsonResult GetPositionbyId(int Id)
+        public JsonResult GetPositionbyId(int? Id)
         {
             HrmsEntities db = new HrmsEntities();
-            IStructuredetailRepository repoobj = new StructuredetailRepository();
             db.Configuration.ProxyCreationEnabled = false;
             return Json(db.tblPositions.Where(p => p.DepartmentId == Id).Select(x=> new { x.Id,x.Position}), JsonRequestBehavior.AllowGet);
         }
-
+        public JsonResult GetPositiontoremove(int? Id)
+        {
+            HrmsEntities db = new HrmsEntities();
+            db.Configuration.ProxyCreationEnabled = false;
+            return Json(db.tblPositions.Where(p => p.DepartmentId != Id).Select(x => new { x.Id, x.Position }), JsonRequestBehavior.AllowGet);
+        }
         [HttpPost]
         public ActionResult CreateVacancy(VacancyVM model, HttpPostedFileBase postedFile1,FormCollection form)
         {
