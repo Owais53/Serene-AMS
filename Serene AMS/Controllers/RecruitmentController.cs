@@ -196,7 +196,8 @@ namespace Serene_AMS.Controllers
                           d.Address,
                           d.ApplicationId,
                           dep.DepartmentName,
-                          pos.Position
+                          pos.Position,
+                          d.Salary
                        
 
                       }).Select(c => new CandidateEmployeeVM()
@@ -211,7 +212,8 @@ namespace Serene_AMS.Controllers
                           Contact = c.Phone,
                           Email = c.Email,
                           Address = c.Address,
-                          Position = c.Position
+                          Position = c.Position,
+                          Salary=(decimal)c.Salary
 
 
 
@@ -308,7 +310,7 @@ namespace Serene_AMS.Controllers
             objrepo.Addemp(add);
             objrepo.Save();
 
-            var add1 = objrepo.AddempDetail(add.EmployeeId,(Nullable<DateTime>)model.JoiningDate);
+            var add1 = objrepo.AddempDetail(add.EmployeeId,(Nullable<DateTime>)model.JoiningDate,model.Salary);
             objrepo.Addempdetail(add1);
             objrepo.Save();
 
@@ -330,7 +332,10 @@ namespace Serene_AMS.Controllers
         {
 
             IRepository objrepo = new ApplicantRepository();
-          
+            IStructuredetailRepository repo = new StructuredetailRepository();
+
+           
+
             objrepo.UpdateEmp(model.ApplicationId,model.JoiningDate,model.Salary);
             objrepo.Save();
 

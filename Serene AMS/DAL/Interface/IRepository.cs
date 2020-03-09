@@ -21,9 +21,10 @@ namespace Serene_AMS.DAL.Interface
         tblApplicant AddApplicant(int vacid,string name,string phone,string email,DateTime dob,string gender,string Appliedfor,string address,string cv);
 
         tblEmployee AddEmployee(string city,string empname,string gender,int depid,DateTime dob,string contact,string email,string address,int posid);
-        tblEmployeeDetail AddempDetail(int empid, Nullable<DateTime> joiningdate);
+        tblEmployeeDetail AddempDetail(int empid, Nullable<DateTime> joiningdate,decimal salary);
 
         void updatetohired(int ApplicationId);
+        
         void Update(int ApplicationId);
         void Update1(int ApplicationId);
         void Delete(int ApplicationId);

@@ -45,6 +45,7 @@ namespace Serene_AMS.DAL.Interface
         void updatepos(int empid,int posid);
         void updateempdetailpro(int empid);
         void setProEmpsalary(int empid,decimal salary);
+      
         void AddReq(tblRequest obj);
         void Delete(int Id);
 

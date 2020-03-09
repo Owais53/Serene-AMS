@@ -64,8 +64,15 @@
             if (successMessage != '')
                 alertify.success(successMessage);
         });
+       
     </script>
-
+    <script>
+         $(function () {
+            var errorMessage = '@TempData["ErrorMessage21"]'
+            if (errorMessage != '')
+                alertify.error(errorMessage);
+        });
+    </script>
     <script type="text/javascript">
         var Popup, dataTable2;
         $(function () {
@@ -125,7 +132,33 @@
 
 
         }
+        function Updateemppossalary()
+        {
+            var modal = $("#Modalempprosal");
+            var form = $('form[name="formEmpProsal"]');
 
+            form.validate();
+            if (!form.valid()) {
+                return;
+            } else {
+                var data = form.serialize();
+                $.post("/Notifications/EmployeeSalaryUpdate", data, function (res) {
+                    if (res) {
+                        modal.modal('hide');
+
+
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+
+                        });
+
+                    }
+
+                })
+            }
+
+        }
 
         </script>
 

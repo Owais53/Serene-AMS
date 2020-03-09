@@ -171,13 +171,14 @@ namespace Serene_AMS.DAL.Repository
 
        
 
-        public tblEmployeeDetail AddempDetail(int empid, Nullable<DateTime> joiningdate)
+        public tblEmployeeDetail AddempDetail(int empid, Nullable<DateTime> joiningdate,decimal salary)
         {
             var adddetail = new tblEmployeeDetail()
             {
                 EmployeeId = empid,
                 EmployeeStatus = "Active",
                 Dateofjoining = joiningdate,
+                EmployeeSalary=salary,
             };
             return adddetail;
         }

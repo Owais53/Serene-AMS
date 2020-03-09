@@ -262,6 +262,27 @@ namespace Serene_AMS.Controllers
             TempData["SuccessMessage11"] = "Success";
             return Json(new { success=true},JsonRequestBehavior.AllowGet);
         }
+        public ActionResult EmployeeSalaryUpdate(PositionVM model)
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            var SalaryCheck = repo.Getpos().Where(x => x.BasicPay >= model.Employeesalary).FirstOrDefault();
+            if (SalaryCheck == null)
+            {
+                repo.setProEmpsalary(model.EmployeeId, model.Employeesalary);
+                repo.Save();
+
+                TempData["SuccessMessage21"] = "Success";
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                TempData["ErrorMessage21"] = "Salary can not be less than " +model.BasicPay+ " for Employee of " +model.Position+ " Position";
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+
+
         public ActionResult SetPromotedEmployeeSalary()
         {
             return View();
