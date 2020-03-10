@@ -42,6 +42,7 @@ namespace Serene_AMS.DAL.Interface
         tblRequest Addreqt(int Employeeid, int posid,string citytrans,string ReasonofReq);
         tblRequest Addreqtfordgm(int Employeeid, int posid, string citytrans, string ReasonofReq);
         void updateseen(int reqid);
+        void updateseenPro(int empid);
         void updatepos(int empid,int posid);
         void updateempdetailpro(int empid);
         void setProEmpsalary(int empid,decimal salary);

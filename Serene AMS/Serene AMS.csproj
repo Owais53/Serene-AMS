@@ -605,6 +605,7 @@
     <Content Include="img\image.png" />
     <Content Include="img\InternetSlowdown_Day.gif" />
     <Content Include="img\logos\logo-vue.png" />
+    <Content Include="img\promotions.png" />
     <Content Include="img\repeat.png" />
     <Content Include="img\users\u1.jpg" />
     <Content Include="img\users\u2.jpg" />
@@ -986,6 +987,7 @@
     <Content Include="Views\Notifications\EmployeePromotionPartial.cshtml" />
     <Content Include="Views\Notifications\EmployeePromotionSalaryPartial.cshtml" />
     <Content Include="Views\Notifications\SetPromotedEmployeeSalary.cshtml" />
+    <Content Include="Views\Notifications\PromotionDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

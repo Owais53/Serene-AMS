@@ -265,5 +265,14 @@ namespace Serene_AMS.DAL.Repository
 
             context.Entry(obj).State = EntityState.Modified;
         }
+
+        public void updateseenPro(int empid)
+        {
+
+            var obj = context.tblEmployeeDetails.Find(empid);
+            obj.IsSeenPromotion= true;
+            context.Entry(obj).State = EntityState.Modified;
+
+        }
     }
 }

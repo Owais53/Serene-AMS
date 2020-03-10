@@ -331,6 +331,7 @@
                    count = parseInt($('span.notify-signal').html()) || 0;
                    updatenoticontent();
                    updatenoticontentres();
+                   showPromotionnoti();
                   
                    $('#countnoti', this).html('&nbsp;');
                })
@@ -379,9 +380,29 @@
                            console.log(error);
                        }
                    })
+                
                   
                }
-               
+               function showPromotionnoti()
+               {
+                   $("#maincontent").empty();
+                     $.ajax({
+                       type: 'GET',
+                       url: '/Notifications/GetEmpProres',
+                       success: function (responses) {
+
+                           $.each(responses, function (i, v) {
+                               $("#maincontent").append($('<div id="getresp"><a href="/Notifications/PromotionDetails/' + v.EmployeeId + '" class="list-group-item"> <div class="media"><div class="media-img"> <img src=@Url.Content("~/img/promotions.png")></div> <div class="media-body"><div class="font-13" style="color:black;">You have been Promoted to ' + v.Position + ' based on your ' + v.Experience +' Experience and Performance"</div></div></div></a></div>'))
+
+                           });
+
+
+                       },
+                       error: function (error) {
+                           console.log(error);
+                       }
+                   })
+               }
            })
            $(function () {
                $.ajax({

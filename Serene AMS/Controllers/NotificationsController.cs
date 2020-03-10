@@ -56,6 +56,25 @@ namespace Serene_AMS.Controllers
             }
             return Json(listreq, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetEmpProres()
+        {
+            ReqList obj = new ReqList();
+            DataSet ds = obj.Show_Emppronoti();
+            List<PositionVM> listpro = new List<PositionVM>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                listpro.Add(new PositionVM
+                {
+                    Position = dr["Position"].ToString(),
+                    Experience = dr["Experience"].ToString(),
+                    EmployeeId=Convert.ToInt32(dr["EmployeeId"])
+
+                   
+                });
+            }
+            return Json(listpro, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult GetReqNoticount()
         {
@@ -91,6 +110,14 @@ namespace Serene_AMS.Controllers
         {
             IStructuredetailRepository obj = new StructuredetailRepository();
             obj.updateseen(Convert.ToInt32(model.RequestId));
+            obj.Save();
+
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UpdateSeenPromotion(PositionVM model)
+        {
+            IStructuredetailRepository obj = new StructuredetailRepository();
+            obj.updateseenPro(Convert.ToInt32(model.EmployeeId));
             obj.Save();
 
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
@@ -265,7 +292,7 @@ namespace Serene_AMS.Controllers
         public ActionResult EmployeeSalaryUpdate(PositionVM model)
         {
             IStructuredetailRepository repo = new StructuredetailRepository();
-            var SalaryCheck = repo.Getpos().Where(x => x.BasicPay >= model.Employeesalary).FirstOrDefault();
+            var SalaryCheck = repo.Getpos().Where(x => x.BasicPay > model.Employeesalary).FirstOrDefault();
             if (SalaryCheck == null)
             {
                 repo.setProEmpsalary(model.EmployeeId, model.Employeesalary);
@@ -337,5 +364,39 @@ namespace Serene_AMS.Controllers
 
             return PartialView("EmployeePromotionSalaryPartial", data);
         }
+        [HttpGet]
+        public ActionResult PromotionDetails(int? Id)
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+
+            var Data = (from emp in repo.Getemp()
+                        join empdet in repo.Getempdet() on emp.EmployeeId equals empdet.EmployeeId
+                        join pos in repo.Getpos() on emp.PositionId equals pos.Id
+                        select new
+                        {
+                            emp.EmployeeId,
+                            emp.EmployeeName,
+                            emp.PositionId,
+                            pos.Position,
+                            empdet.EmployeeSalary,
+                            empdet.DateofPromotion
+
+
+                        }).Where(x => x.EmployeeId == Id).Select(c => new PositionVM()
+                        {
+                            EmployeeName = c.EmployeeName,
+                            EmployeeId=(int)c.EmployeeId,
+                            Position = c.Position,
+                            Employeesalary = (decimal)c.EmployeeSalary,
+                            DateofPromotion=(DateTime)c.DateofPromotion
+
+
+                        }).FirstOrDefault();
+
+
+
+            return View(Data);
+        }
+
     }
 }

@@ -32,6 +32,7 @@ namespace Serene_AMS.ViewModels
         public int EmployeeId { get; set; }
         public int posidtopro { get; set; }
         public decimal Employeesalary { get; set; }
+        public DateTime DateofPromotion { get; set; }
 
     }
 }

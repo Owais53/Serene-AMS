@@ -261,7 +261,7 @@ namespace Serene_AMS.Controllers
                             Address = c.Address,
                             JoiningDate=(Nullable<DateTime>)c.JoiningDate,
                             CityName=c.CityName,
-                            PosSalary=(decimal?)c.Salary
+                            PosSalary=c.Salary
                            
 
                         }).FirstOrDefault();
@@ -313,7 +313,7 @@ namespace Serene_AMS.Controllers
             objrepo.Addemp(add);
             objrepo.Save();
 
-            var add1 = objrepo.AddempDetail(add.EmployeeId,(Nullable<DateTime>)model.JoiningDate,model.Salary);
+            var add1 = objrepo.AddempDetail(add.EmployeeId,(Nullable<DateTime>)model.JoiningDate,Convert.ToDecimal(model.PosSalary));
             objrepo.Addempdetail(add1);
             objrepo.Save();
 
