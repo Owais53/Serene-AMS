@@ -67,5 +67,21 @@ namespace Serene_AMS.DAL.Repository
                 return;
             }
         }
+
+        public tblPositionLeavetype Addleavepos(int posid, int casualleave, int sickleave)
+        {
+            var addleave = new tblPositionLeavetype()
+            {
+               PositionId=posid,
+               CasualLeave=casualleave,
+               SickLeave=sickleave,
+            };
+            return addleave;
+        }
+
+        public void Addleave(tblPositionLeavetype obj)
+        {
+            context.tblPositionLeavetypes.Add(obj);
+        }
     }
 }

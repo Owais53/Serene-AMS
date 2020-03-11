@@ -26,7 +26,8 @@ namespace Serene_AMS.DAL.Interface
 
         void Save();
 
-
+        tblPositionLeavetype Addleavepos(int posid,int casualleave,int sickleave);
+        void Addleave(tblPositionLeavetype obj);
 
     }
 }

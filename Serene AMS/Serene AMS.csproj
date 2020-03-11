@@ -209,6 +209,9 @@
     <Compile Include="Models\tblPosition.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblPositionLeavetype.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblPurchase.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
@@ -988,6 +991,7 @@
     <Content Include="Views\Notifications\EmployeePromotionSalaryPartial.cshtml" />
     <Content Include="Views\Notifications\SetPromotedEmployeeSalary.cshtml" />
     <Content Include="Views\Notifications\PromotionDetails.cshtml" />
+    <Content Include="Views\Admin\LeavesonPosition.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

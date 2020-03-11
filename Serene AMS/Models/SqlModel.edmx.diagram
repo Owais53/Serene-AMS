@@ -51,6 +51,7 @@
         <AssociationConnector Association="HrmsModel.FK_tblPurchaseitem_tblPurchase" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_Users_Roles" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblVacancydetails_tblStructure" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HrmsModel.tblPositionLeavetype" Width="1.5" PointX="12.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,113 @@
+﻿@model Serene_AMS.ViewModels.PositionVM
+@{
+    ViewBag.Title = "LeavesonPosition";
+}
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+            View Applications
+        </li>
+    </ol>
+</nav>
+<div class="ibox">
+
+    <div class="ibox-body">
+        @using (Html.BeginForm("LeavesonPosition", "Admin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.DepartmentId, "Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.DepartmentId, (SelectList)ViewBag.getdeplist, "Select Department", new { @id = "getdeptId", @class = "form-control select2_demo_2", @onchange = "javascript: ddldepchange(this);" })
+                    @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            <div class="form-group">
+
+                <label class="control-label col-md-2">Position</label>
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.PositionId, new { htmlAttributes = new { @class = "form-control",@Type="hidden",@id="getposid"} })
+                    <select onchange="javascript: ddlpositions(this);" class="form-control select2_demo_2" id="ddlposit"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CasualLeave, "Casusal Leave", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CasualLeave, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CasualLeave, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.SickLeave, "Sick Leave", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SickLeave, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SickLeave, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+         }
+    </div>
+  </div>
+@section scripts{
+    
+   <script type="text/javascript">
+         $(function () {
+            var successMessage = '@TempData["SuccessMessage11"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+       function ddldepchange(id) {
+
+           $.get("/Recruitment/GetPositiontoremove", { id: id.value }, function (res) {
+
+               $.each(res, function (index, row) {
+
+                   $('#' + row.Id + '').remove();
+                   $('#select').remove();
+               });
+
+           })
+
+           $.get("/Recruitment/GetPositionbyId", { id: id.value }, function (res) {
+
+
+               $("#ddlposit").append("<option id='select' value='0'>Select Position</option>")
+               $.each(res, function (index, row) {
+
+
+                   $("#ddlposit").append("<option id='" + row.Id + "' value='" + row.Id + "'>" + row.Position + "</option>")
+
+
+               });
+
+           })
+
+
+       }
+       function ddlpositions(id) {
+           $("#getposid").val(id.value);
+       }
+    </script> 
+    
+    
+    
+    
+
+
+}

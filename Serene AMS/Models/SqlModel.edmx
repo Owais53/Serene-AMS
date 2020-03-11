@@ -169,6 +169,15 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <Property Name="IncomeTax" Type="money" />
           <Property Name="Experience" Type="nvarchar" MaxLength="75" />
         </EntityType>
+        <EntityType Name="tblPositionLeavetypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PositionId" Type="int" />
+          <Property Name="CasualLeave" Type="int" />
+          <Property Name="SickLeave" Type="int" />
+        </EntityType>
         <EntityType Name="tblPurchase">
           <Key>
             <PropertyRef Name="PurchaseId" />
@@ -586,6 +595,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySet Name="tblItem" EntityType="Self.tblItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPayroll" EntityType="Self.tblPayroll" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPosition" EntityType="Self.tblPosition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPositionLeavetypes" EntityType="Self.tblPositionLeavetypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchase" EntityType="Self.tblPurchase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseitem" EntityType="Self.tblPurchaseitem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblRequests" EntityType="Self.tblRequests" Schema="dbo" store:Type="Tables" />
@@ -1432,7 +1442,17 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           </FunctionImport>
           <FunctionImport Name="sp_BackEndAvailablity" />
           <FunctionImport Name="spGetAllUsers" />
+          <EntitySet Name="tblPositionLeavetypes" EntityType="HrmsModel.tblPositionLeavetype" />
         </EntityContainer>
+        <EntityType Name="tblPositionLeavetype">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PositionId" Type="Int32" />
+          <Property Name="CasualLeave" Type="Int32" />
+          <Property Name="SickLeave" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1760,6 +1780,16 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <FunctionImportMapping FunctionImportName="getcountnoti" FunctionName="HrmsModel.Store.getcountnoti" />
           <FunctionImportMapping FunctionImportName="sp_BackEndAvailablity" FunctionName="HrmsModel.Store.sp_BackEndAvailablity" />
           <FunctionImportMapping FunctionImportName="spGetAllUsers" FunctionName="HrmsModel.Store.spGetAllUsers" />
+          <EntitySetMapping Name="tblPositionLeavetypes">
+            <EntityTypeMapping TypeName="HrmsModel.tblPositionLeavetype">
+              <MappingFragment StoreEntitySet="tblPositionLeavetypes">
+                <ScalarProperty Name="SickLeave" ColumnName="SickLeave" />
+                <ScalarProperty Name="CasualLeave" ColumnName="CasualLeave" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

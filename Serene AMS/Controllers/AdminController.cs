@@ -266,5 +266,36 @@ namespace Serene_AMS.Controllers
 
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        public ActionResult LeavesonPosition()
+        {
+            IStructuredetailRepository objstructureRepository = new StructuredetailRepository();
+            var deplist = objstructureRepository.Getdep().ToList();
+
+            SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+            ViewBag.getdeplist = list;
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult LeavesonPosition(PositionVM model)
+        {
+            IStructuredetailRepository objstructureRepository = new StructuredetailRepository();
+            IEmployeeRepository obj = new EmployeeRepository();
+            var deplist = objstructureRepository.Getdep().ToList();
+
+            var add=obj.Addleavepos(model.PositionId,model.CasualLeave,model.SickLeave);
+            obj.Addleave(add);
+            obj.Save();
+
+
+            SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+            ViewBag.getdeplist = list;
+
+
+            TempData["SuccessMessage11"] = "Leaves Assigned to Position Sucessfully";
+            return View();
+        }
+
     }
 }
