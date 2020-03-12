@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -106,6 +109,34 @@ namespace Serene_AMS.Controllers
             }
             return Json(listreq, JsonRequestBehavior.AllowGet);
         }
+        public bool SendEmail(string toEmail, string subject, string emailbody)
+        {
+            try
+            {
+                string senderEmail = System.Configuration.ConfigurationManager.AppSettings["SenderEmail"].ToString();
+                string senderPassword = System.Configuration.ConfigurationManager.AppSettings["SenderPassword"].ToString();
+
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.EnableSsl = true;
+                client.Timeout = 100000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(senderEmail, senderPassword);
+
+                MailMessage mailMessage = new MailMessage(senderEmail, toEmail, subject, emailbody);
+                mailMessage.IsBodyHtml = true;
+                mailMessage.BodyEncoding = UTF8Encoding.UTF8;
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+        }
+
         public ActionResult UpdateSeen(RequestVM model)
         {
             IStructuredetailRepository obj = new StructuredetailRepository();
@@ -297,9 +328,12 @@ namespace Serene_AMS.Controllers
             {
                 repo.setProEmpsalary(model.EmployeeId, model.Employeesalary);
                 repo.Save();
+                bool result = false;
+                result = SendEmail(model.Email, "Promotion Letter", " <p>"+model.Description+"</p>");
+
 
                 TempData["SuccessMessage21"] = "Success";
-                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { result,success = true }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -347,7 +381,9 @@ namespace Serene_AMS.Controllers
                             emp.EmployeeName,
                             emp.PositionId,        
                             pos.Position,
-                            pos.BasicPay
+                            pos.BasicPay,
+                            pos.Experience,
+                            emp.Email
                                       
 
                         }).Where(x => x.EmployeeId == Id).Select(c => new PositionVM()
@@ -356,7 +392,9 @@ namespace Serene_AMS.Controllers
                             EmployeeId = (int)c.EmployeeId,
                             PositionId = (int)c.PositionId,
                             Position = c.Position,
-                            BasicPay=(decimal)c.BasicPay
+                            BasicPay=(decimal)c.BasicPay,
+                            Description="Congratulations, "+c.EmployeeName+" based on your Performance and "+c.Experience+" Experience You have Been Promoted to "+c.Position+" Position and your Basic Salary is increased to "+c.BasicPay+". Regards",
+                            Email=c.Email
                           
 
                         }).FirstOrDefault();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using Serene_AMS.Models;
@@ -82,6 +83,20 @@ namespace Serene_AMS.DAL.Repository
         public void Addleave(tblPositionLeavetype obj)
         {
             context.tblPositionLeavetypes.Add(obj);
+        }
+
+        public IEnumerable<tblPositionLeavetype> Getleave()
+        {
+            return context.tblPositionLeavetypes;
+        }
+
+        public void updateleave(int posid, int casualleave, int sickleave)
+        {
+            var obj = context.tblPositionLeavetypes.Find(posid);
+            obj.CasualLeave = casualleave;
+            obj.SickLeave = sickleave;
+            context.Entry(obj).State = EntityState.Modified;
+
         }
     }
 }

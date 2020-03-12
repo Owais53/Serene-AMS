@@ -244,7 +244,22 @@ namespace Serene_AMS.Controllers
 
             return View(Data);
         }
+        public ActionResult LeaveRequest()
+        {
+            IEmployeeRepository obj = new EmployeeRepository();
+            var leavelist = new SelectList(new[]
+         {
+                new {ID="1",Name="Casual Leave"},
+                new {ID="2",Name="Sick Leave"}
+               
+            },
+          "Name", "Name", "1"
+           );
+            ViewBag.getleavelist = leavelist;
 
+
+            return View();
+        }
 
     }
 }

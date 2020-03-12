@@ -992,6 +992,7 @@
     <Content Include="Views\Notifications\SetPromotedEmployeeSalary.cshtml" />
     <Content Include="Views\Notifications\PromotionDetails.cshtml" />
     <Content Include="Views\Admin\LeavesonPosition.cshtml" />
+    <Content Include="Views\Requests\LeaveRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

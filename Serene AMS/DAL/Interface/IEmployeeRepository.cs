@@ -22,12 +22,14 @@ namespace Serene_AMS.DAL.Interface
 
         IEnumerable<tblPosition> Getpos();
 
+        IEnumerable<tblPositionLeavetype> Getleave();
         void Delete(int employeeId);
 
         void Save();
 
         tblPositionLeavetype Addleavepos(int posid,int casualleave,int sickleave);
         void Addleave(tblPositionLeavetype obj);
+        void updateleave(int posid,int casualleave,int sickleave);
 
     }
 }

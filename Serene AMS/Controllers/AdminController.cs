@@ -282,18 +282,33 @@ namespace Serene_AMS.Controllers
         {
             IStructuredetailRepository objstructureRepository = new StructuredetailRepository();
             IEmployeeRepository obj = new EmployeeRepository();
+            var check = obj.Getleave().Where(x => x.PositionId == model.PositionId).FirstOrDefault();
             var deplist = objstructureRepository.Getdep().ToList();
-
-            var add=obj.Addleavepos(model.PositionId,model.CasualLeave,model.SickLeave);
-            obj.Addleave(add);
-            obj.Save();
-
-
-            SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
-            ViewBag.getdeplist = list;
+            if (check == null)
+            {
+               
+                var add = obj.Addleavepos(model.PositionId, model.CasualLeave, model.SickLeave);
+                obj.Addleave(add);
+                obj.Save();
 
 
-            TempData["SuccessMessage11"] = "Leaves Assigned to Position Sucessfully";
+                SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+                ViewBag.getdeplist = list;
+
+
+                TempData["SuccessMessage11"] = "Leaves Assigned to Position Sucessfully";
+            }
+            else
+            {
+                obj.updateleave(model.PositionId,model.CasualLeave,model.SickLeave);
+                obj.Save();
+
+                SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
+                ViewBag.getdeplist = list;
+
+                TempData["SuccessMessage11"] = "Leaves Updated Sucessfully";
+
+            }
             return View();
         }
 

@@ -30,6 +30,11 @@ namespace Serene_AMS.ViewModels
         [DataType(DataType.MultilineText)]
         public string ResponseReason { get; set; }
         public string ResponseReasonrej { get; set; }
+        public string Leavetype { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime FromDate { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime ToDate { get; set; }
 
     }
 }
