@@ -17,8 +17,8 @@ namespace Serene_AMS.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblEmployee()
         {
-            this.tblPayrolls = new HashSet<tblPayroll>();
             this.tblRequestdetails = new HashSet<tblRequestdetail>();
+            this.tblEmployeeLeaves = new HashSet<tblEmployeeLeaves>();
         }
     
         public string CityName { get; set; }
@@ -37,8 +37,8 @@ namespace Serene_AMS.Models
         public virtual tblPosition tblPosition { get; set; }
         public virtual tblEmployeeDetail tblEmployeeDetail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPayroll> tblPayrolls { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblRequestdetail> tblRequestdetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblEmployeeLeaves> tblEmployeeLeaves { get; set; }
     }
 }

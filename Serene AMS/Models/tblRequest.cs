@@ -21,6 +21,8 @@ namespace Serene_AMS.Models
         public string CitytoTranser { get; set; }
         public Nullable<System.DateTime> DateofRequest { get; set; }
         public string Status { get; set; }
+        public Nullable<System.DateTime> FromDate { get; set; }
+        public Nullable<System.DateTime> ToDate { get; set; }
         public string Respondedby { get; set; }
         public Nullable<System.DateTime> ResponseDate { get; set; }
         public string ReasonofRequest { get; set; }

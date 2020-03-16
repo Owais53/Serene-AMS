@@ -191,6 +191,20 @@ namespace Serene_AMS.DAL.Repository
             context.Entry(obj).State = EntityState.Modified;
 
         }
+
+        public tblEmployeeLeaves Addempidinempleave(int empid)
+        {
+            var add = new tblEmployeeLeaves()
+            {
+                EmployeeId = empid
+            };
+            return add;
+        }
+
+        public void Addempidleave(tblEmployeeLeaves obj)
+        {
+            context.tblEmployeeLeaves1.Add(obj);
+        }
     }
 
 }

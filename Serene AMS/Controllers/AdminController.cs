@@ -300,7 +300,7 @@ namespace Serene_AMS.Controllers
             }
             else
             {
-                obj.updateleave(model.PositionId,model.CasualLeave,model.SickLeave);
+                obj.Updateleave(model.PositionId,model.CasualLeave,model.SickLeave);
                 obj.Save();
 
                 SelectList list = new SelectList(deplist, "DepartmentId", "DepartmentName");
@@ -310,6 +310,72 @@ namespace Serene_AMS.Controllers
 
             }
             return View();
+        }
+        [HttpGet]
+        public ActionResult DefineEmployeeLeaves()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DefineEmployeeLeaves(PositionVM model)
+        {
+            IEmployeeRepository obj = new EmployeeRepository();
+            
+
+            obj.updateleaveforemp(model.EmployeeId,model.CasualLeave,model.SickLeave);
+            obj.Save();
+
+            TempData["SuccessMessage1"] = "Leaves Assigned to Employee";
+            return View();
+        }
+        public ActionResult EmpforleaveList()
+        {
+            
+            IEmployeeRepository objemployeeRepository = new EmployeeRepository();  
+
+            var Data = (from emp in objemployeeRepository.GetAll()
+                        select new
+                        {
+                          emp.EmployeeId,
+                          emp.EmployeeName,
+                          emp.PositionId,
+                          emp.Contact,
+                          emp.Email
+
+                        }).ToList();
+
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetEmpforLeaves(int? Id)
+        {
+
+            IEmployeeRepository objemployeeRepository = new EmployeeRepository();
+
+            var Data = (from emp in objemployeeRepository.GetAll()
+                        select new
+                        {
+                            emp.EmployeeId,
+                            emp.EmployeeName,
+                            emp.PositionId,
+                            emp.Contact,
+                            emp.Email
+                           
+
+                        }).Where(x=>x.EmployeeId==Id)
+                        .Select(c => new PositionVM()
+                        {
+                            EmployeeId=c.EmployeeId,
+                            EmployeeName=c.EmployeeName,
+                            PositionId=(int)c.PositionId,
+                            Contact=c.Contact,
+                            Email=c.Email
+                            
+
+                        }).FirstOrDefault();
+
+
+            return PartialView("EmployeeLeavePartial", Data);
+
         }
 
     }

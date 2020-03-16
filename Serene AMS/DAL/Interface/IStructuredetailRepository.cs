@@ -49,7 +49,7 @@ namespace Serene_AMS.DAL.Interface
       
         void AddReq(tblRequest obj);
         void Delete(int Id);
-
+        
         void Save();
 
 

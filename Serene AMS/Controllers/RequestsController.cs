@@ -244,11 +244,12 @@ namespace Serene_AMS.Controllers
 
             return View(Data);
         }
+        [HttpGet]
         public ActionResult LeaveRequest()
         {
             IEmployeeRepository obj = new EmployeeRepository();
             var leavelist = new SelectList(new[]
-         {
+            {
                 new {ID="1",Name="Casual Leave"},
                 new {ID="2",Name="Sick Leave"}
                
@@ -256,6 +257,49 @@ namespace Serene_AMS.Controllers
           "Name", "Name", "1"
            );
             ViewBag.getleavelist = leavelist;
+            
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult LeaveRequest(RequestVM model)
+        {
+            IEmployeeRepository obj = new EmployeeRepository();
+            var empid = Session["EmployeeId"].ToString();
+            var posid = Session["Position"].ToString();
+
+            if (model.FromDate >= model.ToDate)
+            {
+                TempData["SuccessMessage101"] = "From Date Should not be greater or equal than To Date";
+                var leavelist = new SelectList(new[]
+               {
+                new {ID="1",Name="Casual Leave"},
+                new {ID="2",Name="Sick Leave"}
+
+            },
+             "Name", "Name", "1"
+              );
+                ViewBag.getleavelist = leavelist;
+
+            
+            }
+            else 
+            {
+                var add = obj.AddReql(Convert.ToInt32(empid),Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest);
+                obj.AddLeaveReq(add);
+                obj.Save();
+
+                var leavelist = new SelectList(new[]
+                {
+                new {ID="1",Name="Casual Leave"},
+                new {ID="2",Name="Sick Leave"}
+
+            },
+              "Name", "Name", "1"
+               );
+                ViewBag.getleavelist = leavelist;
+                TempData["SuccessMessage102"] = "Success";
+            }
 
 
             return View();

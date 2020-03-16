@@ -1,0 +1,49 @@
+﻿@model Serene_AMS.ViewModels.PositionVM
+<form name="formempleaves">
+
+
+    <div class="modal-content responsive" id="empleavemodal">
+        <div class="modal-header">
+            <h4 class="modal-title">Assign Leaves to Employees</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+
+        <div class="modal-body" style="overflow: auto">
+
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmployeeId, new { htmlAttributes = new { @id = "getEmpId", @class = "form-control", @name = "Id", @type = "hidden" } })
+                    @Html.EditorFor(model => model.PositionId, new { htmlAttributes = new { @id = "getPosId", @class = "form-control", @name = "Id", @type = "hidden" } })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CasualLeave, "Casusal Leave", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CasualLeave, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CasualLeave, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.SickLeave, "Sick Leave", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SickLeave, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SickLeave, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="StatusUpdate()">Proceed</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+
+</form>
+
+
+
+

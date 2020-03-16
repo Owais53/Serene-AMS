@@ -24,7 +24,6 @@ namespace Serene_AMS.Models
         public Nullable<int> PayrollId { get; set; }
         public Nullable<decimal> Amount { get; set; }
     
-        public virtual tblPayroll tblPayroll { get; set; }
         public virtual tblPurchase tblPurchase { get; set; }
     }
 }

@@ -90,13 +90,44 @@ namespace Serene_AMS.DAL.Repository
             return context.tblPositionLeavetypes;
         }
 
-        public void updateleave(int posid, int casualleave, int sickleave)
+        public void Updateleave(int posid, int casualleave, int sickleave)
         {
             var obj = context.tblPositionLeavetypes.Find(posid);
             obj.CasualLeave = casualleave;
             obj.SickLeave = sickleave;
             context.Entry(obj).State = EntityState.Modified;
 
+        }
+
+        public tblRequest AddReql(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq)
+        {
+            var addreq = new tblRequest()
+            {
+                EmployeeId = empid,
+                PositionId = posid,
+                RequestType = "Leave",
+                DateofRequest = DateTime.Now,
+                FromDate=FromDate,
+                ToDate=ToDate,
+                Status = "Pending",
+                ReasonofRequest = ReasonofReq,
+                AuthorizedRole = "Hr Manager",
+                IsSeen = false,
+            };
+            return addreq;
+        }
+
+        public void AddLeaveReq(tblRequest obj)
+        {
+            context.tblRequests.Add(obj);
+        }
+
+        public void updateleaveforemp(int empid,int casualleave,int sickleave)
+        {
+            var obj = context.tblEmployeeLeaves1.Find(empid);
+            obj.CasualLeave = casualleave;
+            obj.SickLeave = sickleave;
+            context.Entry(obj).State = EntityState.Modified;
         }
     }
 }

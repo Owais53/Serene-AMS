@@ -36,8 +36,9 @@ namespace Serene_AMS.DAL.Interface
         void Addempdetail(tblEmployeeDetail obj);
         void UpdateEmp(int Applicationid, Nullable<DateTime> joindate, decimal salary);
         IEnumerable<tblVacancy> Getmarkscriteria(int vacantid);
-
+        tblEmployeeLeaves Addempidinempleave(int empid);
         void Save();
+        void Addempidleave(tblEmployeeLeaves obj);
 
     }
 }

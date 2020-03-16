@@ -317,6 +317,10 @@ namespace Serene_AMS.Controllers
             objrepo.Addempdetail(add1);
             objrepo.Save();
 
+            var add2 = objrepo.Addempidinempleave(add.EmployeeId);
+            objrepo.Addempidleave(add2);
+            objrepo.Save();
+
            
 
             TempData["SuccessMessage25"] = "Success";
@@ -339,7 +343,7 @@ namespace Serene_AMS.Controllers
 
             var checksalarylimit = repo.Getpos().Where(x => x.BasicPay > model.Salary).FirstOrDefault();
 
-            if (checksalarylimit == null)
+            if (checksalarylimit != null)
             {
 
                 objrepo.UpdateEmp(model.ApplicationId, model.JoiningDate, model.Salary);
