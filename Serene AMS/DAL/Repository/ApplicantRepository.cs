@@ -203,7 +203,7 @@ namespace Serene_AMS.DAL.Repository
 
         public void Addempidleave(tblEmployeeLeaves obj)
         {
-            context.tblEmployeeLeaves1.Add(obj);
+            context.tblEmployeeLeaves.Add(obj);
         }
     }
 

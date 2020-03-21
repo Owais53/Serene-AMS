@@ -122,9 +122,9 @@ namespace Serene_AMS.DAL.Repository
             context.tblRequests.Add(obj);
         }
 
-        public void updateleaveforemp(int empid,int casualleave,int sickleave)
+        public void updateleaveforemp(int EmployeeId,int casualleave,int sickleave)
         {
-            var obj = context.tblEmployeeLeaves1.Find(empid);
+            var obj = context.tblEmployeeLeaves.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
             obj.CasualLeave = casualleave;
             obj.SickLeave = sickleave;
             context.Entry(obj).State = EntityState.Modified;

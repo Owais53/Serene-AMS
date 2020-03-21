@@ -32,7 +32,7 @@ namespace Serene_AMS.DAL.Interface
         void Updateleave(int posid,int casualleave,int sickleave);
         tblRequest AddReql(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq);
         void AddLeaveReq(tblRequest obj);
-        void updateleaveforemp(int empid,int casualleave,int sickleave);
+        void updateleaveforemp(int EmployeeId,int casualleave,int sickleave);
             
     }
 }

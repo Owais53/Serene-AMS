@@ -33,9 +33,9 @@ namespace Serene_AMS.ViewModels
         public int posidtopro { get; set; }
         public decimal Employeesalary { get; set; }
         public DateTime DateofPromotion { get; set; }
-        [Required]
+       
         public int CasualLeave { get; set; }
-        [Required]
+       
         public int SickLeave { get; set; }
         [Required]
         [DataType(DataType.MultilineText)]

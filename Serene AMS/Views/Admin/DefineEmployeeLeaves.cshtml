@@ -121,6 +121,32 @@
             })
 
         }
+        function UploadEmpLeave() {
+            var modal = $("#myModalempleave");
+            var form = $('form[name="formempleaves"]');
+
+            form.validate();
+            if (!form.valid()) {
+                return;
+            } else {
+                var data = form.serialize();
+                $.post("/Admin/PostEmpLeave",data, function (res) {
+                    if (res) {
+                        modal.modal('hide');
+
+
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+
+                        });
+
+                    }
+
+                })
+            }
+        }
+
 
 
     </script>

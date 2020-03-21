@@ -265,12 +265,14 @@ namespace Serene_AMS.Controllers
         public ActionResult LeaveRequest(RequestVM model)
         {
             IEmployeeRepository obj = new EmployeeRepository();
+            IStructuredetailRepository repo = new StructuredetailRepository();
             var empid = Session["EmployeeId"].ToString();
             var posid = Session["Position"].ToString();
-
-            if (model.FromDate >= model.ToDate)
+            var Duplicatereq = repo.GetReq().Where(a => a.EmployeeId == Convert.ToInt32(empid)).Where(x => x.RequestType =="Leave" && x.IsSeen == false).FirstOrDefault();
+            if (model.ToDate < model.FromDate)
             {
                 TempData["SuccessMessage101"] = "From Date Should not be greater or equal than To Date";
+                
                 var leavelist = new SelectList(new[]
                {
                 new {ID="1",Name="Casual Leave"},
@@ -285,21 +287,37 @@ namespace Serene_AMS.Controllers
             }
             else 
             {
-                var add = obj.AddReql(Convert.ToInt32(empid),Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest);
-                obj.AddLeaveReq(add);
-                obj.Save();
-
-                var leavelist = new SelectList(new[]
+                if (Duplicatereq != null)
                 {
+                    TempData["SuccessMessage101"] = "You have already Submitted Leave Request";
+                    var leavelist = new SelectList(new[]
+                   {
+                    new {ID="1",Name="Casual Leave"},
+                    new {ID="2",Name="Sick Leave"}
+
+                 },
+                 "Name", "Name", "1"
+                  );
+                    ViewBag.getleavelist = leavelist;
+                }
+                else
+                {
+                    var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest);
+                    obj.AddLeaveReq(add);
+                    obj.Save();
+
+                    var leavelist = new SelectList(new[]
+                    {
                 new {ID="1",Name="Casual Leave"},
                 new {ID="2",Name="Sick Leave"}
 
-            },
-              "Name", "Name", "1"
-               );
-                ViewBag.getleavelist = leavelist;
-                TempData["SuccessMessage102"] = "Success";
-            }
+                 },
+                  "Name", "Name", "1"
+                   );
+                    ViewBag.getleavelist = leavelist;
+                    TempData["SuccessMessage102"] = "Success";
+                  }
+                }
 
 
             return View();

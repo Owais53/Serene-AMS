@@ -316,18 +316,7 @@ namespace Serene_AMS.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public ActionResult DefineEmployeeLeaves(PositionVM model)
-        {
-            IEmployeeRepository obj = new EmployeeRepository();
-            
-
-            obj.updateleaveforemp(model.EmployeeId,model.CasualLeave,model.SickLeave);
-            obj.Save();
-
-            TempData["SuccessMessage1"] = "Leaves Assigned to Employee";
-            return View();
-        }
+       
         public ActionResult EmpforleaveList()
         {
             
@@ -377,6 +366,25 @@ namespace Serene_AMS.Controllers
             return PartialView("EmployeeLeavePartial", Data);
 
         }
+        public ActionResult PostEmpLeave(PositionVM model)
+        {
+            IEmployeeRepository obj = new EmployeeRepository();
 
+            var checkcasualleavelimit = obj.Getleave().Where(x => x.PositionId == model.PositionId && x.CasualLeave >= model.CasualLeave).FirstOrDefault();
+            var checksickleavelimit = obj.Getleave().Where(x => x.PositionId == model.PositionId && x.SickLeave >= model.SickLeave).FirstOrDefault();
+
+            if (checkcasualleavelimit != null && checksickleavelimit != null)
+            {
+                obj.updateleaveforemp(model.EmployeeId,model.CasualLeave,model.SickLeave);
+                obj.Save();
+                TempData["SuccessMessage1"] = "Leaves Assigned to Employee";
+            }
+            else
+            {
+                TempData["ErrorMessage1"] = "Cannot Assign Leaves to more than Defined in Position";
+            }
+           
+            return Json(new {  success = true }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
