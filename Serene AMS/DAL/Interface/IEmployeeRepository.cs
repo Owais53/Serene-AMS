@@ -23,6 +23,7 @@ namespace Serene_AMS.DAL.Interface
         IEnumerable<tblPosition> Getpos();
 
         IEnumerable<tblPositionLeavetype> Getleave();
+        IEnumerable<tblEmployeeLeaves> GetEmpLeaves();
         void Delete(int employeeId);
 
         void Save();
@@ -33,6 +34,8 @@ namespace Serene_AMS.DAL.Interface
         tblRequest AddReql(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq);
         void AddLeaveReq(tblRequest obj);
         void updateleaveforemp(int EmployeeId,int casualleave,int sickleave);
-            
+        void updatecasualleaveleft(int EmployeeId);
+        void updatesickleaveleft(int EmployeeId);
+
     }
 }

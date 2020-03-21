@@ -129,5 +129,33 @@ namespace Serene_AMS.DAL.Repository
             obj.SickLeave = sickleave;
             context.Entry(obj).State = EntityState.Modified;
         }
+
+        public void updatecasualleaveleft(int EmployeeId)
+        {
+            var obj = context.tblEmployeeLeaves.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
+            obj.CasualLeave = obj.CasualLeave-1;
+            if (obj.CasualLeave == 0)
+            {
+                obj.CasualLeave = obj.CasualLeave;
+            }
+
+            context.Entry(obj).State = EntityState.Modified;
+        }
+        public void updatesickleaveleft(int EmployeeId)
+        {
+            var obj = context.tblEmployeeLeaves.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
+            obj.SickLeave=obj.SickLeave-1;
+            if (obj.SickLeave == 0)
+            {
+                obj.SickLeave = obj.SickLeave;
+            }
+
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public IEnumerable<tblEmployeeLeaves> GetEmpLeaves()
+        {
+            return context.tblEmployeeLeaves;
+        }
     }
 }

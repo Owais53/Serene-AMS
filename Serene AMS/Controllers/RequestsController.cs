@@ -269,6 +269,8 @@ namespace Serene_AMS.Controllers
             var empid = Session["EmployeeId"].ToString();
             var posid = Session["Position"].ToString();
             var Duplicatereq = repo.GetReq().Where(a => a.EmployeeId == Convert.ToInt32(empid)).Where(x => x.RequestType =="Leave" && x.IsSeen == false).FirstOrDefault();
+            var CasualLeavesLeft = obj.GetEmpLeaves().Where(x => x.EmployeeId == Convert.ToInt32(empid) && x.CasualLeave == 0).FirstOrDefault();
+            var SickLeavesLeft = obj.GetEmpLeaves().Where(x => x.EmployeeId == Convert.ToInt32(empid) && x.SickLeave == 0).FirstOrDefault();
             if (model.ToDate < model.FromDate)
             {
                 TempData["SuccessMessage101"] = "From Date Should not be greater or equal than To Date";
@@ -302,20 +304,73 @@ namespace Serene_AMS.Controllers
                 }
                 else
                 {
-                    var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest);
-                    obj.AddLeaveReq(add);
-                    obj.Save();
-
-                    var leavelist = new SelectList(new[]
+                    if (CasualLeavesLeft == null && model.Leavetype == "Casual Leave")
                     {
-                new {ID="1",Name="Casual Leave"},
-                new {ID="2",Name="Sick Leave"}
+                        obj.updatecasualleaveleft(Convert.ToInt32(empid));
+                        obj.Save();
 
-                 },
-                  "Name", "Name", "1"
-                   );
-                    ViewBag.getleavelist = leavelist;
-                    TempData["SuccessMessage102"] = "Success";
+                        var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest);
+                        obj.AddLeaveReq(add);
+                        obj.Save();
+
+                        var leavelist = new SelectList(new[]
+                        {
+                    new {ID="1",Name="Casual Leave"},
+                    new {ID="2",Name="Sick Leave"}
+
+                   },
+                       "Name", "Name", "1"
+                       );
+                        ViewBag.getleavelist = leavelist;
+                        TempData["SuccessMessage102"] = "Success";
+                    }
+                    else if(model.Leavetype=="Casual Leave")
+                    {
+                        TempData["SuccessMessage101"] = "You do not have Casual Leave Left";
+                        var leavelist = new SelectList(new[]
+                       {
+                    new {ID="1",Name="Casual Leave"},
+                    new {ID="2",Name="Sick Leave"}
+
+                   },
+                      "Name", "Name", "1"
+                      );
+                        ViewBag.getleavelist = leavelist;
+                    }
+                    if (SickLeavesLeft == null && model.Leavetype == "Sick Leave")
+                    {
+                        obj.updatesickleaveleft(Convert.ToInt32(empid));
+                        obj.Save();
+                        var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest);
+                        obj.AddLeaveReq(add);
+                        obj.Save();
+
+                        var leavelist = new SelectList(new[]
+                        {
+                    new {ID="1",Name="Casual Leave"},
+                    new {ID="2",Name="Sick Leave"}
+
+                   },
+                       "Name", "Name", "1"
+                       );
+                        ViewBag.getleavelist = leavelist;
+                        TempData["SuccessMessage102"] = "Success";
+                    }
+                    else if(model.Leavetype=="Sick Leave")
+                    {
+                        TempData["SuccessMessage101"] = "You do not have Sick Leave Left";
+                        var leavelist = new SelectList(new[]
+                       {
+                    new {ID="1",Name="Casual Leave"},
+                    new {ID="2",Name="Sick Leave"}
+
+                   },
+                      "Name", "Name", "1"
+                      );
+                        ViewBag.getleavelist = leavelist;
+                    }
+                                       
+                  
                   }
                 }
 
