@@ -63,68 +63,7 @@
                 <!-- START TOP-RIGHT TOOLBAR-->
                
                 <ul class="nav navbar-toolbar">
-                    <li class="dropdown dropdown-inbox">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-envelope-o"></i>
-                            <span class="badge badge-primary envelope-badge">9</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media">
-                            <li class="dropdown-menu-header">
-                                <div>
-                                    <span><strong>9 New</strong> Messages</span>
-                                    <a class="pull-right" href="mailbox.html">view all</a>
-                                </div>
-                            </li>
-                            <li class="list-group list-group-divider scroller" data-height="240px" data-color="#71808f">
-                                <div>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <img src="./assets/img/users/u1.jpg" />
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-strong"> </div>Jeanne Gonzalez<small class="text-muted float-right">Just now</small>
-                                                <div class="font-13">Your proposal interested me.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <img src="./assets/img/users/u2.jpg" />
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-strong"></div>Becky Brooks<small class="text-muted float-right">18 mins</small>
-                                                <div class="font-13">Lorem Ipsum is simply.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <img src="./assets/img/users/u3.jpg" />
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-strong"></div>Frank Cruz<small class="text-muted float-right">18 mins</small>
-                                                <div class="font-13">Lorem Ipsum is simply.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <img src=@Url.Content("~/img/employee_transfer-512.png")>
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-strong"></div>Rose Pearson<small class="text-muted float-right">3 hrs</small>
-                                                <div class="font-13">Lorem Ipsum is simply.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
+                   
                     <li class="dropdown dropdown-notification">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="noti"><i class="fa fa-bell-o rel" id="countnoti"></i></a>
                         <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" id="content">
@@ -139,16 +78,13 @@
                         </ul>
                     </li>
                     <li class="dropdown dropdown-user">
-                        <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle link" data-toggle="dropdown" id="bar">
                             <img src=@Url.Content("~/img/admin-avatar.png")>
                             <span></span>Admin<i class="fa fa-angle-down m-l-5"></i>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="profile.html"><i class="fa fa-user"></i>Profile</a>
-                            <a class="dropdown-item" href="profile.html"><i class="fa fa-cog"></i>Settings</a>
-                            <a class="dropdown-item" href="javascript:;"><i class="fa fa-support"></i>Support</a>
+                        <ul class="dropdown-menu dropdown-menu-right" id="contents">
                             <li class="dropdown-divider"></li>
-                            <a class="dropdown-item" href="login.html"><i class="fa fa-power-off"></i>Logout</a>
+                            <a class="dropdown-item" href=@Url.Action("Logout", "Account")><i class="fa fa-power-off"></i>Logout</a>
                         </ul>
                     </li>
                 </ul>
@@ -189,101 +125,128 @@
                             <span class="nav-label">Dashboard</span>
                         </a>
                     </li>
-                    <li class="heading">ADMIN TASK</li>
+                    <li class="heading">TASKS</li>
                     <li>
-                        <a href="javascript:;">
-                            <i class="sidebar-item-icon fa fa-bookmark"></i>
-                            <span class="nav-label">Manage Users</span><i class="fa fa-angle-left arrow"></i>
-                        </a>
-                        <ul class="nav-2-level collapse">
-                            <li>@Html.ActionLink("Create User", "CreateUsers", "Admin")</li>
-                            <li>@Html.ActionLink("View Users", "UserList", "Admin")</li>
-                            <li>@Html.ActionLink("Assign Role", "Assignroles", "Admin")</li>
-                        </ul>
-                    </li>
-                   
-                    <li>
-                        <a href="javascript:;">
-                            <i class="sidebar-item-icon fa fa-table"></i>
-                            <span class="nav-label">Recruitment</span><i class="fa fa-angle-left arrow"></i>
-                        </a>
-                        <ul class="nav-2-level collapse">
-                            @if (Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
-                                <li>@Html.ActionLink("Create Vacancy", "CreateVacancy", "Recruitment")</li>
-                                <li>@Html.ActionLink("View Vacancy", "ViewVacancy", "Recruitment")</li>
+                        @if (Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                        {
+                            <a href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-bookmark"></i>
+                                <span class="nav-label">Manage Admin Tasks</span><i class="fa fa-angle-left arrow"></i>
+                            </a>
+                            <ul class="nav-2-level collapse">
+
+                                <li>@Html.ActionLink("Create User", "CreateUsers", "Admin")</li>
+                                <li>@Html.ActionLink("View Users", "UserList", "Admin")</li>
+                                <li>@Html.ActionLink("Assign Role", "Assignroles", "Admin")</li>
                                 <li>@Html.ActionLink("Create Position", "Position", "Admin")</li>
-                                <li>@Html.ActionLink("Promotions", "Promotions", "Notifications")</li>
-                                <li>@Html.ActionLink("View Promoted Employees", "SetPromotedEmployeeSalary", "Notifications")</li>
-                                <li>@Html.ActionLink("Define Leaves", "LeavesonPosition", "Admin")</li>
-                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
+                                <li>@Html.ActionLink("Assign Leaves to Position", "LeavesonPosition", "Admin")</li>
                                 <li>@Html.ActionLink("Define Employee Leaves", "DefineEmployeeLeaves", "Admin")</li>
-                                <li>@Html.ActionLink("View Applications", "ViewApplications", "Recruitment")</li>
-                                <li>@Html.ActionLink("View Candidate", "ViewCandidate", "Recruitment")</li>
-                                <li>@Html.ActionLink("View Marks", "ViewMarks", "Recruitment")</li>
-                                <li>@Html.ActionLink("View ShortListed Candidates", "ViewShortlistedcandidate", "Recruitment")</li>
-                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
-
-
-                            }
-                            @if (Session["RoleName"].ToString() == "Recruitment Manager")
-                            {
-
-                                <li>@Html.ActionLink("Create Vacancy", "CreateVacancy", "Recruitment")</li>
-                                <li>@Html.ActionLink("View Vacancy", "ViewVacancy", "Recruitment")</li>
-                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
-                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
-
-                                <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
-                            }
-
-                            @if (Session["RoleName"].ToString() == "Recruitment Officer")
-                            {
-
-                                <li>@Html.ActionLink("View Applications", "ViewApplications", "Recruitment")</li>
-                                <li>@Html.ActionLink("View Candidate", "ViewCandidate", "Recruitment")</li>
-                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
-                                <li>@Html.ActionLink("View Marks", "ViewMarks", "Recruitment")</li>
-                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
-
-                                <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
-                            }
-                            @if (Session["RoleName"].ToString() == "DGM")
-                            {
-                                <li>@Html.ActionLink("View ShortListed Candidates", "ViewShortlistedcandidate", "Recruitment")</li>
-
-                                <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
-                            }
-
-                        </ul>
+                            </ul>
+                        }
                     </li>
+
+                    <li>
+                        @if (Session["RoleName"].ToString() == "Recruitment Manager" || Session["RoleName"].ToString() == "Recruitment Officer" || Session["RoleName"].ToString() == "DGM" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                        {
+                            <a href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-table"></i>
+                                <span class="nav-label">Recruitment</span><i class="fa fa-angle-left arrow"></i>
+                            </a>
+                        }
+                            <ul class="nav-2-level collapse">
+
+                                @if (Session["RoleName"].ToString() == "Recruitment Manager" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                                {
+
+                                    <li>@Html.ActionLink("Create Vacancy", "CreateVacancy", "Recruitment")</li>
+                                    <li>@Html.ActionLink("View Vacancy", "ViewVacancy", "Recruitment")</li>
+
+
+                                }
+
+                                @if (Session["RoleName"].ToString() == "Recruitment Officer" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                                {
+
+                                    <li>@Html.ActionLink("View Applications", "ViewApplications", "Recruitment")</li>
+                                    <li>@Html.ActionLink("View Candidate", "ViewCandidate", "Recruitment")</li>
+                                    <li>@Html.ActionLink("View Marks", "ViewMarks", "Recruitment")</li>
+
+                                }
+                                @if (Session["RoleName"].ToString() == "DGM" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                                {
+                                    <li>@Html.ActionLink("View ShortListed Candidates", "ViewShortlistedcandidate", "Recruitment")</li>
+
+                                }
+
+                            </ul>
+                        </li>
+                    <li>
+                        @if (Session["RoleName"].ToString() == "Hr Manager" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                        {
+                            <a href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-bar-chart"></i>
+                                <span class="nav-label">Promotions</span><i class="fa fa-angle-left arrow"></i>
+                            </a>
+                            <ul class="nav-2-level collapse">
+                                <li>@Html.ActionLink("Promotions", "Promotions", "Notifications")</li>
+                            </ul>
+                        }
+                    </li>
+                    <li>
+                        @if (Session["RoleName"].ToString() == "Finance Manager" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                        {
+                            <a href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-bar-chart"></i>
+                                <span class="nav-label">Promotions</span><i class="fa fa-angle-left arrow"></i>
+                            </a>
+                            <ul class="nav-2-level collapse">
+                                <li>@Html.ActionLink("View Promoted Employees", "SetPromotedEmployeeSalary", "Notifications")</li>
+                            </ul>
+                        }
+                    </li>
+
                     <li>
                         <a href="javascript:;">
                             <i class="sidebar-item-icon fa fa-bar-chart"></i>
                             <span class="nav-label">Personnel Actions</span><i class="fa fa-angle-left arrow"></i>
                         </a>
                         <ul class="nav-2-level collapse">
-                            @if (Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                            @if (Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
+                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
                             @if (Session["RoleName"].ToString() == "Recruitment Manager")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
+                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
                             @if (Session["RoleName"].ToString() == "Recruitment Officer")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
+                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
                             @if (Session["RoleName"].ToString() == "DGM")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
+                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
+                            @if (Session["RoleName"].ToString() == "Hr Manager")
+                            {
+                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
+                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
+                            }
+                            @if (Session["RoleName"].ToString() == "Finance Manager")
+                            {
+                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
+                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
+                            }
+
                         </ul>
                     </li>
-                   
-                  
-                      
+
+
+
                 </ul>
             </div>
         </nav>
@@ -326,6 +289,14 @@
         <script src="~/Scripts/jquery.timeselector.js"></script>
        <script type="text/javascript">
            $(function () {
+               $("#bar").click(function (e) {
+
+                   e.stopPropagation();
+
+                   $("#contents").show();
+                 
+                
+               })
                $("#noti").click(function (e) {
 
                    e.stopPropagation();
@@ -341,6 +312,7 @@
                })
                $('html').click(function () {
                    $("#content").hide();
+                   $("#contents").hide();
 
                })
                function updatenoticontent() {
