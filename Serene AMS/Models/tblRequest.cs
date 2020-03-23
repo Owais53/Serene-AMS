@@ -29,5 +29,6 @@ namespace Serene_AMS.Models
         public string AuthorizedRole { get; set; }
         public string ResponseReason { get; set; }
         public Nullable<bool> IsSeen { get; set; }
+        public string LeaveType { get; set; }
     }
 }

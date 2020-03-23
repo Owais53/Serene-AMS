@@ -309,7 +309,7 @@ namespace Serene_AMS.Controllers
                         obj.updatecasualleaveleft(Convert.ToInt32(empid));
                         obj.Save();
 
-                        var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest);
+                        var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest,"Casual Leave");
                         obj.AddLeaveReq(add);
                         obj.Save();
 
@@ -341,7 +341,7 @@ namespace Serene_AMS.Controllers
                     {
                         obj.updatesickleaveleft(Convert.ToInt32(empid));
                         obj.Save();
-                        var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest);
+                        var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest,"Sick Leave");
                         obj.AddLeaveReq(add);
                         obj.Save();
 
@@ -377,6 +377,96 @@ namespace Serene_AMS.Controllers
 
             return View();
         }
+        [HttpGet]
+        public ActionResult LeaveResponse(int? id)
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            IDepartmentRepository deprepo = new DepartmentRepository();
+            IEmployeeRepository emprepo = new EmployeeRepository();
 
+            var Data = (from req in repo.GetReq()
+                        join emp in emprepo.GetAll() on req.EmployeeId equals emp.EmployeeId
+                        join pos in repo.Getpos() on req.PositionId equals pos.Id
+                        join dep in deprepo.GetAll() on emp.DepartmentId equals dep.DepartmentId
+                        where req.RequestId == id
+                        select new RequestVM
+                        {
+                            EmployeeId = (int)req.EmployeeId,
+                            EmployeeName = emp.EmployeeName,
+                            CityName = emp.CityName,
+                            DateofRequest = (DateTime)req.DateofRequest,
+                            RequestId = req.RequestId,
+                            Position = pos.Position,
+                            DepartmentName = dep.DepartmentName,
+                            ReasonofRequest = req.ReasonofRequest,
+                            FromDate=(DateTime)req.FromDate,
+                            ToDate=(DateTime)req.ToDate,
+                            Leavetype=req.LeaveType
+
+
+                        }).FirstOrDefault();
+
+
+            return View(Data);
+        }
+        [HttpPost]
+        public ActionResult LeaveResponse(RequestVM model)
+        {
+
+            var empname = Session["Employeename"].ToString();
+            IStructuredetailRepository obj = new StructuredetailRepository();          
+            obj.updatereqt(model.RequestId, empname, model.ResponseReason);
+            obj.Save();
+            TempData["SuccessMessage101"] = "Successfully Approved";
+
+            return RedirectToAction("Index", "Home");
+        }
+        [HttpPost]
+        public ActionResult LeaveResponseReject(RequestVM model)
+        {
+
+            var empname = Session["Employeename"].ToString();
+            IStructuredetailRepository obj = new StructuredetailRepository();
+
+            obj.updatereqtrej(model.RequestId, empname, model.ResponseReasonrej);
+            obj.Save();
+            TempData["SuccessMessage101"] = "Rejected";
+
+            return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        public ActionResult ViewLeaveResponse(int? id)
+        {
+            IStructuredetailRepository repo = new StructuredetailRepository();
+            IDepartmentRepository deprepo = new DepartmentRepository();
+            IEmployeeRepository emprepo = new EmployeeRepository();
+
+            var Data = (from req in repo.GetReq()
+                        join emp in emprepo.GetAll() on req.EmployeeId equals emp.EmployeeId
+                        join pos in repo.Getpos() on req.PositionId equals pos.Id
+                        join cupos in repo.Getpos() on emp.PositionId equals cupos.Id
+                        join dep in deprepo.GetAll() on emp.DepartmentId equals dep.DepartmentId
+                        where req.RequestId == id
+                        select new RequestVM
+                        {
+                            EmployeeId = (int)req.EmployeeId,
+                            EmployeeName = emp.EmployeeName,
+                            CityName = emp.CityName,
+                            DateofRequest = (DateTime)req.DateofRequest,
+                            RequestId = req.RequestId,
+                            Position = cupos.Position,
+                            DepartmentName = dep.DepartmentName,
+                            PositiontoTransfer = pos.Position,
+                            positionid = (int)req.PositionId,
+                            CitytoTransfer = req.CitytoTranser,
+                            ReasonofRequest = req.ReasonofRequest,
+                            Status = req.Status,
+                            ResponseReason = req.ResponseReason
+
+
+                        }).FirstOrDefault();
+
+            return View(Data);
+        }
     }
 }

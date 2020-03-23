@@ -23,16 +23,21 @@ namespace Serene_AMS.ViewModels
         public string RequestType { get; set; }
         public int count { get; set; }
         public string DepartmentName { get; set; }
+        
         public string PositiontoTransfer { get; set; }
+        [Required]
         public string CitytoTransfer { get; set; }
         public string Status { get; set; }
         [Required]
         [DataType(DataType.MultilineText)]
         public string ResponseReason { get; set; }
         public string ResponseReasonrej { get; set; }
+        [Required]
         public string Leavetype { get; set; }
+        [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime FromDate { get; set; }
+        [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime ToDate { get; set; }
 

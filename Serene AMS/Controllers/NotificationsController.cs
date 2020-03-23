@@ -78,7 +78,52 @@ namespace Serene_AMS.Controllers
             }
             return Json(listpro, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetReqleave()
+        {
+            ReqList obj = new ReqList();
+            DataSet ds = obj.Show_Reqleavenoti();
+            List<RequestVM> listpro = new List<RequestVM>();
 
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                listpro.Add(new RequestVM
+                {
+                    CityName = dr["CityName"].ToString(),
+                    RequestId = Convert.ToInt32(dr["RequestId"]),
+                    EmployeeId = Convert.ToInt32(dr["EmployeeId"]),
+                    EmployeeName = dr["EmployeeName"].ToString(),
+                    DateofRequest = Convert.ToDateTime(dr["DateofRequest"]),
+                    RequestType = dr["RequestType"].ToString(),
+                    Leavetype=dr["LeaveType"].ToString(),
+                    Position = dr["Position"].ToString()
+
+                });
+            }
+            return Json(listpro, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetReqleaveres()
+        {
+            ReqList obj = new ReqList();
+            DataSet ds = obj.Show_Reqleavenotires();
+            List<RequestVM> listpro = new List<RequestVM>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                listpro.Add(new RequestVM
+                {
+                    CityName = dr["CityName"].ToString(),
+                    RequestId = Convert.ToInt32(dr["RequestId"]),
+                    EmployeeId = Convert.ToInt32(dr["EmployeeId"]),
+                    EmployeeName = dr["EmployeeName"].ToString(),
+                    DateofRequest = Convert.ToDateTime(dr["DateofRequest"]),
+                    RequestType = dr["RequestType"].ToString(),
+                    Leavetype = dr["LeaveType"].ToString(),
+                    Position = dr["Position"].ToString()
+
+                });
+            }
+            return Json(listpro, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetReqNoticount()
         {
             ReqList obj = new ReqList();

@@ -211,32 +211,28 @@
                             <span class="nav-label">Personnel Actions</span><i class="fa fa-angle-left arrow"></i>
                         </a>
                         <ul class="nav-2-level collapse">
-                            @if (Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                           
+                            @if (Session["RoleName"].ToString() == "Recruitment Manager"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
-                            @if (Session["RoleName"].ToString() == "Recruitment Manager")
+                            @if (Session["RoleName"].ToString() == "Recruitment Officer"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
-                            @if (Session["RoleName"].ToString() == "Recruitment Officer")
+                            @if (Session["RoleName"].ToString() == "DGM"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
-                            @if (Session["RoleName"].ToString() == "DGM")
+                            @if (Session["RoleName"].ToString() == "Hr Manager"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
-                            @if (Session["RoleName"].ToString() == "Hr Manager")
-                            {
-                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
-                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
-                            }
-                            @if (Session["RoleName"].ToString() == "Finance Manager")
+                            @if (Session["RoleName"].ToString() == "Finance Manager"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
@@ -307,6 +303,8 @@
                    updatenoticontent();
                    updatenoticontentres();
                    showPromotionnoti();
+                   showReqLeavenoti();
+                   showReqLeavenotires();
                   
                    $('#countnoti', this).html('&nbsp;');
                })
@@ -379,6 +377,47 @@
                        }
                    })
                }
+               function showReqLeavenoti()
+               {
+                   $("#maincontent").empty();
+                     $.ajax({
+                       type: 'GET',
+                         url: '/Notifications/GetReqleave',
+                       success: function (responses) {
+
+                           $.each(responses, function (i, v) {
+                               $("#maincontent").append($('<div id="getresp"><a href="/Requests/LeaveResponse/' + v.RequestId + '" class="list-group-item"> <div class="media"><div class="media-img"> <img src=@Url.Content("~/img/leaves.png")></div> <div class="media-body"><div class="font-13" style="color:black;">' + v.EmployeeName + ' has requested for ' + v.Leavetype + '"</div></div></div></a></div>'))
+
+                           });
+
+
+                       },
+                       error: function (error) {
+                           console.log(error);
+                       }
+                   })
+               }
+               function showReqLeavenotires()
+               {
+                   $("#maincontent").empty();
+                     $.ajax({
+                       type: 'GET',
+                         url: '/Notifications/GetReqleaveres',
+                       success: function (responses) {
+
+                           $.each(responses, function (i, v) {
+                               $("#maincontent").append($('<div id="getresp"><a href="/Requests/ViewLeaveResponse/' + v.RequestId + '" class="list-group-item"> <div class="media"><div class="media-img"> <img src=@Url.Content("~/img/leaves.png")></div> <div class="media-body"><div class="font-13" style="color:black;">Your ' + v.Leavetype + ' has been ' + v.Status + '"</div></div></div></a></div>'))
+
+                           });
+
+
+                       },
+                       error: function (error) {
+                           console.log(error);
+                       }
+                   })
+               }
+
            })
            $(function () {
                $.ajax({

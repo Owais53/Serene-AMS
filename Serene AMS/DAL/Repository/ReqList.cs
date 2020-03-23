@@ -16,7 +16,7 @@ namespace Serene_AMS.DAL.Repository
         {
             var role = System.Web.HttpContext.Current.Session["RoleName"].ToString();
 
-            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and AuthorizedRole='"+role+"'", con);
+            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and RequestType='Transfer' and AuthorizedRole='" + role+"'", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -36,7 +36,7 @@ namespace Serene_AMS.DAL.Repository
         {
             var req = System.Web.HttpContext.Current.Session["RequestId"].ToString();
 
-            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestId='" + req + "' and IsSeen='False'", con);
+            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Transfer' and RequestId='" + req + "' and IsSeen='False'", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -47,7 +47,7 @@ namespace Serene_AMS.DAL.Repository
         {
             var req = System.Web.HttpContext.Current.Session["RequestId"].ToString();
 
-            SqlCommand com = new SqlCommand("select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestId='" + req + "' and IsSeen='False'", con);
+            SqlCommand com = new SqlCommand("select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Transfer' and RequestId='" + req + "' and IsSeen='False'", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -61,7 +61,7 @@ namespace Serene_AMS.DAL.Repository
             var emp = System.Web.HttpContext.Current.Session["EmployeeId"].ToString();
 
 
-            SqlCommand com = new SqlCommand("select Totalcount = (select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and AuthorizedRole='" + roles + "') +(select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestId='" + req + "' and IsSeen='False')+(select Count(*) as NotiCount from tblEmployee emp inner join tblEmployeeDetail det on emp.EmployeeId=det.EmployeeId inner join tblPosition pos on emp.PositionId=pos.Id where emp.EmployeeId="+emp+" and det.IsSalaryset='True' and det.IsSeenPromotion='False')", con);
+            SqlCommand com = new SqlCommand("select Totalcount = (select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and RequestType='Transfer' and AuthorizedRole='" + roles + "') +(select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Transfer' and RequestId='" + req + "' and IsSeen='False')+(select Count(*) as NotiCount from tblEmployee emp inner join tblEmployeeDetail det on emp.EmployeeId=det.EmployeeId inner join tblPosition pos on emp.PositionId=pos.Id where emp.EmployeeId="+emp+ " and det.IsSalaryset='True' and det.IsSeenPromotion='False')+(select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and RequestType='Leave' and AuthorizedRole='" + roles + "')+(select COUNT(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Leave' and RequestId='" + req + "' and IsSeen='False')", con);
                 SqlDataAdapter da = new SqlDataAdapter(com);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -79,6 +79,26 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_Reqleavenoti()
+        {
+            var role = System.Web.HttpContext.Current.Session["RoleName"].ToString();
 
+            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and RequestType='Leave' and AuthorizedRole='" + role + "'", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_Reqleavenotires()
+        {
+            
+            var req = System.Web.HttpContext.Current.Session["RequestId"].ToString();
+
+            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Leave' and RequestId='" + req + "' and IsSeen='False'", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
     }
 }
