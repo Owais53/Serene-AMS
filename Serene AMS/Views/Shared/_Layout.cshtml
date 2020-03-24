@@ -106,9 +106,9 @@
                             <fieldset>
                                 @if (Session["UserName"] != null)
                                 {
-                                    <text> @Session["UserName"].ToString() </text>
+                                    <text> @Session["UserName"].ToString() </text>                                   
                                 }
-                            </fieldset>
+                                </fieldset>
                         </div>
                         <small>
                             @if (Session["RoleName"] != null)
@@ -303,8 +303,9 @@
                    updatenoticontent();
                    updatenoticontentres();
                    showPromotionnoti();
-                   showReqLeavenoti();
                    showReqLeavenotires();
+                   showReqLeavenoti();
+                  
                   
                    $('#countnoti', this).html('&nbsp;');
                })

@@ -78,10 +78,7 @@ namespace Serene_AMS.Controllers
             var empid = Session["EmployeeId"].ToString();
             var role = Session["RoleName"].ToString();
             var checkempid= obj.GetReq().Where(x=>x.EmployeeId == Convert.ToInt32(empid)).FirstOrDefault();
-
-           
-
-           
+        
                 SelectList list = new SelectList(poslist, "Id", "Position");
                 ViewBag.getposlist = list;
                 if (city == "Karachi")
@@ -268,6 +265,7 @@ namespace Serene_AMS.Controllers
             IStructuredetailRepository repo = new StructuredetailRepository();
             var empid = Session["EmployeeId"].ToString();
             var posid = Session["Position"].ToString();
+            var role = Session["RoleName"].ToString();
             var Duplicatereq = repo.GetReq().Where(a => a.EmployeeId == Convert.ToInt32(empid)).Where(x => x.RequestType =="Leave" && x.IsSeen == false).FirstOrDefault();
             var CasualLeavesLeft = obj.GetEmpLeaves().Where(x => x.EmployeeId == Convert.ToInt32(empid) && x.CasualLeave == 0).FirstOrDefault();
             var SickLeavesLeft = obj.GetEmpLeaves().Where(x => x.EmployeeId == Convert.ToInt32(empid) && x.SickLeave == 0).FirstOrDefault();
@@ -308,21 +306,31 @@ namespace Serene_AMS.Controllers
                     {
                         obj.updatecasualleaveleft(Convert.ToInt32(empid));
                         obj.Save();
-
-                        var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest,"Casual Leave");
-                        obj.AddLeaveReq(add);
-                        obj.Save();
-
+                       
                         var leavelist = new SelectList(new[]
                         {
-                    new {ID="1",Name="Casual Leave"},
-                    new {ID="2",Name="Sick Leave"}
+                         new {ID="1",Name="Casual Leave"},
+                         new {ID="2",Name="Sick Leave"}
 
                    },
                        "Name", "Name", "1"
                        );
                         ViewBag.getleavelist = leavelist;
-                        TempData["SuccessMessage102"] = "Success";
+
+                        if (role == "Hr Manager")
+                        {
+                            var add = obj.AddReqlforhr(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest, "Casual Leave");
+                            obj.AddLeaveReq(add);
+                            obj.Save();
+                            TempData["SuccessMessage102"] = "Success";
+                        }
+                        else
+                        {
+                            var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest, "Casual Leave");
+                            obj.AddLeaveReq(add);
+                            obj.Save();
+                            TempData["SuccessMessage102"] = "Success";
+                        }     
                     }
                     else if(model.Leavetype=="Casual Leave")
                     {
@@ -341,7 +349,7 @@ namespace Serene_AMS.Controllers
                     {
                         obj.updatesickleaveleft(Convert.ToInt32(empid));
                         obj.Save();
-                        var add = obj.AddReql(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest,"Sick Leave");
+                        var add = obj.AddReqlforhr(Convert.ToInt32(empid), Convert.ToInt32(posid), model.FromDate, model.ToDate, model.ReasonofRequest,"Sick Leave");
                         obj.AddLeaveReq(add);
                         obj.Save();
 

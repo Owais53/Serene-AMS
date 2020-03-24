@@ -99,7 +99,7 @@ namespace Serene_AMS.DAL.Repository
 
         }
 
-        public tblRequest AddReql(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq,string leavetype)
+        public tblRequest AddReqlforhr(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq,string leavetype)
         {
             var addreq = new tblRequest()
             {
@@ -112,7 +112,7 @@ namespace Serene_AMS.DAL.Repository
                 Status = "Pending",
                 ReasonofRequest = ReasonofReq,
                 LeaveType=leavetype,
-                AuthorizedRole = "Hr Manager",
+                AuthorizedRole = "CEO",
                 IsSeen = false,
             };
             return addreq;
@@ -157,6 +157,25 @@ namespace Serene_AMS.DAL.Repository
         public IEnumerable<tblEmployeeLeaves> GetEmpLeaves()
         {
             return context.tblEmployeeLeaves1;
+        }
+
+        public tblRequest AddReql(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq, string leavetype)
+        {
+            var addreq = new tblRequest()
+            {
+                EmployeeId = empid,
+                PositionId = posid,
+                RequestType = "Leave",
+                DateofRequest = DateTime.Now,
+                FromDate = FromDate,
+                ToDate = ToDate,
+                Status = "Pending",
+                ReasonofRequest = ReasonofReq,
+                LeaveType = leavetype,
+                AuthorizedRole = "Hr Manager",
+                IsSeen = false,
+            };
+            return addreq;
         }
     }
 }

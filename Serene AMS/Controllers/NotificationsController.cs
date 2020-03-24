@@ -118,7 +118,8 @@ namespace Serene_AMS.Controllers
                     DateofRequest = Convert.ToDateTime(dr["DateofRequest"]),
                     RequestType = dr["RequestType"].ToString(),
                     Leavetype = dr["LeaveType"].ToString(),
-                    Position = dr["Position"].ToString()
+                    Position = dr["Position"].ToString(),
+                    Status = dr["Status"].ToString()
 
                 });
             }

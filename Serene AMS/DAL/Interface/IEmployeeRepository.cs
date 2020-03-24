@@ -31,7 +31,9 @@ namespace Serene_AMS.DAL.Interface
         tblPositionLeavetype Addleavepos(int posid,int casualleave,int sickleave);
         void Addleave(tblPositionLeavetype obj);
         void Updateleave(int posid,int casualleave,int sickleave);
-        tblRequest AddReql(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq,string leavetype);
+        tblRequest AddReqlforhr(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq,string leavetype);
+        tblRequest AddReql(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq, string leavetype);
+
         void AddLeaveReq(tblRequest obj);
         void updateleaveforemp(int EmployeeId,int casualleave,int sickleave);
         void updatecasualleaveleft(int EmployeeId);
