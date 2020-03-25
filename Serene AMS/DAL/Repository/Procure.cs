@@ -2,6 +2,7 @@
 using Serene_AMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -88,6 +89,32 @@ namespace Serene_AMS.DAL.Repository
         public void Save()
         {
             context.SaveChanges();
+        }
+
+        public void UpdateItem(int ItemId, string ItemName, string ItemType,string SL, decimal ItemPrice, int Reorderpoint)
+        {
+            var obj = context.tblItems.Where(x => x.ItemId == ItemId).FirstOrDefault();
+            obj.ItemName = ItemName;
+            obj.ItemType = ItemType;
+            obj.StorageLocation = SL;
+            obj.ItemPrice = ItemPrice;
+            obj.ReorderPoint = Reorderpoint;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void UpdateItemType(int id, string itemtype)
+        {
+            var obj = context.tblItemTypes.Find(id);
+            obj.ItemType = itemtype;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void UpdateSL(int SLid, string city, string SL)
+        {
+            var obj = context.tblSLs.Find(SLid);
+            obj.City = city;
+            obj.StorageLocation = SL;
+            context.Entry(obj).State = EntityState.Modified;
         }
     }
 }

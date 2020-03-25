@@ -1013,6 +1013,9 @@
     <Content Include="Views\Admin\ViewStorageLocation.cshtml" />
     <Content Include="Views\Admin\ViewItemTypes.cshtml" />
     <Content Include="Views\Admin\ViewItems.cshtml" />
+    <Content Include="Views\Admin\EditStorageLocationPartial.cshtml" />
+    <Content Include="Views\Admin\EditItemTypePartial.cshtml" />
+    <Content Include="Views\Admin\EditItemsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

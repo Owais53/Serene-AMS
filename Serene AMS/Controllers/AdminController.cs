@@ -563,6 +563,15 @@ namespace Serene_AMS.Controllers
         }
         public ActionResult ViewStorageLocation()
         {
+            var cityname = new SelectList(new[]
+             {
+                new {ID="1",Name="Lahore"},
+                new {ID="2",Name="Islamabad"},
+                new {ID="2",Name="Karachi"}
+                },
+              "Name", "Name", "1"
+             );
+            ViewBag.getcitylist = cityname;
             return View();
         }
         public ActionResult ViewItemTypes()
@@ -571,7 +580,153 @@ namespace Serene_AMS.Controllers
         }
         public ActionResult ViewItems()
         {
+            IProcure obj = new Procure();
+            var ItemType = obj.Getitemtype().ToList();
+            var SL = obj.GetSL().ToList();
+            SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+            ViewBag.getItemtypelist = list;
+
+            SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
+            ViewBag.getSLlist = lists;
+
             return View();
+        }
+        public ActionResult GetSLforEdit(int? id)
+        {
+            IProcure obj = new Procure();
+            var ap = (from d in obj.GetSL()                     
+                      where d.SLId == id
+                      select new
+                      {
+
+                          d.SLId,
+                          d.City,
+                          d.StorageLocation
+                        
+                      }).Select(c => new ProcureVM()
+                      {
+                         SlId=c.SLId,
+                         StorageLocation=c.StorageLocation
+
+
+
+                      }).FirstOrDefault();
+
+            var cityname = new SelectList(new[]
+             {
+                new {ID="1",Name="Lahore"},
+                new {ID="2",Name="Islamabad"},
+                new {ID="2",Name="Karachi"}
+                },
+              "Name", "Name", "1"
+             );
+            ViewBag.getcitylist = cityname;
+
+            return PartialView("EditStorageLocationPartial", ap);
+        }
+        public ActionResult EditSL(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+
+            var cityname = new SelectList(new[]
+             {
+                new {ID="1",Name="Lahore"},
+                new {ID="2",Name="Islamabad"},
+                new {ID="2",Name="Karachi"}
+                },
+              "Name", "Name", "1"
+             );
+            ViewBag.getcitylist = cityname;
+                obj.UpdateSL(model.SlId,model.City,model.StorageLocation);
+                obj.Save();
+                TempData["SuccessMessage1"] = "Successfully Updated";
+
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetItemTypes(int? id)
+        {
+            IProcure obj = new Procure();
+            var ap = (from d in obj.Getitemtype()
+                      where d.Id == id
+                      select new
+                      {
+                         d.Id,
+                         d.ItemType
+
+                      }).Select(c => new ProcureVM()
+                      {
+                          Id = c.Id,
+                          ItemType=c.ItemType
+
+
+
+                      }).FirstOrDefault();
+
+           
+            return PartialView("EditItemTypePartial", ap);
+        }
+        public ActionResult EditItemType(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+
+           
+            obj.UpdateItemType(model.Id, model.ItemType);
+            obj.Save();
+            TempData["SuccessMessage1"] = "Successfully Updated";
+
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetItems(int? id)
+        {
+            IProcure obj = new Procure();
+            var ap = (from d in obj.Getitems()
+                      where d.ItemId == id
+                      select new
+                      {
+                          d.ItemId,
+                          d.ItemName,
+                          d.ItemPrice,
+                          d.StorageLocation,
+                          d.ReorderPoint
+
+                      }).Select(c => new ProcureVM()
+                      {
+                         ItemId=c.ItemId,
+                         ItemName=c.ItemName,
+                         ItemPrice=(decimal)c.ItemPrice,
+                         StorageLocation=c.StorageLocation,
+                         ReorderPoint=(int)c.ReorderPoint
+
+
+                      }).FirstOrDefault();
+            var ItemType = obj.Getitemtype().ToList();
+            var SL = obj.GetSL().ToList();
+            SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+            ViewBag.getItemtypelist = list;
+
+            SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
+            ViewBag.getSLlist = lists;
+
+
+            return PartialView("EditItemsPartial", ap);
+        }
+        public ActionResult EditItems(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+            var ItemType = obj.Getitemtype().ToList();
+            var SL = obj.GetSL().ToList();
+            SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+            ViewBag.getItemtypelist = list;
+
+            SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
+            ViewBag.getSLlist = lists;
+
+
+            obj.UpdateItem(model.ItemId,model.ItemName,model.ItemType,model.StorageLocation,model.ItemPrice,model.ReorderPoint);
+            obj.Save();
+            TempData["SuccessMessage1"] = "Successfully Updated";
+
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
     }
 }

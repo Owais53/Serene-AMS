@@ -20,6 +20,8 @@ namespace Serene_AMS.ViewModels
         public int ReorderPoint { get; set; }
         [Required]
         public decimal ItemPrice { get; set; }
-
+        public int SlId { set; get; }
+        public int Id { get; set; }
+        public int ItemId { get; set; }
     }
 }
