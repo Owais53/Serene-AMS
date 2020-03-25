@@ -386,5 +386,132 @@ namespace Serene_AMS.Controllers
            
             return Json(new {  success = true }, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        public ActionResult CreateStorageLocation()
+        {
+            var cityname = new SelectList(new[]
+              {
+
+                new {ID="1",Name="Lahore"},
+                new {ID="2",Name="Islamabad"},
+                 new {ID="2",Name="Karachi"}
+                },
+                "Name", "Name", "1"
+              );
+            ViewBag.getcitylist = cityname;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateStorageLocation(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+
+            var checkduplicate = obj.GetSL().Where(x => x.City == model.City && x.StorageLocation == model.StorageLocation).FirstOrDefault();
+
+            if (checkduplicate == null)
+            {
+                var add = obj.AddSL(model.City, model.StorageLocation);
+                obj.AddStore(add);
+                obj.Save();
+                var cityname = new SelectList(new[]
+                {
+
+                new {ID="1",Name="Lahore"},
+                new {ID="2",Name="Islamabad"},
+                 new {ID="2",Name="Karachi"}
+                },
+                  "Name", "Name", "1"
+                );
+                ViewBag.getcitylist = cityname;
+
+                TempData["SuccessMessage1"] = "Successfully Created";
+            }
+            else
+            {
+                var cityname = new SelectList(new[]
+               {
+                new {ID="1",Name="Lahore"},
+                new {ID="2",Name="Islamabad"},
+                new {ID="2",Name="Karachi"}
+                },
+                "Name", "Name", "1"
+               );
+                ViewBag.getcitylist = cityname;
+                TempData["ErrorMessage1"] = "Storage Location" + model.StorageLocation + " already exists in City " + model.City + "";
+            }
+            return View();
+        }
+        [HttpGet]
+        public ActionResult CreateItemType()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateItemType(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+
+            var check = obj.Getitemtype().Where(x=>x.ItemType == model.ItemType).FirstOrDefault();
+
+            if(check == null)
+            {
+                var add = obj.AddItemtype(model.ItemType);
+                obj.AddTypes(add);
+                obj.Save();
+                TempData["SuccessMessage1"] = "Successfully Created";
+            }
+            else
+            {
+                TempData["ErrorMessage1"] = "ItemType"+ model.ItemType +" already exists";
+            }
+            return View();
+        }
+        [HttpGet]
+        public ActionResult CreateItems()
+        {
+            IProcure obj = new Procure();
+            var ItemType = obj.Getitemtype().ToList();
+            SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+            ViewBag.getItemtypelist = list;
+
+            var SL = obj.GetSL().ToList();
+            SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
+            ViewBag.getSLlist = lists;
+
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateItems(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+            var ItemType = obj.Getitemtype().ToList();
+            var SL = obj.GetSL().ToList();
+            var valide = obj.Getitems().Where(x => x.ItemName == model.ItemName).FirstOrDefault();
+            var validatetype = obj.Getitems().Where(x => x.ItemType == model.ItemType && x.ItemName == model.ItemName).FirstOrDefault();
+            if (valide == null && validatetype == null)
+            {
+                SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+                ViewBag.getItemtypelist = list;
+
+                SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
+                ViewBag.getSLlist = lists;
+                var add = obj.Additem(model.ItemType, model.ItemName, model.StorageLocation, model.ReorderPoint, model.ItemPrice);
+                obj.Additems(add);
+                obj.Save();
+                TempData["SuccessMessage1"] = "Successfully Created";
+                
+            }
+            else
+            {
+                SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+                ViewBag.getItemtypelist = list;
+
+                SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
+                ViewBag.getSLlist = lists;
+                TempData["ErrorMessage1"] = "Item" + model.ItemName + " already exists in Item Type " + model.ItemType + "";
+            }
+            return View();
+        }
     }
 }

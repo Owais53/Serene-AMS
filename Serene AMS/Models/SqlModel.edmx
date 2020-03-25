@@ -132,10 +132,17 @@
           </Key>
           <Property Name="ItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemName" Type="nvarchar(max)" />
-          <Property Name="ItemType" Type="varchar" MaxLength="50" />
-          <Property Name="StorageLocation" Type="varchar" MaxLength="50" />
+          <Property Name="ItemType" Type="varchar" MaxLength="75" />
+          <Property Name="StorageLocation" Type="varchar" MaxLength="75" />
           <Property Name="ReorderPoint" Type="int" />
           <Property Name="ItemPrice" Type="money" />
+        </EntityType>
+        <EntityType Name="tblItemType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemType" Type="varchar" MaxLength="75" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -234,6 +241,14 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoleName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="tblSL">
+          <Key>
+            <PropertyRef Name="SLId" />
+          </Key>
+          <Property Name="SLId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="City" Type="varchar" MaxLength="75" />
+          <Property Name="StorageLocation" Type="varchar" MaxLength="75" />
         </EntityType>
         <EntityType Name="tblStock">
           <Key>
@@ -570,12 +585,14 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySet Name="tblEmployeeLeaves" EntityType="Self.tblEmployeeLeaves" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblExpenses" EntityType="Self.tblExpenses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblItem" EntityType="Self.tblItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblItemType" EntityType="Self.tblItemType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPosition" EntityType="Self.tblPosition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPositionLeavetypes" EntityType="Self.tblPositionLeavetypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchase" EntityType="Self.tblPurchase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseitem" EntityType="Self.tblPurchaseitem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblRequests" EntityType="Self.tblRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblRoles" EntityType="Self.tblRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSL" EntityType="Self.tblSL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblStock" EntityType="Self.tblStock" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblStructuredetail" EntityType="Self.tblStructuredetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblUsers" EntityType="Self.tblUsers" Schema="dbo" store:Type="Tables" />
@@ -831,8 +848,8 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           </Key>
           <Property Name="ItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ItemType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="StorageLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemType" Type="String" MaxLength="75" Unicode="false" FixedLength="false" />
+          <Property Name="StorageLocation" Type="String" MaxLength="75" Unicode="false" FixedLength="false" />
           <Property Name="ReorderPoint" Type="Int32" />
           <Property Name="ItemPrice" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="tblDocuments" Relationship="Self.FK_tblDocument_tblItem" FromRole="tblItem" ToRole="tblDocument" />
@@ -1372,6 +1389,8 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <End Role="tblEmployee" EntitySet="tblEmployees" />
             <End Role="tblEmployeeLeaf" EntitySet="tblEmployeeLeaves1" />
           </AssociationSet>
+          <EntitySet Name="tblSLs" EntityType="HrmsModel.tblSL" />
+          <EntitySet Name="tblItemTypes" EntityType="HrmsModel.tblItemType" />
         </EntityContainer>
         <EntityType Name="tblEmployeeLeaves">
           <Key>
@@ -1395,6 +1414,21 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tblSL">
+          <Key>
+            <PropertyRef Name="SLId" />
+          </Key>
+          <Property Name="SLId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="City" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="StorageLocation" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tblItemType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemType" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1719,6 +1753,23 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
                 <ScalarProperty Name="SickLeave" ColumnName="SickLeave" />
                 <ScalarProperty Name="CasualLeave" ColumnName="CasualLeave" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSLs">
+            <EntityTypeMapping TypeName="HrmsModel.tblSL">
+              <MappingFragment StoreEntitySet="tblSL">
+                <ScalarProperty Name="StorageLocation" ColumnName="StorageLocation" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="SLId" ColumnName="SLId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblItemTypes">
+            <EntityTypeMapping TypeName="HrmsModel.tblItemType">
+              <MappingFragment StoreEntitySet="tblItemType">
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

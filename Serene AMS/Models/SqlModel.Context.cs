@@ -50,5 +50,7 @@ namespace Serene_AMS.Models
         public virtual DbSet<tblOrganizationStructure> tblOrganizationStructures { get; set; }
         public virtual DbSet<tblRequestdetail> tblRequestdetails { get; set; }
         public virtual DbSet<tblEmployeeLeaves> tblEmployeeLeaves1 { get; set; }
+        public virtual DbSet<tblSL> tblSLs { get; set; }
+        public virtual DbSet<tblItemType> tblItemTypes { get; set; }
     }
 }

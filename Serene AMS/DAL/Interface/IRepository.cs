@@ -40,5 +40,7 @@ namespace Serene_AMS.DAL.Interface
         void Save();
         void Addempidleave(tblEmployeeLeaves obj);
 
+       
+
     }
 }

@@ -51,6 +51,8 @@
         <AssociationConnector Association="HrmsModel.FK_tblVacancydetails_tblStructure" ManuallyRouted="false" />
         <EntityTypeShape EntityType="HrmsModel.tblEmployeeLeaves" Width="1.5" PointX="7.5" PointY="7.375" />
         <AssociationConnector Association="HrmsModel.FK_tblEmployeeLeaves_tblEmployee" />
+        <EntityTypeShape EntityType="HrmsModel.tblSL" Width="1.5" PointX="10.375" PointY="11.75" />
+        <EntityTypeShape EntityType="HrmsModel.tblItemType" Width="1.5" PointX="12.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

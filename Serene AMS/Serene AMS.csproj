@@ -140,6 +140,7 @@
     <Compile Include="DAL\Interface\IDepartmentRepository.cs" />
     <Compile Include="DAL\Interface\IEmployeeRepository.cs" />
     <Compile Include="DAL\Interface\ILogin.cs" />
+    <Compile Include="DAL\Interface\IProcure.cs" />
     <Compile Include="DAL\Interface\IRepository.cs" />
     <Compile Include="DAL\Interface\IStructuredetailRepository.cs" />
     <Compile Include="DAL\Interface\IUserRepository.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="DAL\Repository\DepartmentRepository.cs" />
     <Compile Include="DAL\Repository\EmployeeRepository.cs" />
     <Compile Include="DAL\Repository\JobListing.cs" />
+    <Compile Include="DAL\Repository\Procure.cs" />
     <Compile Include="DAL\Repository\ReqList.cs" />
     <Compile Include="DAL\Repository\StructuredetailRepository.cs" />
     <Compile Include="DAL\Repository\UserRepository.cs" />
@@ -203,6 +205,9 @@
     <Compile Include="Models\tblItem.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblItemType.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblOrganizationStructure.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
@@ -225,6 +230,9 @@
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblRole.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblSL.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblStock.cs">
@@ -250,6 +258,7 @@
     <Compile Include="ViewModels\CandidateEmployeeVM.cs" />
     <Compile Include="ViewModels\EmployeeUserVM.cs" />
     <Compile Include="ViewModels\PositionVM.cs" />
+    <Compile Include="ViewModels\ProcureVM.cs" />
     <Compile Include="ViewModels\RequestVM.cs" />
     <Compile Include="ViewModels\VacancyVM.cs" />
   </ItemGroup>
@@ -998,6 +1007,9 @@
     <Content Include="Views\Admin\EmployeeLeavePartial.cshtml" />
     <Content Include="Views\Requests\LeaveResponse.cshtml" />
     <Content Include="Views\Requests\ViewLeaveResponse.cshtml" />
+    <Content Include="Views\Admin\CreateItems.cshtml" />
+    <Content Include="Views\Admin\CreateStorageLocation.cshtml" />
+    <Content Include="Views\Admin\CreateItemType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

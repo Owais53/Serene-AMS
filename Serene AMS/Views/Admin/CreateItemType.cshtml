@@ -1,0 +1,71 @@
+﻿@model Serene_AMS.ViewModels.ProcureVM
+@{
+    ViewBag.Title = "CreateItemType";
+}
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Create Item Type
+        </li>
+    </ol>
+</nav>
+<div class="ibox">
+
+    <div class="ibox-body">
+
+
+        <div id="getposview">
+            @using (Html.BeginForm("CreateItemType", "Admin", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+
+                  
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ItemType, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ItemType, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ItemType, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+       $(function () {
+            var successMessage = '@TempData["SuccessMessage1"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+
+    </script>
+    <script>
+        $(function () {
+            var errorMessage = '@TempData["ErrorMessage1"]'
+            if (errorMessage != '')
+                alertify.error(errorMessage);
+        });
+
+    </script>
+
+
+
+}
+
