@@ -90,6 +90,53 @@ namespace Serene_AMS.Controllers
 
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GetSlList()
+        {
+            IProcure obj = new Procure();
+
+            var Data = (from Sl in obj.GetSL()
+                        select new
+                        {
+                           Sl.City,
+                           Sl.StorageLocation,
+                           Sl.SLId
+                        }).ToList();
+
+
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetitemtypeList()
+        {
+            IProcure obj = new Procure();
+
+            var Data = (from type in obj.Getitemtype()
+                        select new
+                        {
+                           type.ItemType,
+                           type.Id
+                        }).ToList();
+
+
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetitemList()
+        {
+            IProcure obj = new Procure();
+
+            var Data = (from item in obj.Getitems()
+                        select new
+                        {
+                           item.ItemType,
+                           item.ItemName,
+                           item.StorageLocation,
+                           item.ItemPrice,
+                           item.ItemId
+
+                        }).ToList();
+
+
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
+        }
         [HttpGet]
         public ActionResult Assignroles()
         {
@@ -423,8 +470,9 @@ namespace Serene_AMS.Controllers
                   "Name", "Name", "1"
                 );
                 ViewBag.getcitylist = cityname;
-
+               
                 TempData["SuccessMessage1"] = "Successfully Created";
+                return RedirectToAction("ViewStorageLoaction", "Admin");
             }
             else
             {
@@ -511,6 +559,18 @@ namespace Serene_AMS.Controllers
                 ViewBag.getSLlist = lists;
                 TempData["ErrorMessage1"] = "Item" + model.ItemName + " already exists in Item Type " + model.ItemType + "";
             }
+            return View();
+        }
+        public ActionResult ViewStorageLocation()
+        {
+            return View();
+        }
+        public ActionResult ViewItemTypes()
+        {
+            return View();
+        }
+        public ActionResult ViewItems()
+        {
             return View();
         }
     }
