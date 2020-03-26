@@ -58,6 +58,8 @@
           <Property Name="TypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DocumentType" Type="varchar" MaxLength="50" />
           <Property Name="DocumentName" Type="varchar" MaxLength="100" />
+          <Property Name="NumberRangefrom" Type="int" />
+          <Property Name="NumberRangeTo" Type="int" />
         </EntityType>
         <EntityType Name="tblDocument">
           <Key>
@@ -772,6 +774,8 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="DocumentType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DocumentName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="tblDocuments" Relationship="Self.FK_tblDocument_tblDoctype" FromRole="tblDoctype" ToRole="tblDocument" />
+          <Property Name="NumberRangefrom" Type="Int32" />
+          <Property Name="NumberRangeTo" Type="Int32" />
         </EntityType>
         <EntityType Name="tblDocument">
           <Key>
@@ -1488,6 +1492,8 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDoctypes">
             <EntityTypeMapping TypeName="HrmsModel.tblDoctype">
               <MappingFragment StoreEntitySet="tblDoctype">
+                <ScalarProperty Name="NumberRangeTo" ColumnName="NumberRangeTo" />
+                <ScalarProperty Name="NumberRangefrom" ColumnName="NumberRangefrom" />
                 <ScalarProperty Name="TypeId" ColumnName="TypeId" />
                 <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
                 <ScalarProperty Name="DocumentName" ColumnName="DocumentName" />

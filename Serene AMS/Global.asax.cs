@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Serene_AMS.DAL.Classes;
+using Serene_AMS.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,6 +19,7 @@ namespace Serene_AMS
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+           
         }
     }
 }

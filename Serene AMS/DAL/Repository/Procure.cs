@@ -71,6 +71,11 @@ namespace Serene_AMS.DAL.Repository
             context.tblItemTypes.Add(obj);
         }
 
+        public IEnumerable<tblDoctype> GetDoctypes()
+        {
+            return context.tblDoctypes;
+        }
+
         public IEnumerable<tblItem> Getitems()
         {
             return context.tblItems;

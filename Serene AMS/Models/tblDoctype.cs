@@ -23,6 +23,8 @@ namespace Serene_AMS.Models
         public int TypeId { get; set; }
         public string DocumentType { get; set; }
         public string DocumentName { get; set; }
+        public Nullable<int> NumberRangefrom { get; set; }
+        public Nullable<int> NumberRangeTo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocument> tblDocuments { get; set; }

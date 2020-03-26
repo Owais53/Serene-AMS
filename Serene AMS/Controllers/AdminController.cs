@@ -1,4 +1,5 @@
-﻿using Serene_AMS.DAL.Interface;
+﻿using Serene_AMS.DAL.Classes;
+using Serene_AMS.DAL.Interface;
 using Serene_AMS.DAL.Repository;
 using Serene_AMS.Models;
 using Serene_AMS.ViewModel;
@@ -533,8 +534,10 @@ namespace Serene_AMS.Controllers
         public ActionResult CreateItems(ProcureVM model)
         {
             IProcure obj = new Procure();
+            SetDocNumber doc = new SetDocNumber();
             var ItemType = obj.Getitemtype().ToList();
             var SL = obj.GetSL().ToList();
+           
             var valide = obj.Getitems().Where(x => x.ItemName == model.ItemName).FirstOrDefault();
             var validatetype = obj.Getitems().Where(x => x.ItemType == model.ItemType && x.ItemName == model.ItemName).FirstOrDefault();
             if (valide == null && validatetype == null)
@@ -544,11 +547,19 @@ namespace Serene_AMS.Controllers
 
                 SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
                 ViewBag.getSLlist = lists;
-                var add = obj.Additem(model.ItemType, model.ItemName, model.StorageLocation, model.ReorderPoint, model.ItemPrice);
-                obj.Additems(add);
-                obj.Save();
-                TempData["SuccessMessage1"] = "Successfully Created";
                 
+                var add = obj.Additem(model.ItemType, model.ItemName, model.StorageLocation, model.ReorderPoint, model.ItemPrice);
+                var Idcheck = obj.GetDoctypes().Where(x => x.NumberRangeTo == add.ItemId).FirstOrDefault();
+                if (Idcheck != null)
+                {
+                    obj.Additems(add);
+                    obj.Save();
+                    TempData["SuccessMessage1"] = "Successfully Created";
+                }
+                else
+                {
+                    TempData["ErrorMessage1"] = "Doc Number Range Exceeded";
+                }
             }
             else
             {
@@ -728,5 +739,10 @@ namespace Serene_AMS.Controllers
 
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult SetDocumentNumberRanges()
+        {
+            return View();
+        }
+
     }
 }
