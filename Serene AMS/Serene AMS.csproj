@@ -1017,6 +1017,8 @@
     <Content Include="Views\Admin\EditStorageLocationPartial.cshtml" />
     <Content Include="Views\Admin\EditItemTypePartial.cshtml" />
     <Content Include="Views\Admin\EditItemsPartial.cshtml" />
+    <Content Include="Views\Admin\SetDocumentNumberRanges.cshtml" />
+    <Content Include="Views\Admin\SetDocRangePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

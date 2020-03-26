@@ -23,5 +23,13 @@ namespace Serene_AMS.ViewModels
         public int SlId { set; get; }
         public int Id { get; set; }
         public int ItemId { get; set; }
+        public int TypeId { get; set; }
+        public string DocType { get; set; }
+        [Required]
+        public int Docnumberfrom { get; set; }
+        [Required]
+        public int DocnumberTo { get; set; }
+        public int DocPofrom { get; set; }
+        public int DocPoto { get; set; }
     }
 }

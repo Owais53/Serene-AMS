@@ -23,5 +23,6 @@ namespace Serene_AMS.DAL.Interface
         void UpdateItemType(int id,string itemtype);
         void UpdateItem(int ItemId,string ItemName,string ItemType,string SL,decimal ItemPrice,int Reorderpoint);
         IEnumerable<tblDoctype> GetDoctypes();
+        void UpdateDocType(int Typeid,int DocNofrom,int DocNoto);
     }
 }

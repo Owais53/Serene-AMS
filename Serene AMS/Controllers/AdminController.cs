@@ -548,18 +548,11 @@ namespace Serene_AMS.Controllers
                 SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
                 ViewBag.getSLlist = lists;
                 
-                var add = obj.Additem(model.ItemType, model.ItemName, model.StorageLocation, model.ReorderPoint, model.ItemPrice);
-                var Idcheck = obj.GetDoctypes().Where(x => x.NumberRangeTo == add.ItemId).FirstOrDefault();
-                if (Idcheck != null)
-                {
+                  var add = obj.Additem(model.ItemType, model.ItemName, model.StorageLocation, model.ReorderPoint, model.ItemPrice);              
                     obj.Additems(add);
                     obj.Save();
                     TempData["SuccessMessage1"] = "Successfully Created";
-                }
-                else
-                {
-                    TempData["ErrorMessage1"] = "Doc Number Range Exceeded";
-                }
+              
             }
             else
             {
@@ -676,6 +669,25 @@ namespace Serene_AMS.Controllers
            
             return PartialView("EditItemTypePartial", ap);
         }
+        public ActionResult GetDoctypeList()
+        {
+            IProcure obj = new Procure();
+            var Data = (from d in obj.GetDoctypes()
+                      select new
+                      {
+                          d.TypeId,
+                          d.DocumentType,
+                          d.DocumentName,
+                          d.NumberRangefrom,
+                          d.NumberRangeTo
+
+
+
+                      }).ToList();
+
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
+
+        }
         public ActionResult EditItemType(ProcureVM model)
         {
             IProcure obj = new Procure();
@@ -742,6 +754,51 @@ namespace Serene_AMS.Controllers
         public ActionResult SetDocumentNumberRanges()
         {
             return View();
+        }
+        public ActionResult GetDocTypes(int? id)
+        {
+            IProcure obj = new Procure();
+            var ap = (from d in obj.GetDoctypes()
+                      where d.TypeId == id
+                      select new
+                      {
+                          d.TypeId,
+                          d.DocumentType,
+                          d.DocumentName,
+                          d.NumberRangefrom,
+                          d.NumberRangeTo
+
+                      }).Select(c => new ProcureVM()
+                      {
+                          TypeId=c.TypeId,
+                          DocType=c.DocumentType,
+                          Docnumberfrom=(int)c.NumberRangefrom,
+                          DocnumberTo=(int)c.NumberRangeTo
+
+                      }).FirstOrDefault();
+          
+
+            return PartialView("SetDocRangePartial", ap);
+        }
+        public ActionResult SetDocRange(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+           
+            var checkrangeduplicate = obj.GetDoctypes().Where(x => x.DocumentType == "PR").Where(b=>b.NumberRangefrom==model.Docnumberfrom || b.NumberRangeTo==model.DocnumberTo).FirstOrDefault();
+            var checkrangeduplicate1 = obj.GetDoctypes().Where(x => x.DocumentType == "PO").Where(b => b.NumberRangefrom == model.Docnumberfrom || b.NumberRangeTo == model.DocnumberTo).FirstOrDefault();
+
+            if (checkrangeduplicate == null || checkrangeduplicate1== null)
+            {
+                obj.UpdateDocType(model.TypeId, model.Docnumberfrom, model.DocnumberTo);
+                obj.Save();
+                TempData["UpdateMessage3"] = "Successfully Updated";
+            }
+            else 
+            {
+                TempData["ErrorMessage1"] = "Document Number Range matches other Document Number Range";
+            }
+
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
     }

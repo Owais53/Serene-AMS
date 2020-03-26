@@ -96,6 +96,14 @@ namespace Serene_AMS.DAL.Repository
             context.SaveChanges();
         }
 
+        public void UpdateDocType(int Typeid, int DocNofrom, int DocNoto)
+        {
+            var obj = context.tblDoctypes.Where(x => x.TypeId == Typeid).FirstOrDefault();
+            obj.NumberRangefrom = DocNofrom;
+            obj.NumberRangeTo = DocNoto;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
         public void UpdateItem(int ItemId, string ItemName, string ItemType,string SL, decimal ItemPrice, int Reorderpoint)
         {
             var obj = context.tblItems.Where(x => x.ItemId == ItemId).FirstOrDefault();
