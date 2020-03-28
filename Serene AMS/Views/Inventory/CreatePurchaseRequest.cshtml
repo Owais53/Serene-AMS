@@ -43,16 +43,15 @@
 
 
             </table>
-           
-            @Html.EditorFor(model => model.ItemsID, new { htmlAttributes = new { @class = "form-control",@name="txtval",@id="txtval1",@type="hidden" } })
+
+            @Html.EditorFor(model => model.ItemsID, new { htmlAttributes = new { @class = "form-control", @name = "txtval", @id = "txtval1", @type = "hidden" } })
             <button type="submit" class="btn btn-primary">Select Items</button>
 
 
             <div class="form-group" id="getqty">
 
             </div>
-
-
+           
 
         }
     </div>
@@ -118,6 +117,9 @@
               
            });
         });
+      
+            
+      
         function PostPRItems() {
             var form = $('form[name="form"]');
             var data = $("#txtval1").val();
@@ -127,6 +129,7 @@
                 }
             });
         }
+      
        </script>
 
     }

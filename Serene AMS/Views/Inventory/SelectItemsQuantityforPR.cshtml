@@ -16,12 +16,15 @@
 <div class="ibox">
 
     <div class="ibox-body">
-        <table id="tblqtypickforpr" class="table table-striped table-hover responsive table-responsive">
+        <table id="tblqtypickforpr1" class="table table-striped table-hover responsive table-responsive">
             <thead>
                 <tr style="background-color:#0094ff; color:#ecf0f1">
 
                     <th>Document No</th>
                     <th>Items</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
@@ -29,12 +32,27 @@
                 <tr>
                     <th>Document No</th>
                     <th>Items</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Action</th>
                 </tr>
             </tfoot>
 
 
         </table>
-        @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control",@id="getdocno" } })
+        @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @id = "getdocno1",@type="hidden"} })
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="modal" id="Modalqty" tabindex="-1" data-backdrop="false">
+                        <div class="modal-dialog ">
+                            @Html.Partial("AddQuantityPartial")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -53,18 +71,26 @@
         var Popup, dataTable2;
         $(function () {
 
-            dataTable2 = $('#tblqtypickforpr').DataTable({
+            dataTable2 = $('#tblqtypickforpr1').DataTable({
                 pageLength: 10,
                 "ajax": {
                     "url": '/inventory/GetPRItemsList',
                     "type": "get",
                     "datatype": "json",
-                    "data": { DocNo:$("#getdocno").val() }
+                    "data": { DocNo:$("#getdocno1").val() }
                 },
                 "columns": [
 
                     { "data": "DocumentNo", "authowidth": false },
-                    { "data": "ItemId", "authowidth": false }
+                    { "data": "ItemId", "authowidth": false },
+                    { "data": "Quantity", "authowidth": false },
+                    { "data": "TotalPrice", "authowidth": false },
+                    {
+                        "data": "Id", "render": function (data, type, full) {
+                            return "<button type='button' onclick=UpdateQty('" + data + "') class='btn btn-primary' id='getbtnqty'>Set Quantity</button>"
+
+                        },
+                    },
                    
 
                 ]
@@ -74,8 +100,43 @@
 
 
         });
+        function UpdateQty(id) {
+
+            $.get("/Inventory/GetItemforqty", { id: id }, function (res) {
+
+                $("#qtymodal").html(res);
+                $("#Modalqty").modal('show');
 
 
+            })
+
+        }
+        function PostQty() {
+            var modal = $("#Modalqty");
+            var form = $('form[name="formqty"]');
+
+            form.validate();
+            if (!form.valid()) {
+                return;
+            } else {
+                var data = form.serialize();
+                $.post("/Inventory/UpdateItemQtyforPr", data, function (res) {
+                    if (res) {
+                        modal.modal('hide');
+                        if (res.code === 1) {
+                            window.location = 'SelectItemsQuantityforPR'
+                        }
+                        $("#tblqtypickforpr1").DataTable.ajax.reload();
+
+
+                     
+
+                    }
+
+                });
+
+            }
+        }
         </script>
 
       

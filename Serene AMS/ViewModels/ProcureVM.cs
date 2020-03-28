@@ -40,5 +40,6 @@ namespace Serene_AMS.ViewModels
         public bool isChecked { get; set; }
         public String ItemsID { get; set; }
         public int DocNo { get; set; }
+       public int Quantity { get; set; }
     }
 }

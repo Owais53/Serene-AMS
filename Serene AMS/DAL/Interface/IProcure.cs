@@ -29,5 +29,7 @@ namespace Serene_AMS.DAL.Interface
         void UpdateDocType(int Typeid,int DocNofrom,int DocNoto);
         tblDocument CreatePRItems(ProcureVM model);
         void AddPRItems(tblDocument obj);
+        void updatqty(int Id, string item, int qty);
+        void updateDocstatus(int Docno);
     }
 }

@@ -3,10 +3,7 @@ using Serene_AMS.DAL.Interface;
 using Serene_AMS.DAL.Repository;
 using Serene_AMS.Models;
 using Serene_AMS.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Serene_AMS.Controllers
@@ -16,6 +13,8 @@ namespace Serene_AMS.Controllers
         InsertmultipleitemPR db = new InsertmultipleitemPR();
         public ActionResult CreatePurchaseRequest()
         {
+            
+
             return View();
         }
         public ActionResult GetItemsList()
@@ -82,37 +81,81 @@ namespace Serene_AMS.Controllers
             if (flag)
             {
                 var DocNo = obj.GetDoc().Select(x => new ProcureVM { DocNo = x.DocumentNo }).LastOrDefault();
-                return View("SelectItemsQuantityforPR",DocNo);
+                TempData["UpdateMessage3"] = "Success";                
+                return View("SelectItemsQuantityforPR", DocNo);
             }
             else
             {
-               
-                return View();
+             
+                return View("SelectItemsQuantityforPR");
             }
-           
+          
         }
         public ActionResult SelectItemsQuantityforPR()
         {
-            return View();
+            IProcure obj = new Procure();
+            var DocNo = obj.GetDoc().Select(x => new ProcureVM { DocNo = x.DocumentNo }).LastOrDefault();
+
+            return View(DocNo);
         }
         public ActionResult GetPRItemsList(int DocNo)
         {
             IProcure repo = new Procure();
 
-            var Data = (from u in repo.GetDocDetail()                     
+            var Data = (from u in repo.GetDocDetail()
                         where u.DocumentNo==DocNo
                         select new
                         {
 
                            u.DocumentNo,
-                           u.ItemId
+                           u.ItemId,
+                           u.Quantity,
+                           u.TotalPrice,
+                           u.Id
 
                         }).ToList();
 
             return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
 
         }
+        public ActionResult GetItemforqty(int? id)
+        {
+            IProcure obj = new Procure();
 
+            var result = (from d in obj.GetDocDetail()
+                          where d.Id == id
+                          select new
+                          {
+                              d.Id,
+                              d.ItemId,
+                              d.Quantity
 
+                          }).Select(c => new ProcureVM()
+                          {
+                              Id= c.Id,
+                              ItemName=c.ItemId,
+                              Quantity=(int)c.Quantity
+
+                          }).FirstOrDefault();
+
+            return PartialView("AddQuantityPartial", result);
+        }
+        public ActionResult UpdateItemQtyforPr(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+            var docdetail = obj.GetDocDetail().Where(x => x.DocumentNo == model.DocNo && x.Quantity != 0).LastOrDefault();
+            if (docdetail != null)
+            {
+                obj.updateDocstatus(model.DocNo);
+                obj.Save();
+            }
+                obj.updatqty(model.Id,model.ItemName,model.Quantity);
+                obj.Save();
+               
+                TempData["UpdateMessage3"] = "Success";
+                
+            return Json(new { success = true,code=1}, JsonRequestBehavior.AllowGet);
+           
+        }
     }
 }

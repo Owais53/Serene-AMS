@@ -125,6 +125,21 @@ namespace Serene_AMS.DAL.Repository
             context.SaveChanges();
         }
 
+        public void updateDocstatus(int Docno)
+        {
+           
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == Docno).FirstOrDefault();
+            if (obj == null)
+            {
+                
+            }
+            else
+            {
+                obj.DocStatus = "Complete";
+                context.Entry(obj).State = EntityState.Modified;
+            }
+        }
+
         public void UpdateDocType(int Typeid, int DocNofrom, int DocNoto)
         {
             var obj = context.tblDoctypes.Where(x => x.TypeId == Typeid).FirstOrDefault();
@@ -156,6 +171,15 @@ namespace Serene_AMS.DAL.Repository
             var obj = context.tblSLs.Find(SLid);
             obj.City = city;
             obj.StorageLocation = SL;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void updatqty(int Id, string item, int qty)
+        {
+            var price = context.tblItems.Where(x => x.ItemName == item).FirstOrDefault();
+            var obj = context.tblDocDetails.Where(x => x.Id == Id).FirstOrDefault();
+            obj.Quantity = qty;
+            obj.TotalPrice = qty * price.ItemPrice;
             context.Entry(obj).State = EntityState.Modified;
         }
     }

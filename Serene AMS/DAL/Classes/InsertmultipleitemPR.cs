@@ -60,10 +60,12 @@ namespace Serene_AMS.DAL.Classes
                 con.Open();
                 for (int i = 0; i < model.requestedMaterialArray.Length; i++)
                 {
-                    String s = "INSERT INTO [dbo].[tblDocDetails] ([DocumentNo],[ItemId]) VALUES (@Did,@m)";
+                    String s = "INSERT INTO [dbo].[tblDocDetails] ([DocumentNo],[ItemId],[Quantity],[TotalPrice]) VALUES (@Did,@m,@qty,@price)";
                     SqlCommand sd = new SqlCommand(s, con);
                     sd.Parameters.AddWithValue("@Did", DId);
                     sd.Parameters.AddWithValue("@m", model.requestedMaterialArray[i]);
+                    sd.Parameters.AddWithValue("@qty", 0);
+                    sd.Parameters.AddWithValue("@price", 0);
                     sd.ExecuteNonQuery();
                 }
             }
