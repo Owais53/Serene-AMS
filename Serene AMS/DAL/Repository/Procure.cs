@@ -89,7 +89,16 @@ namespace Serene_AMS.DAL.Repository
             };
             return add;
         }
-    
+
+        public IEnumerable<tblDocument> GetDoc()
+        {
+            return context.tblDocuments;
+        }
+
+        public IEnumerable<tblDocDetail> GetDocDetail()
+        {
+            return context.tblDocDetails;
+        }
 
         public IEnumerable<tblDoctype> GetDoctypes()
         {

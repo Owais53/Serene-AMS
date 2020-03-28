@@ -73,16 +73,16 @@ namespace Serene_AMS.Controllers
             IProcure obj = new Procure();
            
             string[] Itemcount = model.ItemsID.ToString().Split(',');
-            model.requestedMaterialArray = new int[Itemcount.Length];
+            model.requestedMaterialArray = new string[Itemcount.Length];
             for (int i = 0; i < Itemcount.Length; i++)
             {              
-               model.requestedMaterialArray[i]= Convert.ToInt32(Itemcount[i]);
+               model.requestedMaterialArray[i]= Itemcount[i];
             }
             bool flag=db.savePR(model);
             if (flag)
             {
-               
-                return View();
+                var DocNo = obj.GetDoc().Select(x => new ProcureVM { DocNo = x.DocumentNo }).LastOrDefault();
+                return View("SelectItemsQuantityforPR",DocNo);
             }
             else
             {
@@ -95,5 +95,24 @@ namespace Serene_AMS.Controllers
         {
             return View();
         }
+        public ActionResult GetPRItemsList(int DocNo)
+        {
+            IProcure repo = new Procure();
+
+            var Data = (from u in repo.GetDocDetail()                     
+                        where u.DocumentNo==DocNo
+                        select new
+                        {
+
+                           u.DocumentNo,
+                           u.ItemId
+
+                        }).ToList();
+
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
+
+        }
+
+
     }
 }

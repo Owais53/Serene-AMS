@@ -35,7 +35,6 @@ namespace Serene_AMS.Models
         public virtual DbSet<tblEmployee> tblEmployees { get; set; }
         public virtual DbSet<tblEmployeeDetail> tblEmployeeDetails { get; set; }
         public virtual DbSet<tblEmployeeLeaf> tblEmployeeLeaves { get; set; }
-        public virtual DbSet<tblExpens> tblExpenses { get; set; }
         public virtual DbSet<tblItem> tblItems { get; set; }
         public virtual DbSet<tblItemType> tblItemTypes { get; set; }
         public virtual DbSet<tblPosition> tblPositions { get; set; }

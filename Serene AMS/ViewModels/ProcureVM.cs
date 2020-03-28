@@ -36,8 +36,9 @@ namespace Serene_AMS.ViewModels
         public string Contact { get; set; }
         public string Address { get; set; }
         public string VendorType { get; set; }
-        public int []requestedMaterialArray { set; get; }
+        public string []requestedMaterialArray { set; get; }
         public bool isChecked { get; set; }
         public String ItemsID { get; set; }
+        public int DocNo { get; set; }
     }
 }

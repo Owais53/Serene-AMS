@@ -17,7 +17,6 @@ namespace Serene_AMS.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblItem()
         {
-            this.tblDocDetails = new HashSet<tblDocDetail>();
             this.tblPurchaseitems = new HashSet<tblPurchaseitem>();
             this.tblStocks = new HashSet<tblStock>();
         }
@@ -29,8 +28,6 @@ namespace Serene_AMS.Models
         public Nullable<int> ReorderPoint { get; set; }
         public Nullable<decimal> ItemPrice { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDocDetail> tblDocDetails { get; set; }
         public virtual tblItemType tblItemType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPurchaseitem> tblPurchaseitems { get; set; }

@@ -15,6 +15,8 @@ namespace Serene_AMS.DAL.Interface
         tblSL AddSL(string city, string SL);
         void AddStore(tblSL obj);
         IEnumerable<tblItemType> Getitemtype();
+        IEnumerable<tblDocument> GetDoc();
+        IEnumerable<tblDocDetail> GetDocDetail();
         void AddTypes(tblItemType obj);
         tblItemType AddItemtype(string ItemType);
         IEnumerable<tblItem> Getitems();
