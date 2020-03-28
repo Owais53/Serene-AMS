@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Serene_AMS.ViewModels
 {
@@ -31,5 +32,12 @@ namespace Serene_AMS.ViewModels
         public int DocnumberTo { get; set; }
         public int DocPofrom { get; set; }
         public int DocPoto { get; set; }
+        public string VendorName { get; set; }
+        public string Contact { get; set; }
+        public string Address { get; set; }
+        public string VendorType { get; set; }
+        public int []requestedMaterialArray { set; get; }
+        public bool isChecked { get; set; }
+        public String ItemsID { get; set; }
     }
 }

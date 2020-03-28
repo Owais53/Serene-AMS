@@ -54,6 +54,9 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Syncfusion.Licensing, Version=18.1460.0.36, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Licensing.18.1.0.36-beta\lib\net46\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -133,10 +136,12 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\RecruitmentController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="DAL\Classes\DataTableparams.cs" />
+    <Compile Include="DAL\Classes\InsertmultipleitemPR.cs" />
     <Compile Include="DAL\Classes\SetDocNumber.cs" />
     <Compile Include="DAL\Interface\IDepartmentRepository.cs" />
     <Compile Include="DAL\Interface\IEmployeeRepository.cs" />
@@ -185,6 +190,9 @@
     <Compile Include="Models\tblDepartment.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblDocDetail.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblDoctype.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
@@ -197,7 +205,7 @@
     <Compile Include="Models\tblEmployeeDetail.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tblEmployeeLeaves.cs">
+    <Compile Include="Models\tblEmployeeLeaf.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblExpens.cs">
@@ -264,6 +272,13 @@
     <Compile Include="ViewModels\VacancyVM.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-multiselect.css" />
+    <Content Include="Content\dataTables.checkboxes.css" />
+    <Content Include="Content\default-responsive.css" />
+    <Content Include="Content\Dropdown-Checkboxes.css" />
+    <Content Include="Content\ej.responsive.css" />
+    <Content Include="Content\ej.web.all.min.css" />
+    <Content Include="Content\ejgrid.responsive.css" />
     <Content Include="Content\main.min.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -687,6 +702,7 @@
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\app.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-multiselect.js" />
     <Content Include="Scripts\bootstrap-timepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -763,6 +779,8 @@
     <Content Include="fonts\themify.eot" />
     <Content Include="fonts\themify.ttf" />
     <Content Include="fonts\themify.woff" />
+    <Content Include="Scripts\dataTables.checkboxes.min.js" />
+    <Content Include="Scripts\jquery.multi-select.js" />
     <Content Include="Scripts\jquery.timeselector.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -1019,6 +1037,8 @@
     <Content Include="Views\Admin\EditItemsPartial.cshtml" />
     <Content Include="Views\Admin\SetDocumentNumberRanges.cshtml" />
     <Content Include="Views\Admin\SetDocRangePartial.cshtml" />
+    <Content Include="Views\Inventory\CreatePurchaseRequest.cshtml" />
+    <Content Include="Views\Admin\CreateVendors.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

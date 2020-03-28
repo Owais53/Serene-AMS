@@ -14,7 +14,19 @@ namespace Serene_AMS.Models
     
     public partial class tblItemType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tblItemType()
+        {
+            this.tblItems = new HashSet<tblItem>();
+            this.tblVendors = new HashSet<tblVendor>();
+        }
+    
         public int Id { get; set; }
         public string ItemType { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblItem> tblItems { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblVendor> tblVendors { get; set; }
     }
 }

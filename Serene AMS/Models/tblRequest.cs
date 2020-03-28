@@ -18,6 +18,7 @@ namespace Serene_AMS.Models
         public Nullable<int> EmployeeId { get; set; }
         public Nullable<int> PositionId { get; set; }
         public string RequestType { get; set; }
+        public string LeaveType { get; set; }
         public string CitytoTranser { get; set; }
         public Nullable<System.DateTime> DateofRequest { get; set; }
         public string Status { get; set; }
@@ -29,6 +30,5 @@ namespace Serene_AMS.Models
         public string AuthorizedRole { get; set; }
         public string ResponseReason { get; set; }
         public Nullable<bool> IsSeen { get; set; }
-        public string LeaveType { get; set; }
     }
 }

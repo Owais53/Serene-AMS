@@ -192,18 +192,18 @@ namespace Serene_AMS.DAL.Repository
 
         }
 
-        public tblEmployeeLeaves Addempidinempleave(int empid)
+        public tblEmployeeLeaf Addempidinempleave(int empid)
         {
-            var add = new tblEmployeeLeaves()
+            var add = new tblEmployeeLeaf()
             {
                 EmployeeId = empid
             };
             return add;
         }
 
-        public void Addempidleave(tblEmployeeLeaves obj)
+        public void Addempidleave(tblEmployeeLeaf obj)
         {
-            context.tblEmployeeLeaves1.Add(obj);
+            context.tblEmployeeLeaves.Add(obj);
         }
     }
 

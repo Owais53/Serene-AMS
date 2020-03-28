@@ -6,6 +6,8 @@ using Serene_AMS.ViewModel;
 using Serene_AMS.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -125,9 +127,10 @@ namespace Serene_AMS.Controllers
             IProcure obj = new Procure();
 
             var Data = (from item in obj.Getitems()
+                        join type in obj.Getitemtype() on item.TypeId equals type.Id
                         select new
                         {
-                           item.ItemType,
+                           type.ItemType,
                            item.ItemName,
                            item.StorageLocation,
                            item.ItemPrice,
@@ -539,16 +542,16 @@ namespace Serene_AMS.Controllers
             var SL = obj.GetSL().ToList();
            
             var valide = obj.Getitems().Where(x => x.ItemName == model.ItemName).FirstOrDefault();
-            var validatetype = obj.Getitems().Where(x => x.ItemType == model.ItemType && x.ItemName == model.ItemName).FirstOrDefault();
+            var validatetype = obj.Getitems().Where(x => x.TypeId == model.TypeId && x.ItemName == model.ItemName).FirstOrDefault();
             if (valide == null && validatetype == null)
             {
-                SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+                SelectList list = new SelectList(ItemType, "Id", "ItemType");
                 ViewBag.getItemtypelist = list;
 
                 SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
                 ViewBag.getSLlist = lists;
                 
-                  var add = obj.Additem(model.ItemType, model.ItemName, model.StorageLocation, model.ReorderPoint, model.ItemPrice);              
+                  var add = obj.Additem(model.TypeId, model.ItemName, model.StorageLocation, model.ReorderPoint, model.ItemPrice);              
                     obj.Additems(add);
                     obj.Save();
                     TempData["SuccessMessage1"] = "Successfully Created";
@@ -724,7 +727,7 @@ namespace Serene_AMS.Controllers
                       }).FirstOrDefault();
             var ItemType = obj.Getitemtype().ToList();
             var SL = obj.GetSL().ToList();
-            SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+            SelectList list = new SelectList(ItemType, "Id", "ItemType");
             ViewBag.getItemtypelist = list;
 
             SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
@@ -738,14 +741,14 @@ namespace Serene_AMS.Controllers
             IProcure obj = new Procure();
             var ItemType = obj.Getitemtype().ToList();
             var SL = obj.GetSL().ToList();
-            SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+            SelectList list = new SelectList(ItemType, "Id", "ItemType");
             ViewBag.getItemtypelist = list;
 
             SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
             ViewBag.getSLlist = lists;
 
 
-            obj.UpdateItem(model.ItemId,model.ItemName,model.ItemType,model.StorageLocation,model.ItemPrice,model.ReorderPoint);
+            obj.UpdateItem(model.ItemId,model.ItemName,model.TypeId,model.StorageLocation,model.ItemPrice,model.ReorderPoint);
             obj.Save();
             TempData["SuccessMessage1"] = "Successfully Updated";
 
@@ -800,6 +803,36 @@ namespace Serene_AMS.Controllers
 
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
+       
+        [HttpGet]
+        public ActionResult CreateVendors()
+        {
+            IProcure obj = new Procure();
+            var ItemType = obj.Getitemtype().ToList();
+            var vendortype = new SelectList(new[]
+             {
+
+                new {ID="1",Name="Local"},
+                new {ID="2",Name="Foreign"}
+
+                },
+                 "Name", "Name", "1"
+             );
+            ViewBag.getVendortypelist = vendortype;
+            SelectList list = new SelectList(ItemType, "Id", "ItemType");
+            ViewBag.getItemtypelist = list;
+
+            IEnumerable<ProcureVM> listofItems =
+                (from items in obj.Getitems()
+                 select new ProcureVM()
+                 {
+                     ItemId=items.ItemId,
+                     ItemName=items.ItemName
+                 }).ToList();
+            ViewBag.Getitem = listofItems;
+            return View();
+        }
+      
 
     }
 }

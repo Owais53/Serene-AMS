@@ -125,7 +125,7 @@ namespace Serene_AMS.DAL.Repository
 
         public void updateleaveforemp(int EmployeeId,int casualleave,int sickleave)
         {
-            var obj = context.tblEmployeeLeaves1.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
+            var obj = context.tblEmployeeLeaves.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
             obj.CasualLeave = casualleave;
             obj.SickLeave = sickleave;
             context.Entry(obj).State = EntityState.Modified;
@@ -133,7 +133,7 @@ namespace Serene_AMS.DAL.Repository
 
         public void updatecasualleaveleft(int EmployeeId)
         {
-            var obj = context.tblEmployeeLeaves1.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
+            var obj = context.tblEmployeeLeaves.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
             obj.CasualLeave = obj.CasualLeave-1;
             if (obj.CasualLeave == 0)
             {
@@ -144,7 +144,7 @@ namespace Serene_AMS.DAL.Repository
         }
         public void updatesickleaveleft(int EmployeeId)
         {
-            var obj = context.tblEmployeeLeaves1.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
+            var obj = context.tblEmployeeLeaves.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
             obj.SickLeave=obj.SickLeave-1;
             if (obj.SickLeave == 0)
             {
@@ -154,9 +154,9 @@ namespace Serene_AMS.DAL.Repository
             context.Entry(obj).State = EntityState.Modified;
         }
 
-        public IEnumerable<tblEmployeeLeaves> GetEmpLeaves()
+        public IEnumerable<tblEmployeeLeaf> GetEmpLeaves()
         {
-            return context.tblEmployeeLeaves1;
+            return context.tblEmployeeLeaves;
         }
 
         public tblRequest AddReql(int empid, int posid, DateTime FromDate, DateTime ToDate, string ReasonofReq, string leavetype)

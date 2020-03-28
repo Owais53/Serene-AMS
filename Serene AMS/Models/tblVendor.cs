@@ -17,16 +17,18 @@ namespace Serene_AMS.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblVendor()
         {
-            this.tblDocuments = new HashSet<tblDocument>();
+            this.tblDocDetails = new HashSet<tblDocDetail>();
         }
     
         public int VendorId { get; set; }
         public string VendorName { get; set; }
         public string Contact { get; set; }
-        public string ItemType { get; set; }
+        public Nullable<int> TypeId { get; set; }
         public string Address { get; set; }
+        public string VendorType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDocument> tblDocuments { get; set; }
+        public virtual ICollection<tblDocDetail> tblDocDetails { get; set; }
+        public virtual tblItemType tblItemType { get; set; }
     }
 }

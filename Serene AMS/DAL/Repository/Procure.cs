@@ -1,5 +1,6 @@
 ﻿using Serene_AMS.DAL.Interface;
 using Serene_AMS.Models;
+using Serene_AMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -23,12 +24,12 @@ namespace Serene_AMS.DAL.Repository
             context = this.context;
         }
 
-        public tblItem Additem(string itemtype, string itemname, string SL, int reorderpoint, decimal price)
+        public tblItem Additem(int Typeid, string itemname, string SL, int reorderpoint, decimal price)
         {
             var add = new tblItem()
             {
                 ItemName=itemname,
-                ItemType=itemtype,
+                TypeId=Typeid,
                 StorageLocation=SL,
                 ReorderPoint=reorderpoint,
                 ItemPrice=price,
@@ -48,6 +49,11 @@ namespace Serene_AMS.DAL.Repository
                 ItemType = ItemType
             };
             return add;
+        }
+
+        public void AddPRItems(tblDocument obj)
+        {
+            context.tblDocuments.Add(obj);
         }
 
         public tblSL AddSL(string city, string SL)
@@ -70,6 +76,20 @@ namespace Serene_AMS.DAL.Repository
         {
             context.tblItemTypes.Add(obj);
         }
+
+        public tblDocument CreatePRItems(ProcureVM model)
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblDocument()
+            {
+                CreationDate = DateTime.Now,
+                CreatedBy=user,
+               
+                
+            };
+            return add;
+        }
+    
 
         public IEnumerable<tblDoctype> GetDoctypes()
         {
@@ -104,11 +124,11 @@ namespace Serene_AMS.DAL.Repository
             context.Entry(obj).State = EntityState.Modified;
         }
 
-        public void UpdateItem(int ItemId, string ItemName, string ItemType,string SL, decimal ItemPrice, int Reorderpoint)
+        public void UpdateItem(int ItemId, string ItemName, int Typeid,string SL, decimal ItemPrice, int Reorderpoint)
         {
             var obj = context.tblItems.Where(x => x.ItemId == ItemId).FirstOrDefault();
             obj.ItemName = ItemName;
-            obj.ItemType = ItemType;
+            obj.TypeId = Typeid;
             obj.StorageLocation = SL;
             obj.ItemPrice = ItemPrice;
             obj.ReorderPoint = Reorderpoint;

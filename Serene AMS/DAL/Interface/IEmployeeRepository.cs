@@ -23,7 +23,7 @@ namespace Serene_AMS.DAL.Interface
         IEnumerable<tblPosition> Getpos();
 
         IEnumerable<tblPositionLeavetype> Getleave();
-        IEnumerable<tblEmployeeLeaves> GetEmpLeaves();
+        IEnumerable<tblEmployeeLeaf> GetEmpLeaves();
         void Delete(int employeeId);
 
         void Save();

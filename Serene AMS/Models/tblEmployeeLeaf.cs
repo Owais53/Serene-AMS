@@ -12,7 +12,7 @@ namespace Serene_AMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tblEmployeeLeaves
+    public partial class tblEmployeeLeaf
     {
         public int Id { get; set; }
         public Nullable<int> EmployeeId { get; set; }

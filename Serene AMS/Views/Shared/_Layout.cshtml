@@ -8,6 +8,8 @@
     <!-- THEME STYLES-->
 
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <link href="~/Content/themify-icons.css" rel="stylesheet" />
     <!-- PLUGINS STYLES-->
@@ -24,6 +26,9 @@
     <link href="~/Content/jquery.timeselector.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-timepicker.min.css" rel="stylesheet" />
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/dataTables.checkboxes.css" rel="stylesheet" />
+    <link href="~/Content/Dropdown-Checkboxes.css" rel="stylesheet" />
+
     <style type="text/css">
         .breadcrumb-item + .breadcrumb-item::before {
             content: ">";
@@ -61,9 +66,9 @@
                 </ul>
                 <!-- END TOP-LEFT TOOLBAR-->
                 <!-- START TOP-RIGHT TOOLBAR-->
-               
+
                 <ul class="nav navbar-toolbar">
-                   
+
                     <li class="dropdown dropdown-notification">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="noti"><i class="fa fa-bell-o rel" id="countnoti"></i></a>
                         <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" id="content">
@@ -72,9 +77,9 @@
 
                             </li>
                             <li class="list-group list-group-divider scroller" data-height="240px" data-color="#71808f" id="maincontent">
-                                
+
                             </li>
-                           
+
                         </ul>
                     </li>
                     <li class="dropdown dropdown-user">
@@ -90,9 +95,9 @@
                 </ul>
                 <!-- END TOP-RIGHT TOOLBAR-->
             </div>
-             
+
         </header>
-       
+
         <!-- END HEADER-->
         <!-- START SIDEBAR-->
         <nav class="page-sidebar" id="sidebar">
@@ -106,9 +111,9 @@
                             <fieldset>
                                 @if (Session["UserName"] != null)
                                 {
-                                    <text> @Session["UserName"].ToString() </text>                                   
+                                    <text> @Session["UserName"].ToString() </text>
                                 }
-                                </fieldset>
+                            </fieldset>
                         </div>
                         <small>
                             @if (Session["RoleName"] != null)
@@ -147,7 +152,8 @@
                                 <li>@Html.ActionLink("View Item Types", "ViewItemTypes", "Admin")</li>
                                 <li>@Html.ActionLink("Create Item Master", "CreateItems", "Admin")</li>
                                 <li>@Html.ActionLink("View Items", "ViewItems", "Admin")</li>
-                                <li>@Html.ActionLink("View Document Type", "SetDocumentNumberRanges", "Admin")</li>
+                                <li>@Html.ActionLink("Create Vendors", "CreateVendors", "Admin")</li>
+
 
                             </ul>
                         }
@@ -161,33 +167,33 @@
                                 <span class="nav-label">Recruitment</span><i class="fa fa-angle-left arrow"></i>
                             </a>
                         }
-                            <ul class="nav-2-level collapse">
+                        <ul class="nav-2-level collapse">
 
-                                @if (Session["RoleName"].ToString() == "Recruitment Manager" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
-                                {
+                            @if (Session["RoleName"].ToString() == "Recruitment Manager" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                            {
 
-                                    <li>@Html.ActionLink("Create Vacancy", "CreateVacancy", "Recruitment")</li>
-                                    <li>@Html.ActionLink("View Vacancy", "ViewVacancy", "Recruitment")</li>
+                                <li>@Html.ActionLink("Create Vacancy", "CreateVacancy", "Recruitment")</li>
+                                <li>@Html.ActionLink("View Vacancy", "ViewVacancy", "Recruitment")</li>
 
 
-                                }
+                            }
 
-                                @if (Session["RoleName"].ToString() == "Recruitment Officer" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
-                                {
+                            @if (Session["RoleName"].ToString() == "Recruitment Officer" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                            {
 
-                                    <li>@Html.ActionLink("View Applications", "ViewApplications", "Recruitment")</li>
-                                    <li>@Html.ActionLink("View Candidate", "ViewCandidate", "Recruitment")</li>
-                                    <li>@Html.ActionLink("View Marks", "ViewMarks", "Recruitment")</li>
+                                <li>@Html.ActionLink("View Applications", "ViewApplications", "Recruitment")</li>
+                                <li>@Html.ActionLink("View Candidate", "ViewCandidate", "Recruitment")</li>
+                                <li>@Html.ActionLink("View Marks", "ViewMarks", "Recruitment")</li>
 
-                                }
-                                @if (Session["RoleName"].ToString() == "DGM" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
-                                {
-                                    <li>@Html.ActionLink("View ShortListed Candidates", "ViewShortlistedcandidate", "Recruitment")</li>
+                            }
+                            @if (Session["RoleName"].ToString() == "DGM" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
+                            {
+                                <li>@Html.ActionLink("View ShortListed Candidates", "ViewShortlistedcandidate", "Recruitment")</li>
 
-                                }
+                            }
 
-                            </ul>
-                        </li>
+                        </ul>
+                    </li>
                     <li>
                         @if (Session["RoleName"].ToString() == "Hr Manager" || Session["isAdmin"].ToString() == "Admin" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin")
                         {
@@ -219,31 +225,46 @@
                             <span class="nav-label">Personnel Actions</span><i class="fa fa-angle-left arrow"></i>
                         </a>
                         <ul class="nav-2-level collapse">
-                           
-                            @if (Session["RoleName"].ToString() == "Recruitment Manager"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+
+                            @if (Session["RoleName"].ToString() == "Recruitment Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
-                            @if (Session["RoleName"].ToString() == "Recruitment Officer"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                            @if (Session["RoleName"].ToString() == "Recruitment Officer" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
-                            @if (Session["RoleName"].ToString() == "DGM"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                            @if (Session["RoleName"].ToString() == "DGM" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
-                            @if (Session["RoleName"].ToString() == "Hr Manager"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                            @if (Session["RoleName"].ToString() == "Hr Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
                             }
-                            @if (Session["RoleName"].ToString() == "Finance Manager"|| Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                            @if (Session["RoleName"].ToString() == "Finance Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
                                 <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
+                            }
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="sidebar-item-icon fa fa-bar-chart"></i>
+                            <span class="nav-label">Purchase</span><i class="fa fa-angle-left arrow"></i>
+                        </a>
+                        <ul class="nav-2-level collapse">
+
+                            @if (Session["RoleName"].ToString() == "Inventory Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                            {
+                                <li>@Html.ActionLink("Create PR", "CreatePurchaseRequest", "Inventory")</li>
+
                             }
 
                         </ul>
@@ -258,7 +279,7 @@
         <div class="content-wrapper">
             <div class="box  box-primary box-body">
                 <div class="page-content fade-in-up">
-                    <input type="hidden" id="getcountvalue"/>
+                    <input type="hidden" id="getcountvalue" />
                     <div class="ibox">
                         @RenderBody()
                     </div>
@@ -266,45 +287,54 @@
             </div>
         </div>
     </div>
-        <div class="sidenav-backdrop backdrop"></div>
-        <div class="preloader-backdrop">
-            <div style="text-align:center;height:300px">
-                <img src="~/img/InternetSlowdown_Day.gif" />
-            </div>
+    <div class="sidenav-backdrop backdrop"></div>
+    <div class="preloader-backdrop">
+        <div style="text-align:center;height:300px">
+            <img src="~/img/InternetSlowdown_Day.gif" />
         </div>
+    </div>
 
-        <script src="~/Scripts/jquery.min.js" type="text/javascript"></script>
-        <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-        <script src="~/Scripts/popper.min.js" type="text/javascript"></script>
-        <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
-        <script src="~/Scripts/metisMenu.min.js" type="text/javascript"></script>
-        <script src="~/Scripts/jquery.slimscroll.min.js" type="text/javascript"></script>
-        <!-- CORE SCRIPTS-->
-        <script src="~/Scripts/app.min.js" type="text/javascript"></script>
-        <!-- PAGE LEVEL SCRIPTS-->
-        <script src="~/Scripts/dashboard_1_demo.js" type="text/javascript"></script>
-        <script src="~/Scripts/datatables.min.js"></script>
-        <script src="~/Scripts/jquery.validate.min.js"></script>
-        <script src="~/Scripts/sweetalert.min.js"></script>
-        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-        <script src="~/Scripts/alertify.min.js"></script>
-        <script src="~/Scripts/notify.min.js"></script>
-        <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-        <script src="~/Scripts/jquery.timeselector.js"></script>
-       <script type="text/javascript">
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/popper.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>
+
+    <link href="~/Content/ej.web.all.min.css" rel="stylesheet" />
+    <link href="~/Content/default-responsive.css" rel="stylesheet" />
+    <link href="~/Content/ej.responsive.css" rel="stylesheet" />
+    <link href="~/Content/ejgrid.responsive.css" rel="stylesheet" />
+    <script src="~/Scripts/metisMenu.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <!-- CORE SCRIPTS-->
+    <script src="~/Scripts/app.min.js" type="text/javascript"></script>
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script src="~/Scripts/dashboard_1_demo.js" type="text/javascript"></script>
+    <script src="~/Scripts/datatables.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/alertify.min.js"></script>
+    <script src="~/Scripts/notify.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery.timeselector.js"></script>
+    <script src="~/Scripts/dataTables.checkboxes.min.js"></script>
+
+    <script type="text/javascript">
            $(function () {
                $("#bar").click(function (e) {
 
                    e.stopPropagation();
 
                    $("#contents").show();
-                 
-                
+
+
                })
                $("#noti").click(function (e) {
 
                    e.stopPropagation();
-                   
+
                    $("#content").show();
                    var count = 0;
                    count = parseInt($('span.notify-signal').html()) || 0;
@@ -313,8 +343,8 @@
                    showPromotionnoti();
                    showReqLeavenotires();
                    showReqLeavenoti();
-                  
-                  
+
+
                    $('#countnoti', this).html('&nbsp;');
                })
                $('html').click(function () {
@@ -363,8 +393,8 @@
                            console.log(error);
                        }
                    })
-                
-                  
+
+
                }
                function showPromotionnoti()
                {
@@ -456,11 +486,11 @@
                        console.log(error);
                    }
                })
-              
+
            })
-          
-       </script>
-        
-        @RenderSection("scripts", required: false)
+
+    </script>
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>
