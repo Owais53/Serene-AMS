@@ -41,5 +41,10 @@ namespace Serene_AMS.ViewModels
         public String ItemsID { get; set; }
         public int DocNo { get; set; }
        public int Quantity { get; set; }
+        public DateTime Createdon { get; set; }
+        public string Createdby { get; set; }
+        public decimal unitprice { get; set; }
+        public decimal Total { get; set; }
+        public decimal Totalforall { get; set; }
     }
 }

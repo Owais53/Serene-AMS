@@ -11,7 +11,7 @@
         </div>
 
         <div class="modal-body" style="overflow: auto">
-            
+
 
             <div class="form-group row">
 
@@ -20,13 +20,13 @@
 
                 </div>
             </div>
+            @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
 
-           
 
             <div class="form-group row">
                 @Html.LabelFor(model => model.ItemName, "Item Name", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control", @type = "readonly" } })
+                    @Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                     @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
                 </div>
             </div>
-           
+
 
 
         </div>

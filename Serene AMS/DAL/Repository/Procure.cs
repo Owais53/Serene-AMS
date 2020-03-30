@@ -128,16 +128,10 @@ namespace Serene_AMS.DAL.Repository
         public void updateDocstatus(int Docno)
         {
            
-            var obj = context.tblDocuments.Where(x => x.DocumentNo == Docno).FirstOrDefault();
-            if (obj == null)
-            {
-                
-            }
-            else
-            {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == Docno).FirstOrDefault();       
                 obj.DocStatus = "Complete";
                 context.Entry(obj).State = EntityState.Modified;
-            }
+            
         }
 
         public void UpdateDocType(int Typeid, int DocNofrom, int DocNoto)

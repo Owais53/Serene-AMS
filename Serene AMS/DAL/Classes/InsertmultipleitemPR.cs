@@ -23,6 +23,20 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
+        public int getDetailsId()
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT max(Id) FROM [Hrms].[dbo].[tblDocDetails] where Quantity=@qty";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@qty", 0);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
         public bool savePR(ProcureVM model)
         {
             var user = System.Web.HttpContext.Current.Session["UserName"].ToString();

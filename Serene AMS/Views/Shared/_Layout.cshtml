@@ -34,6 +34,24 @@
             content: ">";
         }
     </style>
+    <style>
+
+        .invoice {
+            padding: 20px
+        }
+
+        .invoice-header {
+            margin-bottom: 50px
+        }
+
+        .invoice-logo {
+            margin-bottom: 50px;
+        }
+
+        .table-invoice tr td:last-child {
+            text-align: right;
+        }
+    </style>
     @RenderSection("header", required: false)
 </head>
 <body class="fixed-navbar">
@@ -442,6 +460,7 @@
                      $.ajax({
                        type: 'GET',
                          url: '/Notifications/GetReqleaveres',
+
                        success: function (responses) {
 
                            $.each(responses, function (i, v) {
