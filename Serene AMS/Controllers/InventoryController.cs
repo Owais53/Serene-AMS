@@ -7,6 +7,7 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Web.Mvc;
+using Rotativa;
 
 namespace Serene_AMS.Controllers
 {
@@ -81,6 +82,7 @@ namespace Serene_AMS.Controllers
             if (flag)
             {
                 var DocNo = obj.GetDoc().Select(x => new ProcureVM { DocNo = x.DocumentNo }).LastOrDefault();
+              
                 TempData["UpdateMessage3"] = "Success";
                 return View("SelectItemsQuantityforPR", DocNo);
             }
@@ -194,11 +196,9 @@ namespace Serene_AMS.Controllers
         public JsonResult GetPRDetailsfordoc(int? id)
         {
            
-            IProcure obj = new Procure();
-    
+            IProcure obj = new Procure();   
            
-         var list = (from doc in obj.GetDocDetail()  
-                     
+         var list = (from doc in obj.GetDocDetail()                      
                       where doc.DocumentNo == id
                       select new
                       {
@@ -215,6 +215,18 @@ namespace Serene_AMS.Controllers
                       }).ToList();
 
             return Json(list, JsonRequestBehavior.AllowGet);
+        }
+       
+        public ActionResult PrintPR()
+        {            
+            var report = new ActionAsPdf("PRDoc");
+            return report;
+        }
+        public ActionResult PRDoc()
+        {
+            IProcure obj = new Procure();
+            var DocNo = obj.GetDoc().Select(x => new ProcureVM { DocNo = x.DocumentNo,Createdby=x.CreatedBy,Createdon=(DateTime)x.CreationDate }).LastOrDefault();
+            return View(DocNo);
         }
 
     }

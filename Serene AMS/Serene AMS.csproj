@@ -110,6 +110,9 @@
       <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+    </Reference>
     <Reference Include="Syncfusion.Licensing, Version=18.1460.0.36, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.Licensing.18.1.0.36-beta\lib\net46\Syncfusion.Licensing.dll</HintPath>
     </Reference>
@@ -689,6 +692,7 @@
     <Content Include="img\logos\logo-vue.png" />
     <Content Include="img\promotions.png" />
     <Content Include="img\repeat.png" />
+    <Content Include="img\serene logo.jpg" />
     <Content Include="img\users\u1.jpg" />
     <Content Include="img\users\u2.jpg" />
     <Content Include="img\users\u3.jpg" />
@@ -749,6 +753,10 @@
       <DependentUpon>SqlModel.edmx</DependentUpon>
       <LastGenOutput>SqlModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\alertify.js" />
     <Content Include="Scripts\alertify.min.js" />
     <Content Include="Scripts\animsition.min.js" />
@@ -891,6 +899,7 @@
     <Content Include="Models\SqlModel.edmx.diagram">
       <DependentUpon>SqlModel.edmx</DependentUpon>
     </Content>
+    <Content Include="App_Browsers\qt.browser" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\countdowntime.js" />
     <Content Include="Scripts\dashboard_1_demo.js" />
@@ -1096,6 +1105,7 @@
     <Content Include="Views\Inventory\AddQuantityPartial.cshtml" />
     <Content Include="Views\Inventory\CreatePurchaseOrder.cshtml" />
     <Content Include="Views\Inventory\PRPartial.cshtml" />
+    <Content Include="Views\Inventory\PRDoc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

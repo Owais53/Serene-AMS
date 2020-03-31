@@ -1,6 +1,6 @@
 ﻿@model Serene_AMS.ViewModels.ProcureVM
 @{
-    ViewBag.Title = "SelectItemsQuantityforPR";
+  
   
 }
 
@@ -18,7 +18,10 @@
 
     <div class="ibox-body">
         <p>
-            <button class="btn btn-success" type="button"  onclick="GetPRforDoc()">Download Purchase Request</button>
+            <button class="btn btn-success" type="button" onclick="GetPR()">View Purchase Request</button>
+            <a class='btn btn-success' id='geturltopr'>View PR</a>
+
+            @Html.ActionLink("Print PR", "PrintPR")
         </p>
 
         @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @id = "getdocno1", @type = "hidden" } })
@@ -64,13 +67,14 @@
                 <div class="col-xs-12">
 
                     <div class="modal" id="Modalprforprint" tabindex="-1" data-backdrop="false">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog ">
                             @Html.Partial("PRPartial")
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -115,9 +119,30 @@
 
 
             });
+            $.ajax({
+                type: 'GET',
+                url: '/Inventory/PRDoc',
+                data: { id: $("#getdocno1").val() },
+                success: function (res) {
+                    if (res) {
+                       
+                    }
 
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
 
+          
         });
+        $("#linktopr").click(function () {
+            var prdoc = $("#getdocno1").val();
+            var url = $(this).attr('href') + '?Docno' + prdoc;
+            location.href = url;
+            return false;
+        });
+
         function UpdateQty(id) {
 
             $.get("/Inventory/GetItemforqty", { id: id }, function (res) {
@@ -154,6 +179,10 @@
                 });
 
             }
+        }
+        function GetPR() {
+            
+           
         }
         function GetPRforDoc() {
             var valueofprdoc = $("#getdocno1").val();

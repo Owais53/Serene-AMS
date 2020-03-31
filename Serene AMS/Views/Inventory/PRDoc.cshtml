@@ -1,0 +1,137 @@
+﻿@model Serene_AMS.ViewModels.ProcureVM
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/themify-icons.css" rel="stylesheet" />
+    <!-- PLUGINS STYLES-->
+    <!-- THEME STYLES-->
+
+    <link href="~/Content/main.min.css" rel="stylesheet" />
+   
+    <style>
+
+        .invoice {
+            padding: 20px
+        }
+
+        .invoice-header {
+            margin-bottom: 50px
+        }
+
+        .invoice-logo {
+            margin-bottom: 50px;
+        }
+
+        .table-invoice tr td:last-child {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+   
+
+    <div class="ibox invoice" >
+
+        @using (Html.BeginForm("PRDoc", "Inventory", FormMethod.Get))
+        {
+            <div class="invoice-header">
+                <h1 style="margin-left:500px;">Purchase Request</h1>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="invoice-logo">
+                            <img src="~/img/serene logo.jpg"  />
+                        </div>
+
+                    </div>
+                    <div class="col-6 text-left">
+                        <div class="clf" style="margin-bottom:30px;">
+                            <div class="col-6 text-right">
+                                <div class="m-b-5 font-bold">Purchase Request</div>
+                                <ul class="list-unstyled m-t-10">
+                                    <li class="m-b-5">
+                                        <span class="font-strong">Document No:</span> @Html.DisplayFor(x => x.DocNo)
+                                    </li>
+                                    <li class="m-b-5">
+                                        <span class="font-strong">Created by:</span> @Html.DisplayFor(x => x.Createdby)
+                                    </li>
+                                    <li>
+                                        <span class="font-strong">Created on:</span> @Html.DisplayFor(x => x.Createdon)
+                                    </li>
+                                </ul>
+                            </div>                   
+                        </div>
+                        @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @id = "getdocno2",@type="hidden" } })
+
+                    </div>
+                </div>
+            </div>
+        }
+            <table class="table table-striped no-margin table-invoice">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>                       
+                        <th class="text-right">Total</th>
+
+                    </tr>
+                </thead>
+                <tbody id="getprrecord"></tbody>
+            </table>
+            <table class="table no-border">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th width="15%"></th>
+                    </tr>
+                </thead>
+                <tbody id="totalall"></tbody>
+            </table>
+
+        </div>
+
+        <script src="~/Scripts/popper.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/jquery.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
+
+
+        <script src="~/Scripts/metisMenu.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/jquery.slimscroll.min.js" type="text/javascript"></script>
+        <!-- CORE SCRIPTS-->
+        <script src="~/Scripts/app.min.js" type="text/javascript"></script>
+        <!-- PAGE LEVEL SCRIPTS-->
+        <script type="text/javascript">
+            $(function () {
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/Inventory/GetPRDetailsfordoc',
+                    data: { id: $("#getdocno2").val() },
+                    success: function (res) {
+                        $.each(res, function (i, v) {
+                            $("#getprrecord").append($('<tr><td><div><strong>' + v.ItemName + '</strong></div></td><td>' + v.Quantity + '</td><td>' + v.Total + '</td></tr>'))
+                          
+                        });
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+
+            });
+        </script>
+
+
+    </body>
+
+</html>
