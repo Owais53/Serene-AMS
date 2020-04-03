@@ -1,4 +1,4 @@
-﻿
+﻿@model Serene_AMS.ViewModels.ProcureVM
 @{
     ViewBag.Title = "CreatePurchaseOrder";
 }
@@ -20,7 +20,7 @@
         <p>
             <button type="button" class="btn btn-primary">Create Purchase Order with out Reference</button>
         </p>
-        <table id="tblprforpo" class="table table-striped table-hover responsive table-responsive">
+        <table id="tblprlistpo" class="table table-striped table-hover responsive table-responsive">
             <thead>
                 <tr style="background-color:#0094ff; color:#ecf0f1">
                     <th>Document No</th>
@@ -39,8 +39,31 @@
 
 
         </table>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
 
+                    <div class="modal" id="Modalpritems" tabindex="-1" data-backdrop="false">
+                        <div class="modal-dialog ">
+                            @Html.Partial("PRItemsPartial")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
 
+                    <div class="modal" id="Modalvendorselect" tabindex="-1" data-backdrop="false">
+                        <div class="modal-dialog lg">
+                            @Html.Partial("POVendorPartial")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
 
     </div>
 </div>
@@ -55,12 +78,19 @@
                 alertify.success(successMessage);
         });
     </script>
+    <script>
+        $(function () {
+            var successMessage = '@TempData["ErrorMessage3"]'
+            if (successMessage != '')
+                alertify.error(successMessage);
+        });
+    </script>
 
     <script type="text/javascript">
-        var Popup, dataTable2;
+        var dataTable1, dataTableprpo;
         $(function () {
 
-            dataTable2 = $('#tblprforpr').DataTable({
+            dataTableprpo = $('#tblprlistpo').DataTable({
                 pageLength: 10,
                 "ajax": {
                     "url": '/inventory/GetPrList',
@@ -70,31 +100,149 @@
                 },
 
                 "columns": [
-                    {
-                        "data":"ItemName",
-                        "targets": 0,
-                        "render": function (data, type, full) {
-                            return "<input type='checkbox' name='statut' value='" + data+"'/>"
-                        },
-                    },
-                    { "data": "ItemType", "authowidth": false },
-                    { "data": "ItemName", "authowidth": false },
-                    { "data": "StorageLocation", "authowidth": false },
 
+                    { "data": "DocumentNo", "authowidth": false },
+                    { "data": "DocumentType", "authowidth": false },
                     {
-                        "data": "ItemPrice", "authowidth": false
+                        "data": "DocumentNo", "render": function (data, type, full) {
+                            return "<button type='button' onclick=Getprforpo('" + data + "') class='btn btn-primary' id='getbtnpo'>Create PO</button>"
+                        },
                     },
 
 
                 ]
-               
+
             });
+
+
+
+        });
+        function Getprforpo(id) {
+            $.ajax({
+                type: 'GET',
+                url: '/Inventory/RemovecommonPrItems',
+                data: { DocNo: id },
+                success: function (responses1) {
+
+                    $.each(responses1, function (i, v1) {
+                        $('#' + v1.DocNo + '').remove();
+
+                    });
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+            $.ajax({
+                type: 'GET',
+                url: '/Inventory/RemovePrItemsforpo',
+                data: { DocNo: id },
+                success: function (responses1) {
+
+                    $.each(responses1, function (i, v1) {
+                        $('#' + v1.DocNo + '').remove();
+
+                    });
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+            $.ajax({
+                type: 'GET',
+                url: '/Inventory/GetPrItemsforpo',
+                data: { DocNo: id },
+                success: function (responses) {
+
+                    $.each(responses, function (i, v) {
+                        $("#getitemsofpr").append($('<tr id=' + v.DocNo + '><td>' + id + '</td><td>' + v.ItemName + '</td><td><button type="button" onclick=Getvendorforpo(' + v.Id + ') class="btn btn-success" id="getbtnpo">Select Vendor</button></td></tr>'))
+
+                    });
+
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+            $.get("/Inventory/GetItemsofPr", { id: id }, function (res) {
+
+                $("#Modalpritems").modal('show');
+
+
+            })
+
+        }
+        function Getvendorforpo(id) {
+            $.get("/Inventory/GetVendorforItem", { id: id }, function (res) {
+                $('#povendormodal').html(res);
+
+                $("#Modalvendorselect").modal('show');
+
+            })
+
+
+
+
+        }
+        $("#formpovendor").submit(function (e) {
            
+            var modal = $("#Modalvendorselect");
+            var form = $('form[name="formpovendor"]');
+
+            form.validate();
+            if (!form.valid()) {
+                return;
+            } else {
+                var data = form.serialize();
+                alert(data);
+                $.post("/Inventory/GetVendorforItem", function (res) {
+                    if (res) {
+                        modal.modal('hide');
+                        $("#Modalvendorselect").modal('show');
 
 
+                    }
 
-      
+                })
+            }
+            e.preventDefault();
+        });
+        function OnSuccess(res) {
+            if (res) {
+               
+                var modal = $("#Modalvendorselect");
+                if (res.code == 1) {
 
+
+                    modal.modal('hide');
+                    $.notify(res.message, {
+                        globalPosition: "top center",
+                        className: "success"
+
+                    });
+                }
+                else {
+
+
+                    $.notify(res.message, {
+                        globalPosition: "top center",
+                        className: "error"
+
+                    });
+                }
+                dataTableprpo.ajax.reload();
+                      
+                   
+                
+            }
+        }
+        function OnFailure(res) {
+            alert("UnSuccessfull");
+        }
     </script>
+
 
 }

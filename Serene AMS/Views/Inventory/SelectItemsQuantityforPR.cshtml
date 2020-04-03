@@ -18,8 +18,8 @@
 
     <div class="ibox-body">
         <p>
-            <button class="btn btn-success" type="button" onclick="GetPR()">View Purchase Request</button>
-            <a class='btn btn-success' id='geturltopr'>View PR</a>
+           
+           
 
             @Html.ActionLink("Print PR", "PrintPR")
         </p>
@@ -104,7 +104,7 @@
                 "columns": [
 
                     { "data": "DocumentNo", "authowidth": false },
-                    { "data": "ItemId", "authowidth": false },
+                    { "data": "ItemName", "authowidth": false },
                     { "data": "Quantity", "authowidth": false },
                     { "data": "TotalPrice", "authowidth": false },
                     {
@@ -148,6 +148,8 @@
             $.get("/Inventory/GetItemforqty", { id: id }, function (res) {
 
                 $("#qtymodal").html(res);
+                var minDate = new Date();
+                $('input[type=datetime]').datepicker({ showAnim: 'drop', changeMonth: true, changeYear: false, minDate: minDate, dateFormat: "yy-mm-dd" }).datepicker("setDate", new Date);
                 $("#Modalqty").modal('show');
 
 

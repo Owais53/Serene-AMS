@@ -1,0 +1,80 @@
+﻿@model Serene_AMS.ViewModels.ProcureVM
+
+
+@using (Ajax.BeginForm("GetVendorforItem", "Inventory", new AjaxOptions { OnSuccess = "OnSuccess", OnFailure = "OnFailure" }))
+{
+
+    <div class="modal-content responsive" id="povendormodal">
+        <div class="modal-header">
+            <h4 class="modal-title">Select Vendor</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+        <div class="modal-body" style="overflow: auto">
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.ItemName, "Item Name", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.Quantity, "Quantity", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.StorageLocation, "Storage Location", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.StorageLocation, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.StorageLocation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.VendorId, "Vendor", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.VendorId, (SelectList)ViewBag.getvendorlist, "Select Vendor", new { @id = "getId", @class = "form-control select2_demo_2", @onchange = "ddltextchange()" })
+                    @Html.ValidationMessageFor(model => model.VendorId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TypeId, new { htmlAttributes = new { @class = "form-control", @type = "hidden", @id = "gettypeid" } })
+
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ItemId, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="postpowithvendor">Submit</button>
+            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+}
+<div id="progress" class="modal">
+    <div class="center">
+        <img src="~/img/admin-avatar.png" />
+    </div>
+</div>
+

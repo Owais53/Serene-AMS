@@ -533,6 +533,7 @@ namespace Serene_AMS.Controllers
 
             return View();
         }
+
         [HttpPost]
         public ActionResult CreateItems(ProcureVM model)
         {
@@ -830,9 +831,44 @@ namespace Serene_AMS.Controllers
                      ItemName=items.ItemName
                  }).ToList();
             ViewBag.Getitem = listofItems;
+
             return View();
         }
-      
+
+        [HttpPost]
+        public ActionResult CreateVendors(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+            var ItemType = obj.Getitemtype().ToList();
+            var vendortype = new SelectList(new[]
+             {
+
+                new {ID="1",Name="Local"},
+                new {ID="2",Name="Foreign"}
+
+                },
+                 "Name", "Name", "1"
+             );
+            ViewBag.getVendortypelist = vendortype;
+            SelectList list = new SelectList(ItemType, "Id", "ItemType");
+            ViewBag.getItemtypelist = list;
+
+            IEnumerable<ProcureVM> listofItems =
+                (from items in obj.Getitems()
+                 select new ProcureVM()
+                 {
+                     ItemId = items.ItemId,
+                     ItemName = items.ItemName
+                 }).ToList();
+            ViewBag.Getitem = listofItems;
+           var add= obj.addvendor(model.VendorName,model.Contact,model.TypeId,model.Address,model.VendorType);
+            obj.Addvendors(add);
+            obj.Save();
+            TempData["SuccessMessage1"] = "Successfully Created";
+        
+            return View();
+        }
+
 
     }
 }

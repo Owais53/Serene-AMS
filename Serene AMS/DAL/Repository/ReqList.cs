@@ -98,5 +98,25 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_PRItemsdata(int Docno)
+        {
+           
+            SqlCommand com = new SqlCommand("select doc.DocumentNo,det.ItemName,det.Id from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo where doc.DocumentNo='" +Docno+ "' and det.VendorId IS NULL", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet DonotShow_PRItemsdata(int Docno)
+        {
+
+            SqlCommand com = new SqlCommand("select doc.DocumentNo,det.ItemName,det.Id from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo where doc.DocumentNo!='" + Docno + "'", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+
+
     }
 }

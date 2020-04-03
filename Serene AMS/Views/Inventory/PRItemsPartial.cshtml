@@ -1,0 +1,76 @@
+﻿@model Serene_AMS.ViewModels.ProcureVM
+<form name="formpritemslist">
+
+
+    <div class="modal-content responsive" id="pritemsmodal">
+        <div class="modal-header">
+            <h4 class="modal-title">Select Items for Vendor</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+        <div class="modal-body" style="overflow: auto">
+            @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @id = "getdocnoofpr", @type = "hidden" } })
+            <table id="tblpritemsvendor" class="table table-striped table-hover responsive table-responsive">
+                <thead>
+                    <tr style="background-color:#0094ff; color:#ecf0f1">
+
+                        <th>Document No</th>
+                        <th>Items</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="getitemsofpr"></tbody>
+                <tfoot>
+                    <tr>
+                        <th>Document No</th>
+                        <th>Items</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+
+
+            </table>
+
+
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+        var dataTable1;
+        $(function () {
+
+            dataTable1 = $('#tblpritemsvendor').DataTable({
+                pageLength: 10,
+                "ajax": {
+                    "url": '/inventory/GetPrItemsforpo',
+                    "type": "get",
+                    "datatype": "json",
+                    "data": { DocNo: $("#getdocnoofpr").val() }
+
+                },
+
+                "columns": [
+
+                    { "data": "DocumentNo", "authowidth": false },
+                    { "data": "DocumentType", "authowidth": false },
+                    {
+                        "data": "DocumentNo", "render": function (data, type, full) {
+                            return "<button type='button' onclick=Getprforpo('" + data + "') class='btn btn-primary' id='getbtnpo'>Create PO</button>"
+                        },
+                    },
+
+
+                ]
+
+            });
+
+
+        });
+</script>
+}

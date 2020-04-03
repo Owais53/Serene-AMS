@@ -51,6 +51,25 @@ namespace Serene_AMS.DAL.Repository
             return add;
         }
 
+        public void AddPO(tblDocument obj)
+        {
+            context.tblDocuments.Add(obj);
+        }
+
+        public tblDocument AddPowithref(int PRref)
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblDocument()
+            {
+                DTypeId = 3,
+                CreationDate = DateTime.Now.Date,
+                CreatedBy = user,
+                DocStatus="Complete",
+                PrReferenceNo=PRref
+            };
+            return add;
+        }
+
         public void AddPRItems(tblDocument obj)
         {
             context.tblDocuments.Add(obj);
@@ -75,6 +94,24 @@ namespace Serene_AMS.DAL.Repository
         public void AddTypes(tblItemType obj)
         {
             context.tblItemTypes.Add(obj);
+        }
+
+        public tblVendor addvendor(string name, string contact, int Itypeid, string address, string vtype)
+        {
+            var add = new tblVendor()
+            {
+                VendorName=name,
+                Contact=contact,
+                TypeId=Itypeid,
+                Address=address,
+                VendorType=vtype,
+            };
+            return add;
+        }
+
+        public void Addvendors(tblVendor obj)
+        {
+            context.tblVendors.Add(obj);
         }
 
         public tblDocument CreatePRItems(ProcureVM model)
@@ -120,9 +157,30 @@ namespace Serene_AMS.DAL.Repository
             return context.tblSLs;
         }
 
+        public IEnumerable<tblVendor> GetVendor()
+        {
+            return context.tblVendors;
+        }
+
         public void Save()
         {
             context.SaveChanges();
+        }
+
+        public void setstatusonpocreate(int docnoofpr)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == docnoofpr).FirstOrDefault();
+            obj.Status = "PO Created";
+            context.Entry(obj).State = EntityState.Modified;
+
+        }
+
+        public void SetVendorforItem(int detailid, int Itemid, int vendorid)
+        {
+            var obj = context.tblDocDetails.Where(x => x.Id == detailid).FirstOrDefault();
+            obj.ItemId = Itemid;
+            obj.VendorId = vendorid;
+            context.Entry(obj).State = EntityState.Modified;
         }
 
         public void updateDocstatus(int Docno)
@@ -168,12 +226,13 @@ namespace Serene_AMS.DAL.Repository
             context.Entry(obj).State = EntityState.Modified;
         }
 
-        public void updatqty(int Id, string item, int qty)
+        public void updatqty(int Id, string item, int qty,DateTime requesteddate)
         {
             var price = context.tblItems.Where(x => x.ItemName == item).FirstOrDefault();
             var obj = context.tblDocDetails.Where(x => x.Id == Id).FirstOrDefault();
             obj.Quantity = qty;
             obj.TotalPrice = qty * price.ItemPrice;
+            obj.RequestedDate = requesteddate;
             context.Entry(obj).State = EntityState.Modified;
         }
     }

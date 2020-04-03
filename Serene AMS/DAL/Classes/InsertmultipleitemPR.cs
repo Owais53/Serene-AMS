@@ -23,6 +23,63 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
+        public int getDetailsIdforPo(int Docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT max(Id) FROM [Hrms].[dbo].[tblDocDetails] where DocumentNo=@docno";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@docno", Docno);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public string getItemNameforPo(int Docno,int id)
+        {
+            string name;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT ItemName FROM [Hrms].[dbo].[tblDocDetails] where DocumentNo=@docno and ItemId IS NULL and Id=@id";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@docno", Docno);
+                smd.Parameters.AddWithValue("@id", id);
+                name = (string)smd.ExecuteScalar();
+
+            }
+            return name;
+        }
+        public int getVendorIdforPo(int Docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT min(VendorId) FROM [Hrms].[dbo].[tblDocDetails] where DocumentNo=@docno";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@docno", Docno);
+                id = (int)smd.ExecuteScalar();
+               
+            }
+            return id;
+        }
+        public int getIdforPo(int Docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT min(Id) FROM [Hrms].[dbo].[tblDocDetails] where DocumentNo=@docno";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@docno", Docno);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
         public int getDetailsId()
         {
             int id;
@@ -43,7 +100,7 @@ namespace Serene_AMS.DAL.Classes
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
-                String s = "INSERT INTO [dbo].[tblDocument]([DTypeId],[CreationDate],[CreatedBy],[DocStatus],[Status],[ItemId]) VALUES (@DTypeId,@createdDate,@createdby,@docstatus,@status,@item)";
+                String s = "INSERT INTO [dbo].[tblDocument]([DTypeId],[CreationDate],[CreatedBy],[DocStatus],[Status],[ItemName]) VALUES (@DTypeId,@createdDate,@createdby,@docstatus,@status,@item)";
                 SqlCommand smd = new SqlCommand(s, con);
 
                 smd.Parameters.AddWithValue("@DTypeId", 1);
@@ -57,8 +114,11 @@ namespace Serene_AMS.DAL.Classes
                 if (x > 0)
                 {
                     int rId = getDocumentNo();
-                    insertIntoCommonTable(model, rId);
-                    return true;
+
+                   
+                        insertIntoCommonTable(model, rId);
+                        return true;
+                  
                 }
                 else
                 {
@@ -66,7 +126,7 @@ namespace Serene_AMS.DAL.Classes
                 }
             }
         }
-
+      
         public void insertIntoCommonTable(ProcureVM model, int DId)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
@@ -74,7 +134,7 @@ namespace Serene_AMS.DAL.Classes
                 con.Open();
                 for (int i = 0; i < model.requestedMaterialArray.Length; i++)
                 {
-                    String s = "INSERT INTO [dbo].[tblDocDetails] ([DocumentNo],[ItemId],[Quantity],[TotalPrice]) VALUES (@Did,@m,@qty,@price)";
+                    String s = "INSERT INTO [dbo].[tblDocDetails] ([DocumentNo],[ItemName],[Quantity],[TotalPrice]) VALUES (@Did,@m,@qty,@price)";
                     SqlCommand sd = new SqlCommand(s, con);
                     sd.Parameters.AddWithValue("@Did", DId);
                     sd.Parameters.AddWithValue("@m", model.requestedMaterialArray[i]);

@@ -17,6 +17,7 @@ namespace Serene_AMS.DAL.Interface
         IEnumerable<tblItemType> Getitemtype();
         IEnumerable<tblDocument> GetDoc();
         IEnumerable<tblDocDetail> GetDocDetail();
+        IEnumerable<tblVendor> GetVendor();
         void AddTypes(tblItemType obj);
         tblItemType AddItemtype(string ItemType);
         IEnumerable<tblItem> Getitems();
@@ -29,7 +30,13 @@ namespace Serene_AMS.DAL.Interface
         void UpdateDocType(int Typeid,int DocNofrom,int DocNoto);
         tblDocument CreatePRItems(ProcureVM model);
         void AddPRItems(tblDocument obj);
-        void updatqty(int Id, string item, int qty);
+        void updatqty(int Id, string item, int qty,DateTime requesteddate);
         void updateDocstatus(int Docno);
+        tblVendor addvendor(string name,string contact,int Itypeid,string address,string vtype);
+        void Addvendors(tblVendor obj);
+        void SetVendorforItem(int detailid,int Itemid,int vendorid);
+        tblDocument AddPowithref(int PRref);
+        void AddPO(tblDocument obj);
+        void setstatusonpocreate(int docnoofpr);
     }
 }

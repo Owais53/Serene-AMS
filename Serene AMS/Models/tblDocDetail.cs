@@ -16,10 +16,14 @@ namespace Serene_AMS.Models
     {
         public int Id { get; set; }
         public Nullable<int> DocumentNo { get; set; }
-        public string ItemId { get; set; }
+        public Nullable<int> ItemId { get; set; }
+        public string ItemName { get; set; }
         public Nullable<int> VendorId { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<decimal> TotalPrice { get; set; }
+        public Nullable<System.DateTime> RequestedDate { get; set; }
+        public Nullable<System.DateTime> DeliveryDate { get; set; }
+        public Nullable<int> POReference { get; set; }
     
         public virtual tblDocument tblDocument { get; set; }
         public virtual tblVendor tblVendor { get; set; }

@@ -267,6 +267,9 @@
     <Compile Include="Models\tblEmployeeLeaf.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblExpens.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblItem.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
@@ -892,6 +895,7 @@
     <Content Include="Website\js\owl.carousel.min.js" />
     <Content Include="Website\js\popper.min.js" />
     <Content Include="Website\js\slick.min.js" />
+    <Content Include="App_Browsers\qt.browser" />
     <EntityDeploy Include="Models\SqlModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>SqlModel.Designer.cs</LastGenOutput>
@@ -899,7 +903,6 @@
     <Content Include="Models\SqlModel.edmx.diagram">
       <DependentUpon>SqlModel.edmx</DependentUpon>
     </Content>
-    <Content Include="App_Browsers\qt.browser" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\countdowntime.js" />
     <Content Include="Scripts\dashboard_1_demo.js" />
@@ -1106,6 +1109,8 @@
     <Content Include="Views\Inventory\CreatePurchaseOrder.cshtml" />
     <Content Include="Views\Inventory\PRPartial.cshtml" />
     <Content Include="Views\Inventory\PRDoc.cshtml" />
+    <Content Include="Views\Inventory\PRItemsPartial.cshtml" />
+    <Content Include="Views\Inventory\POVendorPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
