@@ -56,7 +56,7 @@ namespace Serene_AMS.DAL.Repository
             context.tblDocuments.Add(obj);
         }
 
-        public tblDocument AddPowithref(int PRref)
+        public tblDocument AddPowithref(int PRref,int vendorid)
         {
             var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
             var add = new tblDocument()
@@ -65,7 +65,8 @@ namespace Serene_AMS.DAL.Repository
                 CreationDate = DateTime.Now.Date,
                 CreatedBy = user,
                 DocStatus="Complete",
-                PrReferenceNo=PRref
+                PrReferenceNo=PRref,
+                VendorId=vendorid,
             };
             return add;
         }
@@ -175,11 +176,13 @@ namespace Serene_AMS.DAL.Repository
 
         }
 
-        public void SetVendorforItem(int detailid, int Itemid, int vendorid)
+        public void SetVendorforItem(int detailid, int Itemid, int vendorid,DateTime deliverydate,int Poreference)
         {
             var obj = context.tblDocDetails.Where(x => x.Id == detailid).FirstOrDefault();
             obj.ItemId = Itemid;
             obj.VendorId = vendorid;
+            obj.DeliveryDate = deliverydate;
+            obj.POReference = Poreference;
             context.Entry(obj).State = EntityState.Modified;
         }
 

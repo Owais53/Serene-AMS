@@ -29,6 +29,7 @@ namespace Serene_AMS.Models
         public string Status { get; set; }
         public string ItemName { get; set; }
         public Nullable<int> PrReferenceNo { get; set; }
+        public Nullable<int> VendorId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocDetail> tblDocDetails { get; set; }

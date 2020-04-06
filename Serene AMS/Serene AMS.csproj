@@ -844,6 +844,7 @@
     <Content Include="fonts\themify.ttf" />
     <Content Include="fonts\themify.woff" />
     <Content Include="Scripts\dataTables.checkboxes.min.js" />
+    <Content Include="Scripts\ej.web.all.min.js" />
     <Content Include="Scripts\jquery.multi-select.js" />
     <Content Include="Scripts\jquery.timeselector.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -1111,6 +1112,10 @@
     <Content Include="Views\Inventory\PRDoc.cshtml" />
     <Content Include="Views\Inventory\PRItemsPartial.cshtml" />
     <Content Include="Views\Inventory\POVendorPartial.cshtml" />
+    <Content Include="Views\Inventory\PODoc.cshtml" />
+    <Content Include="Views\Inventory\PODocPartial.cshtml" />
+    <Content Include="Scripts\jsrender.min" />
+    <Content Include="Views\Inventory\CreatePR.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

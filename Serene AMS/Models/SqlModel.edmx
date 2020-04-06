@@ -86,6 +86,7 @@
           <Property Name="CreatedBy" Type="varchar" MaxLength="50" />
           <Property Name="DocStatus" Type="varchar" MaxLength="100" />
           <Property Name="Status" Type="varchar" MaxLength="75" />
+          <Property Name="VendorId" Type="int" />
           <Property Name="ItemName" Type="nvarchar(max)" />
           <Property Name="PrReferenceNo" Type="int" />
         </EntityType>
@@ -858,6 +859,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <NavigationProperty Name="tblDocDetails" Relationship="Self.FK_tblDocDetails_tblDocument" FromRole="tblDocument" ToRole="tblDocDetails" />
           <NavigationProperty Name="tblDoctype" Relationship="Self.FK_tblDocument_tblDoctype" FromRole="tblDocument" ToRole="tblDoctype" />
           <NavigationProperty Name="tblPurchases" Relationship="Self.FK_tblPurchase_tblDocument" FromRole="tblDocument" ToRole="tblPurchase" />
+          <Property Name="VendorId" Type="Int32" />
         </EntityType>
         <EntityType Name="tblEmployee">
           <Key>
@@ -1621,6 +1623,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocuments">
             <EntityTypeMapping TypeName="HrmsModel.tblDocument">
               <MappingFragment StoreEntitySet="tblDocument">
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
                 <ScalarProperty Name="DTypeId" ColumnName="DTypeId" />
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />

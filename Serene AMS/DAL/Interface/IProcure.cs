@@ -34,8 +34,8 @@ namespace Serene_AMS.DAL.Interface
         void updateDocstatus(int Docno);
         tblVendor addvendor(string name,string contact,int Itypeid,string address,string vtype);
         void Addvendors(tblVendor obj);
-        void SetVendorforItem(int detailid,int Itemid,int vendorid);
-        tblDocument AddPowithref(int PRref);
+        void SetVendorforItem(int detailid,int Itemid,int vendorid,DateTime Deliverydate,int PoReference);
+        tblDocument AddPowithref(int PRref,int vendorid);
         void AddPO(tblDocument obj);
         void setstatusonpocreate(int docnoofpr);
     }

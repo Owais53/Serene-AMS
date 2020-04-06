@@ -10,6 +10,31 @@ namespace Serene_AMS.DAL.Classes
 {
     public class InsertmultipleitemPR
     {
+        public List<ProcureVM> getPODocData(int? Docno)
+        {
+            List<ProcureVM> a = new List<ProcureVM>();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select doc.DocumentNo,doc.CreationDate,doc.CreatedBy,v.VendorName,v.Contact,v.Address from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.POReference inner join tblVendors v on det.VendorId=v.VendorId where doc.DTypeId=3 and doc.DocumentNo=@id";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@id", Docno);
+
+                SqlDataReader sdr = smd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    ProcureVM r = new ProcureVM();
+                    r.DocNo = Convert.ToInt32(sdr["DocumentNo"]);
+                    r.Createdon = Convert.ToDateTime(sdr["CreationDate"]).Date;
+                    r.Createdby = sdr["CreatedBy"].ToString();
+                    r.VendorName = sdr["VendorName"].ToString();
+                    r.Contact = sdr["Contact"].ToString();
+                    r.Address = sdr["Address"].ToString();
+                    a.Add(r);
+                }
+                return a;
+            }
+        }
         public int getDocumentNo()
         {
             int id;
@@ -17,6 +42,19 @@ namespace Serene_AMS.DAL.Classes
             {
                 con.Open();
                 String s = "SELECT max(DocumentNo) FROM [Hrms].[dbo].[tblDocument]";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getPODocNo()
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT max(doc.DocumentNo) FROM [Hrms].[dbo].[tblDocument] doc inner join tblDocDetails det on doc.PrReferenceNo=det.DocumentNo where doc.DTypeId = 3";
                 SqlCommand smd = new SqlCommand(s, con);
                 id = (int)smd.ExecuteScalar();
 

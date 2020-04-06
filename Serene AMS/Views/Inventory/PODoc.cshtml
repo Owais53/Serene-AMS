@@ -1,0 +1,158 @@
+﻿@model Serene_AMS.ViewModels.ProcureVM
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/themify-icons.css" rel="stylesheet" />
+    <!-- PLUGINS STYLES-->
+    <!-- THEME STYLES-->
+
+    <link href="~/Content/main.min.css" rel="stylesheet" />
+
+    <style>
+
+        .invoice {
+            padding: 20px
+        }
+
+        .invoice-header {
+            margin-bottom: 50px
+        }
+
+        .invoice-logo {
+            margin-bottom: 50px;
+        }
+
+        .table-invoice tr td:last-child {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="ibox invoice" id="printpo">
+
+            @using (Html.BeginForm("PODoc", "Inventory", FormMethod.Get, new { id = "getdatapo" }))
+            {
+                <div class="invoice-header">
+                    <h1 style="margin-left:500px;">Purchase Order</h1>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="invoice-logo">
+                                <img src="~/img/serene logo.jpg" />
+                            </div>
+
+                        </div>
+                        <div class="col-6 text-left">
+                            <div class="clf" style="margin-bottom:30px;">
+                                <div class="col-6 text-right">
+                                    <div class="m-b-5 font-bold">Purchase Order</div>
+                                    <ul class="list-unstyled m-t-10">
+                                        <li class="m-b-5" id="getdocno">
+                                            <span class="font-strong">Document No:</span> @Html.DisplayFor(x => x.DocNo)
+                                        </li>
+                                        <li class="m-b-5" id="getcreatedby">
+                                            <span class="font-strong">Created by:</span> @Html.DisplayFor(x => x.Createdby)
+                                        </li>
+                                        <li>
+                                            <span class="font-strong" id="getcreatedon">Created on:</span> @Html.DisplayFor(x => x.ReturnCreationDateForDisplay)
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="m-b-5 font-bold">Order To</div>
+                                <div>@Html.DisplayFor(x => x.VendorName)</div>
+                                <ul class="list-unstyled m-t-10">
+                                    <li class="m-b-5">@Html.DisplayFor(x => x.Address)</li>
+                                    <li>@Html.DisplayFor(x => x.Contact)</li>
+                                </ul>
+                            </div>
+                            @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @id = "getdocnopo", @type = "hidden" } })
+
+                        </div>
+                    </div>
+                </div>
+            }
+            <table class="table table-striped no-margin table-invoice">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Delivery Date</th>
+                        <th class="text-right">Total</th>
+
+                    </tr>
+                </thead>
+                <tbody id="getporecord"></tbody>
+            </table>
+            <table class="table no-border">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th width="15%"></th>
+                    </tr>
+                </thead>
+                <tbody id="totalal"></tbody>
+            </table>
+
+        </div>
+        <input type="button" onclick="printDiv('printpo')" value="Print PO" class="btn btn-success" />
+    </div>
+    <script src="~/Scripts/popper.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
+
+
+    <script src="~/Scripts/metisMenu.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <!-- CORE SCRIPTS-->
+    <script src="~/Scripts/app.min.js" type="text/javascript"></script>
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script type="text/javascript">
+        $(function () {
+             
+                $.ajax({
+                    type: 'GET',
+                    url: '/Inventory/GetPODetailsfordoc',
+                    data: { id: $("#getdocnopo").val()},
+                    success: function (res) {
+                        $.each(res, function (i, v) {
+                            var date = new Date(parseInt(v.DeliveryDate.substr(6)));
+                            var month = date.getMonth() + 1;
+                           
+                            $("#getporecord").append($('<tr><td><div><strong>' + v.ItemName + '</strong></div></td><td>' + v.Quantity + '</td><td>' + date.getFullYear() + "/" + month + "/" + date.getDate() + '</td><td>' + v.Total + '</td></tr>'))
+
+                        });
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+
+            });
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+        }
+        
+    </script>
+
+
+</body>
+</html>

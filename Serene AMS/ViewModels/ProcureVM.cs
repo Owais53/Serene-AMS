@@ -27,7 +27,9 @@ namespace Serene_AMS.ViewModels
         public int SlId { set; get; }
         public int Id { get; set; }
         public int ItemId { get; set; }
+        [Required]
         public int TypeId { get; set; }
+   
         public string DocType { get; set; }
         [Required]
         public int Docnumberfrom { get; set; }
@@ -52,9 +54,18 @@ namespace Serene_AMS.ViewModels
         public decimal Totalforall { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime RequestedDate { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime DeliveryDate { get; set; }
         public int Prreferenceno { get; set; }
         public int VendorId { get; set; }
-
+        public string ReturnCreationDateForDisplay
+        {
+            get
+            {
+                return this.Createdon.ToString("d");
+            }
+        }
+        public IEnumerable<ProcureVM> PoData { get; set; }
         public List<ProcureVM> getItemDataforVendorSelection(int id)
         {
             List<ProcureVM> lf = new List<ProcureVM>();
@@ -81,6 +92,6 @@ namespace Serene_AMS.ViewModels
                 return lf;
             }
         }
-
+      
     }
 }

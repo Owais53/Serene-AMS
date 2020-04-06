@@ -39,6 +39,20 @@
 
 
         </table>
+
+        <div class="form-group">
+
+            <label class="control-label col-md-2">Select PO to View</label>
+
+            <div class="col-md-10" id="appendddlreport">
+                <select onchange="javascript: ddldocpo(this);" class="form-control select2_demo_2" id="appendselect"><option id="select" value="0">Select PO to View</option></select>
+            </div>
+            
+        
+        </div>
+       <button type="submit" id="btnsubmitdocpo" class="btn btn-primary">Generate PO</button>
+        <input type="hidden" id="getdocpovalue"/>
+                
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
@@ -63,7 +77,19 @@
                 </div>
             </div>
         </div>
-       
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="modal" id="Modalpo" tabindex="-1" data-backdrop="false">
+                        <div class="modal-dialog lg">
+                            @Html.Partial("PODocPartial")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </div>
@@ -157,7 +183,7 @@
                 success: function (responses) {
 
                     $.each(responses, function (i, v) {
-                        $("#getitemsofpr").append($('<tr id=' + v.DocNo + '><td>' + id + '</td><td>' + v.ItemName + '</td><td><button type="button" onclick=Getvendorforpo(' + v.Id + ') class="btn btn-success" id="getbtnpo">Select Vendor</button></td></tr>'))
+                        $("#getitemsofpr").append($('<tr id=' + v.DocNo + '><td>' + id + '</td><td>' + v.ItemName + '</td><td><button type="button" onclick=Getvendorforpo(' + v.Id + ') class="btn btn-success" id="getbtnpo">Select</button></td></tr>'))
 
                     });
 
@@ -178,7 +204,8 @@
         function Getvendorforpo(id) {
             $.get("/Inventory/GetVendorforItem", { id: id }, function (res) {
                 $('#povendormodal').html(res);
-
+                var minDate = new Date();
+                $('input[type=datetime]').datepicker({ showAnim: 'drop', changeMonth: true, changeYear: false, minDate: minDate, dateFormat: "yy-mm-dd" }).datepicker("setDate", new Date);
                 $("#Modalvendorselect").modal('show');
 
             })
@@ -212,7 +239,40 @@
         });
         function OnSuccess(res) {
             if (res) {
-               
+                $.ajax({
+                    type: 'GET',
+                    url: '/Inventory/RemoveDocPO',
+                    success: function (response) {                      
+
+                        $.each(response, function (i, v1) {
+                            
+                            $("#" + v1.DocumentNo + "").remove();
+                        });
+                       
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+                $.ajax({
+                       type: 'GET',
+                       url: '/Inventory/GetDocPO',
+                    success: function (response) {
+                       
+                        $("#appendselect").append('')
+                        $.each(response, function (i, v1) {
+
+                               $("#appendselect").append($('<option id="' + v1.DocumentNo + '" value="' + v1.DocumentNo + '">' + v1.DocumentNo + '</option>'))
+                           });
+                          
+
+                    },
+                       error: function (error) {
+                           console.log(error);
+                       }
+                })
+              
                 var modal = $("#Modalvendorselect");
                 if (res.code == 1) {
 
@@ -223,6 +283,8 @@
                         className: "success"
 
                     });
+                    dataTableprpo.ajax.reload();
+
                 }
                 else {
 
@@ -232,8 +294,10 @@
                         className: "error"
 
                     });
+                    dataTableprpo.ajax.reload();
+
                 }
-                dataTableprpo.ajax.reload();
+               
                       
                    
                 
@@ -241,6 +305,15 @@
         }
         function OnFailure(res) {
             alert("UnSuccessfull");
+        }
+        $("#btnsubmitdocpo").click(function (e) {
+            var doc = $("#getdocpovalue").val();
+            window.location.href = '@Url.Action("PODoc", "Inventory", new {id = "doc"})'.replace("doc", doc);
+          
+        });
+        function ddldocpo(id) {
+            $("#getdocpovalue").val(id.value);
+          
         }
     </script>
 

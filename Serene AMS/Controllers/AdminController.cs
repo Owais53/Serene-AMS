@@ -523,7 +523,7 @@ namespace Serene_AMS.Controllers
         {
             IProcure obj = new Procure();
             var ItemType = obj.Getitemtype().ToList();
-            SelectList list = new SelectList(ItemType, "ItemType", "ItemType");
+            SelectList list = new SelectList(ItemType, "Id", "ItemType");
             ViewBag.getItemtypelist = list;
 
             var SL = obj.GetSL().ToList();
