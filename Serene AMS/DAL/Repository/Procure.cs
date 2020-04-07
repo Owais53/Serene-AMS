@@ -71,6 +71,35 @@ namespace Serene_AMS.DAL.Repository
             return add;
         }
 
+        public tblDocument Addpr()
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblDocument()
+            {
+                DTypeId=1,
+                CreationDate = DateTime.Now,
+                CreatedBy = user,
+                DocStatus="Complete",
+                Status="Pending",
+
+            };
+            return add;
+        }
+
+        public tblDocDetail AddPrdetails(int prno, int itemid, int vendorid, DateTime? reqdate, int? qty, decimal? totalprice)
+        {
+            var add = new tblDocDetail()
+            {
+                DocumentNo=prno,
+                ItemId=itemid,
+                VendorId=vendorid,
+                RequestedDate=reqdate,
+                Quantity=qty,
+                TotalPrice=totalprice,
+            };
+            return add;
+        }
+
         public void AddPRItems(tblDocument obj)
         {
             context.tblDocuments.Add(obj);
@@ -126,6 +155,11 @@ namespace Serene_AMS.DAL.Repository
                 
             };
             return add;
+        }
+
+        public void docdetails(tblDocDetail obj)
+        {
+            context.tblDocDetails.Add(obj);
         }
 
         public IEnumerable<tblDocument> GetDoc()
@@ -186,6 +220,13 @@ namespace Serene_AMS.DAL.Repository
             context.Entry(obj).State = EntityState.Modified;
         }
 
+        public void upatedocdetail(int doc, string prno)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == doc).FirstOrDefault();
+            obj.Docno = prno;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
         public void updateDocstatus(int Docno)
         {
            
@@ -200,6 +241,14 @@ namespace Serene_AMS.DAL.Repository
             var obj = context.tblDoctypes.Where(x => x.TypeId == Typeid).FirstOrDefault();
             obj.NumberRangefrom = DocNofrom;
             obj.NumberRangeTo = DocNoto;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void updateduplicate(int doc, int itemid, int vendorid, int? qty, decimal? price, int prevqty, decimal prevprice)
+        {
+            var obj = context.tblDocDetails.Where(x => x.DocumentNo == doc && x.ItemId==itemid && x.VendorId==vendorid).FirstOrDefault();
+            obj.Quantity = prevqty + qty;
+            obj.TotalPrice = prevprice + price;
             context.Entry(obj).State = EntityState.Modified;
         }
 

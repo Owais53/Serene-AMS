@@ -3,6 +3,7 @@ using Serene_AMS.DAL.Interface;
 using Serene_AMS.DAL.Repository;
 using Serene_AMS.Models;
 using Serene_AMS.ViewModels;
+
 using System;
 using System.Data;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Serene_AMS.Controllers
     public class InventoryController : Controller
     {
         InsertmultipleitemPR db = new InsertmultipleitemPR();
+        
         [HttpGet]
         public ActionResult CreatePurchaseRequest()
         {
@@ -575,6 +577,47 @@ namespace Serene_AMS.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public JsonResult CreatePR(List<tblDocDetail> prlist)
+        {
+            IProcure obj = new Procure();
+            InsertmultipleitemPR getid = new InsertmultipleitemPR();
+            NumberSequence seq = new NumberSequence();
+            if (prlist == null)
+            {
+                prlist = new List<tblDocDetail>();
+            }
+            var add=obj.Addpr();
+            obj.AddPRItems(add);
+            obj.Save();
+            string no= seq.GenerateNo("PR",add.DocumentNo);
+            obj.upatedocdetail(add.DocumentNo,no);
+            obj.Save();
 
+            foreach(tblDocDetail pr in prlist)
+            {
+                if (db.checkduplicate(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName)) == getid.getItemid(pr.ItemName))
+                {
+                    obj.updateduplicate(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName),pr.Quantity,pr.TotalPrice,db.getqty(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName)),db.getprice(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName)));
+                    obj.Save();
+                }
+                else
+                {
+                    var adddet = obj.AddPrdetails(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName), pr.RequestedDate, pr.Quantity, pr.TotalPrice);
+                    obj.docdetails(adddet);
+                }
+            }
+            obj.Save();
+
+            return Json(new {prlist,message="PR "+add.DocumentNo+" Created" },JsonRequestBehavior.AllowGet);
+
+        }
+        public JsonResult GetItemPrice(int qty,int item)
+        {
+            InsertmultipleitemPR obj = new InsertmultipleitemPR();
+          
+          
+            return Json(obj.getTotalPrice(qty, item),JsonRequestBehavior.AllowGet);
+        }
     }
 }

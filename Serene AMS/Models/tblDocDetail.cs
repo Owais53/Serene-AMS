@@ -24,6 +24,7 @@ namespace Serene_AMS.Models
         public Nullable<System.DateTime> RequestedDate { get; set; }
         public Nullable<System.DateTime> DeliveryDate { get; set; }
         public Nullable<int> POReference { get; set; }
+        public string VendorName { get; set; }
     
         public virtual tblDocument tblDocument { get; set; }
         public virtual tblVendor tblVendor { get; set; }

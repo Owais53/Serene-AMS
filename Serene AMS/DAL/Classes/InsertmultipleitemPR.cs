@@ -48,6 +48,110 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
+        public int getPrNo()
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT max(DocumentNo) FROM [Hrms].[dbo].[tblDocument] ";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getItemid(string item)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT ItemId FROM [Hrms].[dbo].[tblItem] Where ItemName=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@item", item);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getVendorId(string vendor)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT VendorId FROM [Hrms].[dbo].[tblVendors] Where VendorName=@vendor";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@vendor", vendor);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int checkduplicate(int docno,int itemid,int vendorid)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT ItemId FROM [Hrms].[dbo].[tblDocDetails] Where VendorId=@vendor and Documentno=@doc and ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@vendor", vendorid);             
+                smd.Parameters.AddWithValue("@doc", docno);
+                smd.Parameters.AddWithValue("@item", itemid);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getqty(int docno, int itemid, int vendorid)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT Quantity FROM [Hrms].[dbo].[tblDocDetails] Where VendorId=@vendor and Documentno=@doc and ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@vendor", vendorid);
+                smd.Parameters.AddWithValue("@doc", docno);
+                smd.Parameters.AddWithValue("@item", itemid);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getprice(int docno, int itemid, int vendorid)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT TotalPrice FROM [Hrms].[dbo].[tblDocDetails] Where VendorId=@vendor and Documentno=@doc and ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@vendor", vendorid);
+                smd.Parameters.AddWithValue("@doc", docno);
+                smd.Parameters.AddWithValue("@item", itemid);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public decimal getTotalPrice(int qty,int item)
+        {
+            decimal id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT (@qty*ItemPrice) FROM [Hrms].[dbo].[tblItem] where ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@qty", qty);
+                smd.Parameters.AddWithValue("@item", item);
+                id = (decimal)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
         public int getPODocNo()
         {
             int id;

@@ -201,6 +201,7 @@
     <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="DAL\Classes\DataTableparams.cs" />
     <Compile Include="DAL\Classes\InsertmultipleitemPR.cs" />
+    <Compile Include="DAL\Classes\NumberSequence.cs" />
     <Compile Include="DAL\Classes\SetDocNumber.cs" />
     <Compile Include="DAL\Interface\IDepartmentRepository.cs" />
     <Compile Include="DAL\Interface\IEmployeeRepository.cs" />

@@ -31,12 +31,12 @@
                 <tbody></tbody>
                 <tfoot>
                     <tr>
-                        <td><select id="selecttype" onchange="javascript: ddlitemtypechange(this);"><option id="select" value="0">Select Item Type</option></select></td>                 
-                        <td><select id="selectitem"><option id="select" value="0">Select Item</option></select></td>                      
-                        <td><input type="number" id="txtqty" /></td>                     
-                        <td><input type="number" id="txtprice" /></td>                      
-                        <td><select id="selectvendor"><option id="select" value="0">Select Vendor</option></select></td>                       
-                        <td><input type="date" id="dateRequested" /></td>                      
+                        <td><select id="selecttype" onchange="javascript: ddlitemtypechange(this);"><option id="select" value="0">Select Item Type</option></select></td>
+                        <td><select id="selectitem"><option id="select" value="0">Select Item</option></select></td>
+                        <td><input type="number" id="txtqty" /></td>
+                        <td><input type="number" id="txtprice" /></td>
+                        <td><select id="selectvendor"><option id="select" value="0">Select Vendor</option></select></td>
+                        <td><input type="text" id="dateRequested" /></td>
                         <td><input type="button" id="btnAddrows" class="btn btn-success btn-sm" value="Add" /></td>
                     </tr>
                     <tr>
@@ -51,7 +51,10 @@
 
 
             </table>
-           <button type="submit" id="btnsavetodb" class="btn btn-block btn-success">Submit</button> 
+           
+                <button type="submit" id="btnsavetodb" class="btn btn-primary">Submit</button>
+            
+
         </div>
 
     </div>
@@ -64,7 +67,24 @@
                  });                
 
             })
-           
+            $("#dateRequested").datepicker();
+            $("#txtqty").on("keyup", function () {
+                if ($("#selectitem").val() == 0) {
+                    $("#txtprice").val(0);
+                }
+                else if ($("#txtqty").val() == "" || $("#txtqty").val()=="0") {
+                    $("#txtprice").val(0);
+                }
+                else {
+
+                    $.get("/Inventory/GetItemPrice", { qty: $("#txtqty").val(), item: $("#selectitem").val() }, function (res) {
+                        if (res) {
+                            $("#txtprice").val(res);
+                        }
+
+                    })
+                }
+            });
         });
         function ddlitemtypechange(id) {
             $.get("/Inventory/GetItems", { Id: id.value }, function (res) {
@@ -96,13 +116,14 @@
         <script type="text/javascript">
             $("body").on("click", "#btnAddrows", function () {
                 var seltype = $("#selecttype option:selected");
-                var selitem = $("#selectitem");
+                var selitem = $("#selectitem option:selected");
                 var txtqty = $("#txtqty");
                 var txtprice = $("#txtprice");
-                var selvendor = $("#selectvendor");
+                var selvendor = $("#selectvendor option:selected");
 
                 var reqdate = $("#dateRequested");
-
+              
+                
                 var tBody = $("#tbllineforpr>TBODY")[0];
                 if ($("#selecttype").val() == 0 || $("#selectitem").val() == 0 || txtqty.val() == "" || txtprice.val() == "" || $("#selectvendor").val() == 0 || reqdate.val() == "") {
                     if ($("#selecttype").val() == 0) {
@@ -112,49 +133,81 @@
                         document.getElementById('lbltype').innerHTML = "";
                     }
                     if ($("#selectitem").val() == 0) {
-                        document.getElementById('lblitem').innerHTML= 'Please Select Item';
+                        document.getElementById('lblitem').innerHTML = 'Please Select Item';
+                    }
+                    else {
+                        document.getElementById('lblitem').innerHTML = '';
                     }
                     if (txtqty.val() == "") {
                         document.getElementById('lblqty').innerHTML = 'Please Enter Quantity';
                     }
+                    else {
+                        document.getElementById('lblqty').innerHTML = '';
+                    }
                     if (txtprice.val() == "") {
                         document.getElementById('lblprice').innerHTML = 'Please Enter Price';
+                    } else {
+                        document.getElementById('lblprice').innerHTML = '';
                     }
                     if ($("#selectvendor").val() == 0) {
                         document.getElementById('lblvendor').innerHTML = 'Please select Vendor';
+                    } else {
+                        document.getElementById('lblvendor').innerHTML = '';
                     }
                     if (reqdate.val() == "") {
                         document.getElementById('lblreqdate').innerHTML = 'Please select Date';
+                    } else {
+                        document.getElementById('lblreqdate').innerHTML = '';
                     }
                 }
                 else {
+                    if ($("#selecttype").val() != 0) {                   
+                        document.getElementById('lbltype').innerHTML = "";
+                    }
+                    if ($("#selectitem").val() != 0) {
+                        document.getElementById('lblitem').innerHTML = '';
+                    }
+                   
+                    if (txtqty.val() != "") {
+                        document.getElementById('lblqty').innerHTML = '';
+                    }
+                  
+                    if (txtprice.val() != "") {
+                        document.getElementById('lblprice').innerHTML = '';
+                    } 
+                    if ($("#selectvendor").val() != 0) {
+                        document.getElementById('lblvendor').innerHTML = '';
+                    } 
+                    if (reqdate.val() != "") {
+                        document.getElementById('lblreqdate').innerHTML = '';
+                    }
+                 
+                        var row = tBody.insertRow(-1);
+                        var cell = $(row.insertCell(-1));
+                        cell.html(seltype.text());
+                        cell = $(row.insertCell(-1));
+                        cell.html(selitem.text());
+                        cell = $(row.insertCell(-1));
+                        cell.html(txtqty.val());
+                        cell = $(row.insertCell(-1));
+                        cell.html(txtprice.val());
+                        cell = $(row.insertCell(-1));
+                        cell.html(selvendor.text());
+                        cell = $(row.insertCell(-1));
+                        cell.html(reqdate.val());
+
+                        cell = $(row.insertCell(-1));
+                        var btnRemove = $("<input/>");
+                        btnRemove.attr("type", "button");
+                        btnRemove.attr("onclick", "Remove(this);")
+                        btnRemove.attr("class", "btn btn-danger btn-sm")
+                        btnRemove.val("Remove");
+                        cell.append(btnRemove);
 
 
-                    var row = tBody.insertRow(-1);
-                    var cell = $(row.insertCell(-1));
-                    cell.html(seltype.text());
-                    cell = $(row.insertCell(-1));
-                    cell.html(selitem.val());
-                    cell = $(row.insertCell(-1));
-                    cell.html(txtqty.val());
-                    cell = $(row.insertCell(-1));
-                    cell.html(txtprice.val());
-                    cell = $(row.insertCell(-1));
-                    cell.html(selvendor.val());
-                    cell = $(row.insertCell(-1));
-                    cell.html(reqdate.val());
-
-                    cell = $(row.insertCell(-1));
-                    var btnRemove = $("<input/>");
-                    btnRemove.attr("type", "button");
-                    btnRemove.attr("onclick", "Remove(this);")
-                    btnRemove.attr("class", "btn btn-danger btn-sm")
-                    btnRemove.val("Remove");
-                    cell.append(btnRemove);
-
-
-                    txtqty.val("");
-                    txtprice.val("");
+                        txtqty.val("");
+                        txtprice.val("");
+                    
                 }
             });
             function Remove(button) {
@@ -165,6 +218,37 @@
                     table.deleteRow(row[0].rowIndex);
                 }
             };
+            $("body").on("click", "#btnsavetodb", function (e) {
+               
+                var prlist = new Array();
+               
+                $("#tbllineforpr TBODY TR").each(function () {
+                    var row = $(this);
+                    var pr = {};
+                    pr.ItemName = row.find("TD").eq(1).html();
+                    pr.Quantity = row.find("TD").eq(2).html();
+                    pr.TotalPrice = row.find("TD").eq(3).html();
+                    pr.VendorName = row.find("TD").eq(4).html();
+                    pr.RequestedDate = row.find("TD").eq(5).html();
+                    prlist.push(pr);
+                });
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "/Inventory/CreatePR",
+                    data: JSON.stringify(prlist),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (res) {
+                        $.notify(res.message, {
+                            globalPosition: "top center",
+                            className: "success"
+
+                        });
+                    }
+                });
+            });
+          
         </script>
 
 

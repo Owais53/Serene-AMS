@@ -38,5 +38,11 @@ namespace Serene_AMS.DAL.Interface
         tblDocument AddPowithref(int PRref,int vendorid);
         void AddPO(tblDocument obj);
         void setstatusonpocreate(int docnoofpr);
+        tblDocument Addpr();
+        tblDocDetail AddPrdetails(int prno,int itemid,int vendorid,DateTime? reqdate,int? qty,decimal? totalprice);
+        void docdetails(tblDocDetail obj);
+        void upatedocdetail(int doc,string prno);
+        void updateduplicate(int doc, int itemid, int vendorid, int? qty, decimal? price, int prevqty, decimal prevprice);
+
     }
 }

@@ -60,6 +60,7 @@
           <Property Name="ItemId" Type="int" />
           <Property Name="ItemName" Type="nvarchar(max)" />
           <Property Name="VendorId" Type="int" />
+          <Property Name="VendorName" Type="nvarchar(max)" />
           <Property Name="RequestedDate" Type="date" />
           <Property Name="Quantity" Type="int" />
           <Property Name="DeliveryDate" Type="date" />
@@ -81,6 +82,7 @@
             <PropertyRef Name="DocumentNo" />
           </Key>
           <Property Name="DocumentNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Docno" Type="varchar(max)" />
           <Property Name="DTypeId" Type="int" />
           <Property Name="CreationDate" Type="date" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="50" />
@@ -832,6 +834,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="RequestedDate" Type="DateTime" Precision="0" />
           <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
           <Property Name="POReference" Type="Int32" />
+          <Property Name="VendorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblDoctype">
           <Key>
@@ -860,6 +863,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <NavigationProperty Name="tblDoctype" Relationship="Self.FK_tblDocument_tblDoctype" FromRole="tblDocument" ToRole="tblDoctype" />
           <NavigationProperty Name="tblPurchases" Relationship="Self.FK_tblPurchase_tblDocument" FromRole="tblDocument" ToRole="tblPurchase" />
           <Property Name="VendorId" Type="Int32" />
+          <Property Name="Docno" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblEmployee">
           <Key>
@@ -1596,6 +1600,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocDetails">
             <EntityTypeMapping TypeName="HrmsModel.tblDocDetail">
               <MappingFragment StoreEntitySet="tblDocDetails">
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
                 <ScalarProperty Name="POReference" ColumnName="POReference" />
                 <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
                 <ScalarProperty Name="RequestedDate" ColumnName="RequestedDate" />
@@ -1623,6 +1628,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocuments">
             <EntityTypeMapping TypeName="HrmsModel.tblDocument">
               <MappingFragment StoreEntitySet="tblDocument">
+                <ScalarProperty Name="Docno" ColumnName="Docno" />
                 <ScalarProperty Name="VendorId" ColumnName="VendorId" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
                 <ScalarProperty Name="DTypeId" ColumnName="DTypeId" />
