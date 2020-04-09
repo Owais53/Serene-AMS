@@ -87,7 +87,8 @@
                 <div>
                     <br />
                     <button type="submit" id="btnsavetodb" class="btn btn-primary">Submit</button>
-
+                   
+                   @Html.ActionLink("View PR", "PrintPR", "Inventory", null, new { @id="viewprlink",@class= "btn btn-primary",@style="display: none"} )
                 </div>
             </div>
         </div>
@@ -277,6 +278,17 @@
                             className: "success"
 
                         });
+                    }
+                });
+                $.ajax({
+                    type: "GET",
+                    url: "/Inventory/GetLastDoc",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (res) {
+                        if (res) {
+                            $("#viewprlink").show();
+                        }
                     }
                 });
             });

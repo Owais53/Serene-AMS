@@ -219,18 +219,21 @@ namespace Serene_AMS.Controllers
            
             IProcure obj = new Procure();   
            
-         var list = (from doc in obj.GetDocDetail()                      
+         var list = (from doc in obj.GetDocDetail() 
+                     join item in obj.Getitems() on doc.ItemId equals item.ItemId
                       where doc.DocumentNo == id
                       select new
                       {
-                          doc.ItemName,
+                          item.ItemName,
                           doc.Quantity,
+                          doc.RequestedDate,
                           doc.TotalPrice
                          
                       }).Select(x => new ProcureVM()
                       {
                          ItemName=x.ItemName,
                          Quantity=(int)x.Quantity,
+                         RequestedDate=(DateTime)x.RequestedDate,
                          Total=(int)x.TotalPrice
 
                       }).ToList();
@@ -618,6 +621,12 @@ namespace Serene_AMS.Controllers
           
           
             return Json(obj.getTotalPrice(qty, item),JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetLastDoc()
+        {
+            
+          
+            return Json(db.getDocumentNo(),JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public JsonResult PostPrItems(string type,string item,int qty,decimal price,string vendor,DateTime redate)

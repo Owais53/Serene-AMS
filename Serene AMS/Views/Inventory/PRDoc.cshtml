@@ -80,7 +80,8 @@
                 <thead>
                     <tr>
                         <th>Item</th>
-                        <th>Quantity</th>                       
+                        <th>Quantity</th>   
+                        <th>Requested Date</th>
                         <th class="text-right">Total</th>
 
                     </tr>
@@ -118,7 +119,10 @@
                     data: { id: $("#getdocno2").val() },
                     success: function (res) {
                         $.each(res, function (i, v) {
-                            $("#getprrecord").append($('<tr><td><div><strong>' + v.ItemName + '</strong></div></td><td>' + v.Quantity + '</td><td>' + v.Total + '</td></tr>'))
+                            var date = new Date(parseInt(v.RequestedDate.substr(6)));
+                            var month = date.getMonth() + 1;
+
+                            $("#getprrecord").append($('<tr><td><div><strong>' + v.ItemName + '</strong></div></td><td>' + v.Quantity + '</td><td>' + date.getFullYear() + "/" + month + "/" + date.getDate() +'</td><td>' + v.Total + '</td></tr>'))
                           
                         });
 
