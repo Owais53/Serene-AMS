@@ -105,6 +105,26 @@ namespace Serene_AMS.DAL.Repository
             context.tblDocuments.Add(obj);
         }
 
+        public void Addprline(tblprlineitem obj)
+        {
+            context.tblprlineitems.Add(obj);
+        }
+
+        public tblprlineitem addprlineitem(string itype, string item, int qty, decimal price, string vendor, DateTime reqdate)
+        {
+            var add = new tblprlineitem()
+            {
+                ItemType=itype,
+                ItemName=item,
+                Quantity=qty,
+                ItemPrice=price,
+                VendorName=vendor,
+                RequestedDate=reqdate,
+                Status="Pending",
+            };
+            return add;
+        }
+
         public tblSL AddSL(string city, string SL)
         {
             var add = new tblSL()
@@ -187,6 +207,11 @@ namespace Serene_AMS.DAL.Repository
             return context.tblItemTypes;
         }
 
+        public IEnumerable<tblprlineitem> Getprline()
+        {
+            return context.tblprlineitems;
+        }
+
         public IEnumerable<tblSL> GetSL()
         {
             return context.tblSLs;
@@ -246,9 +271,9 @@ namespace Serene_AMS.DAL.Repository
 
         public void updateduplicate(int doc, int itemid, int vendorid, int? qty, decimal? price, int prevqty, decimal prevprice)
         {
-            var obj = context.tblDocDetails.Where(x => x.DocumentNo == doc && x.ItemId==itemid && x.VendorId==vendorid).FirstOrDefault();
-            obj.Quantity = prevqty + qty;
-            obj.TotalPrice = prevprice + price;
+            var obj = context.tblDocDetails.Where(x => x.Id == doc && x.ItemId==itemid && x.VendorId==vendorid).FirstOrDefault();
+            obj.Quantity =  obj.Quantity+ qty;
+            obj.TotalPrice = obj.TotalPrice+ price;
             context.Entry(obj).State = EntityState.Modified;
         }
 

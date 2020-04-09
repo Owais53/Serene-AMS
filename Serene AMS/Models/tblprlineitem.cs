@@ -12,21 +12,15 @@ namespace Serene_AMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tblDocDetail
+    public partial class tblprlineitem
     {
         public int Id { get; set; }
-        public Nullable<int> DocumentNo { get; set; }
-        public Nullable<int> ItemId { get; set; }
+        public string ItemType { get; set; }
         public string ItemName { get; set; }
-        public Nullable<int> VendorId { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<decimal> ItemPrice { get; set; }
         public string VendorName { get; set; }
         public Nullable<System.DateTime> RequestedDate { get; set; }
-        public Nullable<int> Quantity { get; set; }
-        public Nullable<System.DateTime> DeliveryDate { get; set; }
-        public Nullable<decimal> TotalPrice { get; set; }
-        public Nullable<int> POReference { get; set; }
-    
-        public virtual tblDocument tblDocument { get; set; }
-        public virtual tblVendor tblVendor { get; set; }
+        public string Status { get; set; }
     }
 }

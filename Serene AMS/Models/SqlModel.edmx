@@ -196,6 +196,19 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <Property Name="CasualLeave" Type="int" />
           <Property Name="SickLeave" Type="int" />
         </EntityType>
+        <EntityType Name="tblprlineitem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemType" Type="varchar(max)" />
+          <Property Name="ItemName" Type="varchar(max)" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="ItemPrice" Type="money" />
+          <Property Name="VendorName" Type="varchar(max)" />
+          <Property Name="RequestedDate" Type="date" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="tblPurchase">
           <Key>
             <PropertyRef Name="PurchaseId" />
@@ -634,6 +647,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySet Name="tblItemType" EntityType="Self.tblItemType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPosition" EntityType="Self.tblPosition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPositionLeavetypes" EntityType="Self.tblPositionLeavetypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblprlineitem" EntityType="Self.tblprlineitem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchase" EntityType="Self.tblPurchase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseitem" EntityType="Self.tblPurchaseitem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblRequests" EntityType="Self.tblRequests" Schema="dbo" store:Type="Tables" />
@@ -827,14 +841,14 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="ItemId" Type="Int32" />
           <Property Name="ItemName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="VendorId" Type="Int32" />
+          <Property Name="VendorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RequestedDate" Type="DateTime" Precision="0" />
           <Property Name="Quantity" Type="Int32" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
           <Property Name="TotalPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="POReference" Type="Int32" />
           <NavigationProperty Name="tblDocument" Relationship="Self.FK_tblDocDetails_tblDocument" FromRole="tblDocDetails" ToRole="tblDocument" />
           <NavigationProperty Name="tblVendor" Relationship="Self.FK_tblDocDetails_tblVendor" FromRole="tblDocDetails" ToRole="tblVendors" />
-          <Property Name="RequestedDate" Type="DateTime" Precision="0" />
-          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
-          <Property Name="POReference" Type="Int32" />
-          <Property Name="VendorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblDoctype">
           <Key>
@@ -852,18 +866,18 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <PropertyRef Name="DocumentNo" />
           </Key>
           <Property Name="DocumentNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Docno" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DTypeId" Type="Int32" />
           <Property Name="CreationDate" Type="DateTime" Precision="0" />
           <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DocStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="VendorId" Type="Int32" />
           <Property Name="ItemName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PrReferenceNo" Type="Int32" />
           <NavigationProperty Name="tblDocDetails" Relationship="Self.FK_tblDocDetails_tblDocument" FromRole="tblDocument" ToRole="tblDocDetails" />
           <NavigationProperty Name="tblDoctype" Relationship="Self.FK_tblDocument_tblDoctype" FromRole="tblDocument" ToRole="tblDoctype" />
           <NavigationProperty Name="tblPurchases" Relationship="Self.FK_tblPurchase_tblDocument" FromRole="tblDocument" ToRole="tblPurchase" />
-          <Property Name="VendorId" Type="Int32" />
-          <Property Name="Docno" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblEmployee">
           <Key>
@@ -972,6 +986,19 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="PositionId" Type="Int32" />
           <Property Name="CasualLeave" Type="Int32" />
           <Property Name="SickLeave" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tblprlineitem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ItemName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="ItemPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="VendorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RequestedDate" Type="DateTime" Precision="0" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblPurchase">
           <Key>
@@ -1435,6 +1462,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySet Name="tblItemTypes" EntityType="Self.tblItemType" />
           <EntitySet Name="tblPositions" EntityType="Self.tblPosition" />
           <EntitySet Name="tblPositionLeavetypes" EntityType="Self.tblPositionLeavetype" />
+          <EntitySet Name="tblprlineitems" EntityType="Self.tblprlineitem" />
           <EntitySet Name="tblPurchases" EntityType="Self.tblPurchase" />
           <EntitySet Name="tblPurchaseitems" EntityType="Self.tblPurchaseitem" />
           <EntitySet Name="tblRequests" EntityType="Self.tblRequest" />
@@ -1600,17 +1628,17 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocDetails">
             <EntityTypeMapping TypeName="HrmsModel.tblDocDetail">
               <MappingFragment StoreEntitySet="tblDocDetails">
-                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
-                <ScalarProperty Name="POReference" ColumnName="POReference" />
-                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
-                <ScalarProperty Name="RequestedDate" ColumnName="RequestedDate" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="RequestedDate" ColumnName="RequestedDate" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
                 <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="POReference" ColumnName="POReference" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1628,14 +1656,14 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocuments">
             <EntityTypeMapping TypeName="HrmsModel.tblDocument">
               <MappingFragment StoreEntitySet="tblDocument">
-                <ScalarProperty Name="Docno" ColumnName="Docno" />
-                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+                <ScalarProperty Name="Docno" ColumnName="Docno" />
                 <ScalarProperty Name="DTypeId" ColumnName="DTypeId" />
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="DocStatus" ColumnName="DocStatus" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="PrReferenceNo" ColumnName="PrReferenceNo" />
               </MappingFragment>
@@ -1739,6 +1767,20 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
                 <ScalarProperty Name="PositionId" ColumnName="PositionId" />
                 <ScalarProperty Name="CasualLeave" ColumnName="CasualLeave" />
                 <ScalarProperty Name="SickLeave" ColumnName="SickLeave" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblprlineitems">
+            <EntityTypeMapping TypeName="HrmsModel.tblprlineitem">
+              <MappingFragment StoreEntitySet="tblprlineitem">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="RequestedDate" ColumnName="RequestedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

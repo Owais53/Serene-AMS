@@ -40,6 +40,7 @@ namespace Serene_AMS.Models
         public virtual DbSet<tblItemType> tblItemTypes { get; set; }
         public virtual DbSet<tblPosition> tblPositions { get; set; }
         public virtual DbSet<tblPositionLeavetype> tblPositionLeavetypes { get; set; }
+        public virtual DbSet<tblprlineitem> tblprlineitems { get; set; }
         public virtual DbSet<tblPurchase> tblPurchases { get; set; }
         public virtual DbSet<tblPurchaseitem> tblPurchaseitems { get; set; }
         public virtual DbSet<tblRequest> tblRequests { get; set; }

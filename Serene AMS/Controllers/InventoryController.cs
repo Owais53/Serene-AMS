@@ -17,7 +17,7 @@ namespace Serene_AMS.Controllers
     public class InventoryController : Controller
     {
         InsertmultipleitemPR db = new InsertmultipleitemPR();
-        
+        HrmsEntities context = new HrmsEntities();
         [HttpGet]
         public ActionResult CreatePurchaseRequest()
         {
@@ -582,6 +582,7 @@ namespace Serene_AMS.Controllers
         {
             IProcure obj = new Procure();
             InsertmultipleitemPR getid = new InsertmultipleitemPR();
+            
             NumberSequence seq = new NumberSequence();
             if (prlist == null)
             {
@@ -593,21 +594,20 @@ namespace Serene_AMS.Controllers
             string no= seq.GenerateNo("PR",add.DocumentNo);
             obj.upatedocdetail(add.DocumentNo,no);
             obj.Save();
-
-            foreach(tblDocDetail pr in prlist)
+            var anyrecord = obj.GetDocDetail().Where(x => x.DocumentNo == add.DocumentNo).FirstOrDefault();
+            foreach (tblDocDetail pr in prlist)
             {
-                if (db.checkduplicate(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName)) == getid.getItemid(pr.ItemName))
-                {
-                    obj.updateduplicate(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName),pr.Quantity,pr.TotalPrice,db.getqty(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName)),db.getprice(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName)));
-                    obj.Save();
-                }
-                else
+               
+                if (anyrecord == null)
                 {
                     var adddet = obj.AddPrdetails(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName), pr.RequestedDate, pr.Quantity, pr.TotalPrice);
                     obj.docdetails(adddet);
+                    obj.Save();
+                   
                 }
+               
             }
-            obj.Save();
+           
 
             return Json(new {prlist,message="PR "+add.DocumentNo+" Created" },JsonRequestBehavior.AllowGet);
 
@@ -618,6 +618,46 @@ namespace Serene_AMS.Controllers
           
           
             return Json(obj.getTotalPrice(qty, item),JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult PostPrItems(string type,string item,int qty,decimal price,string vendor,DateTime redate)
+        {
+            IProcure obj = new Procure();
+            var add = obj.addprlineitem(type,item,qty,price,vendor,redate);
+            obj.Addprline(add);
+            obj.Save();
+            return Json( JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetPrlineitem()
+        {
+            ReqList obj = new ReqList();
+            DataSet ds = obj.Show_PRlineitem();
+            List<tblprlineitem> list = new List<tblprlineitem>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                list.Add(new tblprlineitem
+                {
+                    Id=Convert.ToInt32(dr["Id"]),
+                    ItemType = dr["ItemType"].ToString(),
+                    ItemName = dr["ItemName"].ToString(),
+                    Quantity = Convert.ToInt32(dr["Quantity"]),
+                    ItemPrice = Convert.ToDecimal(dr["ItemPrice"]),
+                    VendorName=dr["VendorName"].ToString(),
+                    RequestedDate = Convert.ToDateTime(dr["RequestedDate"])
+                   
+
+                });
+            }
+            return Json(list,JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult Removeprline(int id)
+        {
+
+            db.Removeprline(id);
+                 
+            return Json( JsonRequestBehavior.AllowGet);
         }
     }
 }

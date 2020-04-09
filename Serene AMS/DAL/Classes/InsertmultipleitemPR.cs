@@ -48,18 +48,33 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
-        public int getPrNo()
+        public int getPrNo(int itemid,int vendorid,int doc)
         {
             int id;
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
-                String s = "SELECT max(DocumentNo) FROM [Hrms].[dbo].[tblDocument] ";
+                String s = "SELECT min(Id) FROM [Hrms].[dbo].[tblDocDetails] where DocumentNo=@doc and ItemId=@item and VendorId=@vendorid";
                 SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@doc", doc);
+                smd.Parameters.AddWithValue("@item", itemid);
+                smd.Parameters.AddWithValue("@vendorid", vendorid);
                 id = (int)smd.ExecuteScalar();
 
             }
             return id;
+        }
+        public void Removeprline(int id)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                using (SqlCommand com = new SqlCommand("DELETE FROM tblprlineitem WHERE Id=@ID", con))
+                {
+                    com.Parameters.AddWithValue("@ID", id);
+                    com.ExecuteNonQuery();
+                }
+            }
         }
         public int getItemid(string item)
         {
@@ -70,6 +85,20 @@ namespace Serene_AMS.DAL.Classes
                 String s = "SELECT ItemId FROM [Hrms].[dbo].[tblItem] Where ItemName=@item";
                 SqlCommand smd = new SqlCommand(s, con);
                 smd.Parameters.AddWithValue("@item", item);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getminItemid(int no)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT min(ItemId) FROM [Hrms].[dbo].[tblItem] Where DocumentNo=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@item", no);
                 id = (int)smd.ExecuteScalar();
 
             }
@@ -121,9 +150,9 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
-        public int getprice(int docno, int itemid, int vendorid)
+        public decimal getprice(int docno, int itemid, int vendorid)
         {
-            int id;
+            decimal id;
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
@@ -132,7 +161,7 @@ namespace Serene_AMS.DAL.Classes
                 smd.Parameters.AddWithValue("@vendor", vendorid);
                 smd.Parameters.AddWithValue("@doc", docno);
                 smd.Parameters.AddWithValue("@item", itemid);
-                id = (int)smd.ExecuteScalar();
+                id = (decimal)smd.ExecuteScalar();
 
             }
             return id;

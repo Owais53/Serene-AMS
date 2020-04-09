@@ -116,6 +116,15 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_PRlineitem()
+        {
+
+            SqlCommand com = new SqlCommand("select Id,ItemType,ItemName,Quantity,ItemPrice,VendorName,RequestedDate from tblprlineitem where Status='Pending' ", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
 
 
     }

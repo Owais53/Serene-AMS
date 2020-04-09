@@ -286,6 +286,9 @@
     <Compile Include="Models\tblPositionLeavetype.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblprlineitem.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblPurchase.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>

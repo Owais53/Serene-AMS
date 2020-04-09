@@ -18,6 +18,7 @@ namespace Serene_AMS.DAL.Interface
         IEnumerable<tblDocument> GetDoc();
         IEnumerable<tblDocDetail> GetDocDetail();
         IEnumerable<tblVendor> GetVendor();
+        IEnumerable<tblprlineitem> Getprline();
         void AddTypes(tblItemType obj);
         tblItemType AddItemtype(string ItemType);
         IEnumerable<tblItem> Getitems();
@@ -43,6 +44,7 @@ namespace Serene_AMS.DAL.Interface
         void docdetails(tblDocDetail obj);
         void upatedocdetail(int doc,string prno);
         void updateduplicate(int doc, int itemid, int vendorid, int? qty, decimal? price, int prevqty, decimal prevprice);
-
+        tblprlineitem addprlineitem(string itype,string item,int qty,decimal price,string vendor,DateTime reqdate);
+        void Addprline(tblprlineitem obj);
     }
 }
