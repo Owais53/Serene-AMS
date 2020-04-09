@@ -46,5 +46,6 @@ namespace Serene_AMS.DAL.Interface
         void updateduplicate(int doc, int itemid, int vendorid, int? qty, decimal? price, int prevqty, decimal prevprice);
         tblprlineitem addprlineitem(string itype,string item,int qty,decimal price,string vendor,DateTime reqdate);
         void Addprline(tblprlineitem obj);
+        void updateprlineitem(string item, string vendor, int qty, decimal itemprice);
     }
 }

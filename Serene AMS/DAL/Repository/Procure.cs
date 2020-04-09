@@ -121,6 +121,7 @@ namespace Serene_AMS.DAL.Repository
                 VendorName=vendor,
                 RequestedDate=reqdate,
                 Status="Pending",
+                Date=DateTime.Now.Date,
             };
             return add;
         }
@@ -292,6 +293,14 @@ namespace Serene_AMS.DAL.Repository
         {
             var obj = context.tblItemTypes.Find(id);
             obj.ItemType = itemtype;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void updateprlineitem(string item, string vendor, int qty, decimal itemprice)
+        {
+            var obj = context.tblprlineitems.Where(x => x.ItemName == item && x.VendorName == vendor).FirstOrDefault();
+            obj.Quantity = obj.Quantity + qty;
+            obj.ItemPrice = obj.ItemPrice + itemprice;
             context.Entry(obj).State = EntityState.Modified;
         }
 

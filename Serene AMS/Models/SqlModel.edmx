@@ -208,6 +208,7 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <Property Name="VendorName" Type="varchar(max)" />
           <Property Name="RequestedDate" Type="date" />
           <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="Date" Type="date" />
         </EntityType>
         <EntityType Name="tblPurchase">
           <Key>
@@ -999,6 +1000,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="VendorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RequestedDate" Type="DateTime" Precision="0" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="tblPurchase">
           <Key>
@@ -1773,6 +1775,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblprlineitems">
             <EntityTypeMapping TypeName="HrmsModel.tblprlineitem">
               <MappingFragment StoreEntitySet="tblprlineitem">
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ItemType" ColumnName="ItemType" />

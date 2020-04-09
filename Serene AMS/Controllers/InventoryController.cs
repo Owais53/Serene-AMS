@@ -623,9 +623,20 @@ namespace Serene_AMS.Controllers
         public JsonResult PostPrItems(string type,string item,int qty,decimal price,string vendor,DateTime redate)
         {
             IProcure obj = new Procure();
-            var add = obj.addprlineitem(type,item,qty,price,vendor,redate);
-            obj.Addprline(add);
-            obj.Save();
+            bool flag = db.getItemName(item);
+            bool flag1 = db.getVendorName(vendor);
+            if (flag && flag1)
+            {
+                obj.updateprlineitem(item,vendor,qty,price);
+                obj.Save();
+            }
+            else
+            {
+
+                var add = obj.addprlineitem(type, item, qty, price, vendor, redate);
+                obj.Addprline(add);
+                obj.Save();
+            }
             return Json( JsonRequestBehavior.AllowGet);
         }
 
@@ -659,5 +670,11 @@ namespace Serene_AMS.Controllers
                  
             return Json( JsonRequestBehavior.AllowGet);
         }
+        public JsonResult DeletePrline()
+        {
+            db.Deleteprline();
+            return Json( JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

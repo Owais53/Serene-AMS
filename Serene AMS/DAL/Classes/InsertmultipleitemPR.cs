@@ -35,6 +35,52 @@ namespace Serene_AMS.DAL.Classes
                 return a;
             }
         }
+        public bool getItemName(string item)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select * from tblprlineitem";
+                SqlCommand smd = new SqlCommand(s, con);
+               
+
+                SqlDataReader sdr = smd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    if (sdr[2].ToString() == item)
+                    {
+                        return true;
+                        
+                    }
+                }
+                
+            }
+
+            return false;
+        }
+        public bool getVendorName(string vendor)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select * from tblprlineitem";
+                SqlCommand smd = new SqlCommand(s, con);
+
+
+                SqlDataReader sdr = smd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    if (sdr[5].ToString() == vendor)
+                    {
+                        return true;
+
+                    }
+                }
+
+            }
+
+            return false;
+        }
         public int getDocumentNo()
         {
             int id;
@@ -72,6 +118,18 @@ namespace Serene_AMS.DAL.Classes
                 using (SqlCommand com = new SqlCommand("DELETE FROM tblprlineitem WHERE Id=@ID", con))
                 {
                     com.Parameters.AddWithValue("@ID", id);
+                    com.ExecuteNonQuery();
+                }
+            }
+        }
+        public void Deleteprline()
+        {           
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                using (SqlCommand com = new SqlCommand("DELETE FROM tblprlineitem WHERE Date<=@date", con))
+                {
+                    com.Parameters.AddWithValue("@date", DateTime.Now.Date);
                     com.ExecuteNonQuery();
                 }
             }
