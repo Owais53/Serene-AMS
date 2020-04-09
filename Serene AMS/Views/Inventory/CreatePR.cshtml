@@ -273,24 +273,24 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (res) {
-                        $.notify(res.message, {
-                            globalPosition: "top center",
-                            className: "success"
+                        if (res.code == 0) {
+                            $.notify(res.message, {
+                                globalPosition: "top center",
+                                className: "error"
 
-                        });
-                    }
-                });
-                $.ajax({
-                    type: "GET",
-                    url: "/Inventory/GetLastDoc",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (res) {
-                        if (res) {
+                            });
+                        } else {
+
+                            $.notify(res.message, {
+                                globalPosition: "top center",
+                                className: "success"
+
+                            });
                             $("#viewprlink").show();
                         }
                     }
                 });
+               
             });
             function showinserteddata()
             {

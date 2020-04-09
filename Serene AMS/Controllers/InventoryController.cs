@@ -587,33 +587,44 @@ namespace Serene_AMS.Controllers
             InsertmultipleitemPR getid = new InsertmultipleitemPR();
             
             NumberSequence seq = new NumberSequence();
+
             if (prlist == null)
             {
                 prlist = new List<tblDocDetail>();
+                return Json(new { code=0, message = "Please add to list before Submitting" }, JsonRequestBehavior.AllowGet);
             }
-            var add=obj.Addpr();
-            obj.AddPRItems(add);
-            obj.Save();
-            string no= seq.GenerateNo("PR",add.DocumentNo);
-            obj.upatedocdetail(add.DocumentNo,no);
-            obj.Save();
-            var anyrecord = obj.GetDocDetail().Where(x => x.DocumentNo == add.DocumentNo).FirstOrDefault();
-            foreach (tblDocDetail pr in prlist)
+            else
             {
-               
-                if (anyrecord == null)
+                if (prlist == null)
                 {
-                    var adddet = obj.AddPrdetails(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName), pr.RequestedDate, pr.Quantity, pr.TotalPrice);
-                    obj.docdetails(adddet);
-                    obj.Save();
-                   
+                    prlist = new List<tblDocDetail>();
+                    
                 }
-               
+
+                var add = obj.Addpr();
+                obj.AddPRItems(add);
+                obj.Save();
+                string no = seq.GenerateNo("PR", add.DocumentNo);
+                obj.upatedocdetail(add.DocumentNo, no);
+                obj.Save();
+                var anyrecord = obj.GetDocDetail().Where(x => x.DocumentNo == add.DocumentNo).FirstOrDefault();
+                foreach (tblDocDetail pr in prlist)
+                {
+
+                    if (anyrecord == null)
+                    {
+                        var adddet = obj.AddPrdetails(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName), pr.RequestedDate, pr.Quantity, pr.TotalPrice);
+                        obj.docdetails(adddet);
+                        obj.Save();
+
+                    }
+
+                }
+
+
+                return Json(new { prlist, message = "PR " + add.DocumentNo + " Created" }, JsonRequestBehavior.AllowGet);
             }
-           
-
-            return Json(new {prlist,message="PR "+add.DocumentNo+" Created" },JsonRequestBehavior.AllowGet);
-
+            return Json(JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetItemPrice(int qty,int item)
         {
