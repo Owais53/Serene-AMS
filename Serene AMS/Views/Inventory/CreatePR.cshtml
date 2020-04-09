@@ -238,7 +238,7 @@
                      type: "POST",
                         url: '@Url.Action("PostPrItems")',
                         data: JSON.stringify({ type: seltype.text(), item: selitem.text(), qty: txtqty.val(), price: txtprice.val(), vendor: selvendor.text(), redate: reqdate.val() }), //use id here
-                    dataType: "json",
+                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: function () {
 

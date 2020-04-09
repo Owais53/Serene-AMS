@@ -4,7 +4,7 @@
 
     <div class="modal-content responsive" id="pritemsmodal">
         <div class="modal-header">
-            <h4 class="modal-title">Select Items for Vendor</h4>
+            <h4 class="modal-title">View Purchase Request Details</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
 
         </div>
@@ -16,7 +16,9 @@
 
                         <th>Document No</th>
                         <th>Items</th>
-                        <th>Action</th>
+                        <th>Quantity</th>
+                        <th>Vendor</th>
+                        <th>Requested Date</th>
                     </tr>
                 </thead>
                 <tbody id="getitemsofpr"></tbody>
@@ -24,7 +26,9 @@
                     <tr>
                         <th>Document No</th>
                         <th>Items</th>
-                        <th>Action</th>
+                        <th>Quantity</th>
+                        <th>Vendor</th>
+                        <th>Requested Date</th>
                     </tr>
                 </tfoot>
 
@@ -34,43 +38,9 @@
 
         </div>
         <div class="modal-footer">
-
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
     </div>
 
 </form>
 
-@section scripts{
-    <script type="text/javascript">
-        var dataTable1;
-        $(function () {
-
-            dataTable1 = $('#tblpritemsvendor').DataTable({
-                pageLength: 10,
-                "ajax": {
-                    "url": '/inventory/GetPrItemsforpo',
-                    "type": "get",
-                    "datatype": "json",
-                    "data": { DocNo: $("#getdocnoofpr").val() }
-
-                },
-
-                "columns": [
-
-                    { "data": "DocumentNo", "authowidth": false },
-                    { "data": "DocumentType", "authowidth": false },
-                    {
-                        "data": "DocumentNo", "render": function (data, type, full) {
-                            return "<button type='button' onclick=Getprforpo('" + data + "') class='btn btn-primary' id='getbtnpo'>Create PO</button>"
-                        },
-                    },
-
-
-                ]
-
-            });
-
-
-        });
-</script>
-}

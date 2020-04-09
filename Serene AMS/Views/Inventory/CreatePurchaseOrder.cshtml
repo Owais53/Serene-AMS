@@ -59,7 +59,7 @@
 
                     <div class="modal" id="Modalpritems" tabindex="-1" data-backdrop="false">
                         <div class="modal-dialog ">
-                            @Html.Partial("PRItemsPartial")
+                            @Html.Partial("PRDetailsPartial")
                         </div>
                     </div>
                 </div>
@@ -69,9 +69,9 @@
             <div class="row">
                 <div class="col-xs-12">
 
-                    <div class="modal" id="Modalvendorselect" tabindex="-1" data-backdrop="false">
-                        <div class="modal-dialog lg">
-                            @Html.Partial("POVendorPartial")
+                    <div class="modal" id="Modalconfirmreject" tabindex="-1" data-backdrop="false">
+                        <div class="modal-dialog sm">
+                            @Html.Partial("ConfirmRejectPartial")
                         </div>
                     </div>
                 </div>
@@ -127,15 +127,14 @@
 
                 "columns": [
 
-                    { "data": "DocumentNo", "authowidth": false },
+                    { "data": "Docno", "authowidth": false },
                     { "data": "DocumentType", "authowidth": false },
                     {
                         "data": "DocumentNo", "render": function (data, type, full) {
-                            return "<button type='button' onclick=Getprforpo('" + data + "') class='btn btn-primary' id='getbtnpo'>Create PO</button>"
+                            return "<button type='button' onclick=Getprforpo('" + data + "') class='btn btn-primary' id='getbtnpo'>View Details</button> <button type='submit' onclick=RejectPr('" + data + "') class='btn btn-danger' id='getbtnp'>Reject</button>"
                         },
-                    },
-
-
+                    }
+                   
                 ]
 
             });
@@ -146,30 +145,16 @@
         function Getprforpo(id) {
             $.ajax({
                 type: 'GET',
-                url: '/Inventory/RemovecommonPrItems',
-                data: { DocNo: id },
-                success: function (responses1) {
-
-                    $.each(responses1, function (i, v1) {
-                        $('#' + v1.DocNo + '').remove();
-
-                    });
-
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            })
-            $.ajax({
-                type: 'GET',
                 url: '/Inventory/RemovePrItemsforpo',
                 data: { DocNo: id },
-                success: function (responses1) {
+                success: function (responses) {
 
-                    $.each(responses1, function (i, v1) {
-                        $('#' + v1.DocNo + '').remove();
+                    $.each(responses, function (i, v) {
 
+                        $("#" + v.DocNo + "").remove();
+                       
                     });
+
 
                 },
                 error: function (error) {
@@ -183,7 +168,10 @@
                 success: function (responses) {
 
                     $.each(responses, function (i, v) {
-                        $("#getitemsofpr").append($('<tr id=' + v.DocNo + '><td>' + id + '</td><td>' + v.ItemName + '</td><td><button type="button" onclick=Getvendorforpo(' + v.Id + ') class="btn btn-success" id="getbtnpo">Select</button></td></tr>'))
+                        var date = new Date(parseInt(v.RequestedDate.substr(6)));
+                        var month = date.getMonth() + 1;
+                      
+                        $("#getitemsofpr").append($('<tr id="' + v.DocNo + '"><td>' + v.Prno + '</td><td>' + v.ItemName + '</td><td>' + v.Quantity + '</td><td>' + v.VendorName + '</td><td>' + date.getFullYear() + "/" + month + "/" + date.getDate() + '</td></tr>'))
 
                     });
 
@@ -201,6 +189,13 @@
             })
 
         }
+        function RejectPr(id) {
+            $.get("/Inventory/GetConfirmRejectPartial", { DocNo: id }, function (res) {
+                $("#confirmrejectmodal").html(res);
+                $("#Modalconfirmreject").modal('show');
+            })
+           
+        }
         function Getvendorforpo(id) {
             $.get("/Inventory/GetVendorforItem", { id: id }, function (res) {
                 $('#povendormodal').html(res);
@@ -210,33 +205,9 @@
 
             })
 
-
-
-
         }
-        $("#formpovendor").submit(function (e) {
-           
-            var modal = $("#Modalvendorselect");
-            var form = $('form[name="formpovendor"]');
-
-            form.validate();
-            if (!form.valid()) {
-                return;
-            } else {
-                var data = form.serialize();
-                alert(data);
-                $.post("/Inventory/GetVendorforItem", function (res) {
-                    if (res) {
-                        modal.modal('hide');
-                        $("#Modalvendorselect").modal('show');
-
-
-                    }
-
-                })
-            }
-            e.preventDefault();
-        });
+        
+       
         function OnSuccess(res) {
             if (res) {
                 $.ajax({
@@ -273,9 +244,8 @@
                        }
                 })
               
-                var modal = $("#Modalvendorselect");
-                if (res.code == 1) {
-
+                var modal = $("#Modalconfirmreject");
+               
 
                     modal.modal('hide');
                     $.notify(res.message, {
@@ -285,18 +255,7 @@
                     });
                     dataTableprpo.ajax.reload();
 
-                }
-                else {
-
-
-                    $.notify(res.message, {
-                        globalPosition: "top center",
-                        className: "error"
-
-                    });
-                    dataTableprpo.ajax.reload();
-
-                }
+              
                
                       
                    

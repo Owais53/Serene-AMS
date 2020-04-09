@@ -18,38 +18,7 @@ namespace Serene_AMS.Controllers
     {
         InsertmultipleitemPR db = new InsertmultipleitemPR();
         HrmsEntities context = new HrmsEntities();
-        [HttpGet]
-        public ActionResult CreatePurchaseRequest()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult CreatePurchaseRequest(ProcureVM model)
-        {
-            IProcure obj = new Procure();
-
-            string[] Itemcount = model.ItemsID.ToString().Split(',');
-
-            model.requestedMaterialArray = new string[Itemcount.Length];
-            for (int i = 0; i < Itemcount.Length; i++)
-            {
-                model.requestedMaterialArray[i] = Itemcount[i];
-            }
-            bool flag = db.savePR(model);
-            if (flag)
-            {
-                var DocNo = obj.GetDoc().Select(x => new ProcureVM { DocNo = x.DocumentNo }).LastOrDefault();
-
-                TempData["UpdateMessage3"] = "Success";
-                return View("SelectItemsQuantityforPR", DocNo);
-            }
-            else
-            {
-
-                return View();
-            }
-
-        }
+       
         public ActionResult GetItemsList()
         {
             IProcure repo = new Procure();
@@ -350,6 +319,7 @@ namespace Serene_AMS.Controllers
                         select new
                         {
                             u.DocumentNo,
+                            u.Docno,
                             doctype.DocumentType
                                                                              
                         }).ToList();
@@ -366,9 +336,13 @@ namespace Serene_AMS.Controllers
             {
                 list.Add(new ProcureVM
                 {
-                    DocNo=Convert.ToInt32(dr["DocumentNo"]),
+                    DocNo = Convert.ToInt32(dr["DocumentNo"]),
+                    Prno =dr["Docno"].ToString(),
                     ItemName = dr["ItemName"].ToString(),
-                    Id=Convert.ToInt32(dr["Id"])
+                    Quantity=Convert.ToInt32(dr["Quantity"]),
+                    VendorName=dr["VendorName"].ToString(),
+                    RequestedDate=Convert.ToDateTime(dr["RequestedDate"])
+               
 
                 });
             }
@@ -385,9 +359,12 @@ namespace Serene_AMS.Controllers
             {
                 list.Add(new ProcureVM
                 {
-                    DocNo = Convert.ToInt32(dr["DocumentNo"]),
+                    DocNo=Convert.ToInt32(dr["DocumentNo"]),
+                    Prno = dr["Docno"].ToString(),
                     ItemName = dr["ItemName"].ToString(),
-                    Id = Convert.ToInt32(dr["Id"])
+                    Quantity = Convert.ToInt32(dr["Quantity"]),
+                    VendorName = dr["VendorName"].ToString(),
+                    RequestedDate = Convert.ToDateTime(dr["RequestedDate"])
 
                 });
             }
@@ -431,7 +408,7 @@ namespace Serene_AMS.Controllers
                            
                         }).FirstOrDefault();
 
-            return PartialView("PRItemsPartial", Data);
+            return PartialView("PRDetailsPartial", Data);
         }
         public ActionResult GetVendorforItem(int id,ProcureVM model)
         {
@@ -622,9 +599,9 @@ namespace Serene_AMS.Controllers
                 }
 
 
-                return Json(new { prlist, message = "PR " + add.DocumentNo + " Created" }, JsonRequestBehavior.AllowGet);
+                return Json(new { prlist, message = "PR " + add.Docno + " Created" }, JsonRequestBehavior.AllowGet);
             }
-            return Json(JsonRequestBehavior.AllowGet);
+            
         }
         public JsonResult GetItemPrice(int qty,int item)
         {
@@ -695,6 +672,22 @@ namespace Serene_AMS.Controllers
             db.Deleteprline();
             return Json( JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        public ActionResult GetConfirmRejectPartial(int DocNo)
+        {
+            IProcure obj = new Procure();
+            var data = obj.GetDoc().Where(x => x.DocumentNo == DocNo).Select(x => new ProcureVM() { DocNo = x.DocumentNo }).FirstOrDefault();
 
+            return PartialView("ConfirmRejectPartial",data);
+        }
+
+        public JsonResult GetConfirmRejectPartial(ProcureVM model)
+        {
+            IProcure obj = new Procure();
+            obj.rejectpr(model.DocNo);
+            obj.Save();
+
+            return Json(new { code=0, message = "PR Rejected" },JsonRequestBehavior.AllowGet);
+        }
     }
 }

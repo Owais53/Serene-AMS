@@ -101,7 +101,7 @@ namespace Serene_AMS.DAL.Repository
         public DataSet Show_PRItemsdata(int Docno)
         {
            
-            SqlCommand com = new SqlCommand("select doc.DocumentNo,det.ItemName,det.Id from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo where doc.DocumentNo='" +Docno+ "' and det.VendorId IS NULL", con);
+            SqlCommand com = new SqlCommand("select doc.DocumentNo,doc.Docno,item.ItemName,det.Quantity,v.VendorName,det.RequestedDate from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo inner join tblItem item on det.ItemId=item.ItemId inner join tblVendors v on det.VendorId=v.VendorId where doc.DocumentNo='" +Docno+ "' and doc.Status='Pending' ", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -110,7 +110,7 @@ namespace Serene_AMS.DAL.Repository
         public DataSet DonotShow_PRItemsdata(int Docno)
         {
 
-            SqlCommand com = new SqlCommand("select doc.DocumentNo,det.ItemName,det.Id from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo where doc.DocumentNo!='" + Docno + "'", con);
+            SqlCommand com = new SqlCommand("select doc.DocumentNo,doc.Docno,item.ItemName,det.Quantity,v.VendorName,det.RequestedDate from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo inner join tblItem item on det.ItemId=item.ItemId inner join tblVendors v on det.VendorId=v.VendorId where doc.DocumentNo!='" + Docno + "'", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);

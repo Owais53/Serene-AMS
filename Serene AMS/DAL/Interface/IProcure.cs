@@ -47,5 +47,6 @@ namespace Serene_AMS.DAL.Interface
         tblprlineitem addprlineitem(string itype,string item,int qty,decimal price,string vendor,DateTime reqdate);
         void Addprline(tblprlineitem obj);
         void updateprlineitem(string item, string vendor, int qty, decimal itemprice);
+        void rejectpr(int id);
     }
 }

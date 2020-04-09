@@ -1107,19 +1107,17 @@
     <Content Include="Views\Admin\EditItemsPartial.cshtml" />
     <Content Include="Views\Admin\SetDocumentNumberRanges.cshtml" />
     <Content Include="Views\Admin\SetDocRangePartial.cshtml" />
-    <Content Include="Views\Inventory\CreatePurchaseRequest.cshtml" />
     <Content Include="Views\Admin\CreateVendors.cshtml" />
-    <Content Include="Views\Inventory\SelectItemsQuantityforPR.cshtml" />
-    <Content Include="Views\Inventory\AddQuantityPartial.cshtml" />
     <Content Include="Views\Inventory\CreatePurchaseOrder.cshtml" />
     <Content Include="Views\Inventory\PRPartial.cshtml" />
     <Content Include="Views\Inventory\PRDoc.cshtml" />
-    <Content Include="Views\Inventory\PRItemsPartial.cshtml" />
+    <Content Include="Views\Inventory\PRDetailsPartial.cshtml" />
     <Content Include="Views\Inventory\POVendorPartial.cshtml" />
     <Content Include="Views\Inventory\PODoc.cshtml" />
     <Content Include="Views\Inventory\PODocPartial.cshtml" />
     <Content Include="Scripts\jsrender.min" />
     <Content Include="Views\Inventory\CreatePR.cshtml" />
+    <Content Include="Views\Inventory\ConfirmRejectPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

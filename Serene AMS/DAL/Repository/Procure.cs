@@ -223,6 +223,13 @@ namespace Serene_AMS.DAL.Repository
             return context.tblVendors;
         }
 
+        public void rejectpr(int id)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == id).FirstOrDefault();
+            obj.Status = "Rejected";
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
         public void Save()
         {
             context.SaveChanges();
