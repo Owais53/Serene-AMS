@@ -61,9 +61,9 @@
           <Property Name="ItemName" Type="nvarchar(max)" />
           <Property Name="VendorId" Type="int" />
           <Property Name="VendorName" Type="nvarchar(max)" />
-          <Property Name="RequestedDate" Type="date" />
           <Property Name="Quantity" Type="int" />
-          <Property Name="DeliveryDate" Type="date" />
+          <Property Name="DeliveredQuantity" Type="int" />
+          <Property Name="RemainingQuantity" Type="int" />
           <Property Name="TotalPrice" Type="money" />
           <Property Name="POReference" Type="int" />
         </EntityType>
@@ -89,6 +89,7 @@
           <Property Name="DocStatus" Type="varchar" MaxLength="100" />
           <Property Name="Status" Type="varchar" MaxLength="75" />
           <Property Name="VendorId" Type="int" />
+          <Property Name="ItemRequestedDate" Type="date" />
           <Property Name="ItemName" Type="nvarchar(max)" />
           <Property Name="PrReferenceNo" Type="int" />
         </EntityType>
@@ -206,7 +207,6 @@ warning 6002: The table/view 'Hrms.dbo.tblOrganizationStructure' does not have a
           <Property Name="Quantity" Type="int" />
           <Property Name="ItemPrice" Type="money" />
           <Property Name="VendorName" Type="varchar(max)" />
-          <Property Name="RequestedDate" Type="date" />
           <Property Name="Status" Type="varchar" MaxLength="50" />
           <Property Name="Date" Type="date" />
         </EntityType>
@@ -843,13 +843,13 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="ItemName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="VendorId" Type="Int32" />
           <Property Name="VendorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="RequestedDate" Type="DateTime" Precision="0" />
           <Property Name="Quantity" Type="Int32" />
-          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
           <Property Name="TotalPrice" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="POReference" Type="Int32" />
           <NavigationProperty Name="tblDocument" Relationship="Self.FK_tblDocDetails_tblDocument" FromRole="tblDocDetails" ToRole="tblDocument" />
           <NavigationProperty Name="tblVendor" Relationship="Self.FK_tblDocDetails_tblVendor" FromRole="tblDocDetails" ToRole="tblVendors" />
+          <Property Name="DeliveredQuantity" Type="Int32" />
+          <Property Name="RemainingQuantity" Type="Int32" />
         </EntityType>
         <EntityType Name="tblDoctype">
           <Key>
@@ -879,6 +879,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <NavigationProperty Name="tblDocDetails" Relationship="Self.FK_tblDocDetails_tblDocument" FromRole="tblDocument" ToRole="tblDocDetails" />
           <NavigationProperty Name="tblDoctype" Relationship="Self.FK_tblDocument_tblDoctype" FromRole="tblDocument" ToRole="tblDoctype" />
           <NavigationProperty Name="tblPurchases" Relationship="Self.FK_tblPurchase_tblDocument" FromRole="tblDocument" ToRole="tblPurchase" />
+          <Property Name="ItemRequestedDate" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="tblEmployee">
           <Key>
@@ -998,7 +999,6 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="Quantity" Type="Int32" />
           <Property Name="ItemPrice" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="VendorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="RequestedDate" Type="DateTime" Precision="0" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Date" Type="DateTime" Precision="0" />
         </EntityType>
@@ -1630,15 +1630,15 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocDetails">
             <EntityTypeMapping TypeName="HrmsModel.tblDocDetail">
               <MappingFragment StoreEntitySet="tblDocDetails">
+                <ScalarProperty Name="RemainingQuantity" ColumnName="RemainingQuantity" />
+                <ScalarProperty Name="DeliveredQuantity" ColumnName="DeliveredQuantity" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="VendorId" ColumnName="VendorId" />
                 <ScalarProperty Name="VendorName" ColumnName="VendorName" />
-                <ScalarProperty Name="RequestedDate" ColumnName="RequestedDate" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
                 <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
                 <ScalarProperty Name="POReference" ColumnName="POReference" />
               </MappingFragment>
@@ -1658,6 +1658,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocuments">
             <EntityTypeMapping TypeName="HrmsModel.tblDocument">
               <MappingFragment StoreEntitySet="tblDocument">
+                <ScalarProperty Name="ItemRequestedDate" ColumnName="ItemRequestedDate" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
                 <ScalarProperty Name="Docno" ColumnName="Docno" />
                 <ScalarProperty Name="DTypeId" ColumnName="DTypeId" />
@@ -1783,7 +1784,6 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
                 <ScalarProperty Name="VendorName" ColumnName="VendorName" />
-                <ScalarProperty Name="RequestedDate" ColumnName="RequestedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

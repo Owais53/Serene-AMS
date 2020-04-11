@@ -73,7 +73,6 @@
                                 <th>Quantity</th>
                                 <th>Item Price</th>
                                 <th>Vendor</th>
-                                <th>Requested Date</th>
                             </tr>
                         </thead>
                         <tbody id="getprline"></tbody>
@@ -237,7 +236,7 @@
                     $.ajax({
                      type: "POST",
                         url: '@Url.Action("PostPrItems")',
-                        data: JSON.stringify({ type: seltype.text(), item: selitem.text(), qty: txtqty.val(), price: txtprice.val(), vendor: selvendor.text(), redate: reqdate.val() }), //use id here
+                        data: JSON.stringify({ type: seltype.text(), item: selitem.text(), qty: txtqty.val(), price: txtprice.val(), vendor: selvendor.text() }), //use id here
                      dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: function (res) {
@@ -275,7 +274,7 @@
                 $.ajax({
                     type: "POST",
                     url: "/Inventory/CreatePR",
-                    data: JSON.stringify(prlist),
+                    data: JSON.stringify(prlist), 
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (res) {
@@ -306,10 +305,9 @@
                     success: function (responses4) {
 
                         $.each(responses4, function (i, v) {
-                            var date = new Date(parseInt(v.RequestedDate.substr(6)));
-                            var month = date.getMonth() + 1;
+                           
                             $("#row" + v.Id + "").remove();
-                            $("#getprline").append($('<tr id="row' + v.Id + '"><td>' + v.ItemType + '</td><td>' + v.ItemName + '</td><td>' + v.Quantity + '</td><td>' + v.ItemPrice + '</td><td>' + v.VendorName + '</td><td>' + date.getFullYear() + "/" + month + "/" + date.getDate() + '</td><td><button type="button" onclick="Remove(' + v.Id + ')" class="btn btn-danger btn-sm">Remove</button></td></tr>'))
+                            $("#getprline").append($('<tr id="row' + v.Id + '"><td>' + v.ItemType + '</td><td>' + v.ItemName + '</td><td>' + v.Quantity + '</td><td>' + v.ItemPrice + '</td><td>' + v.VendorName + '</td><td><button type="button" onclick="Remove(' + v.Id + ')" class="btn btn-danger btn-sm">Remove</button></td></tr>'))
 
                         });
 

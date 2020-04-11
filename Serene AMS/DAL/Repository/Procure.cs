@@ -86,14 +86,13 @@ namespace Serene_AMS.DAL.Repository
             return add;
         }
 
-        public tblDocDetail AddPrdetails(int prno, int itemid, int vendorid, DateTime? reqdate, int? qty, decimal? totalprice)
+        public tblDocDetail AddPrdetails(int prno, int itemid, int vendorid, int? qty, decimal? totalprice)
         {
             var add = new tblDocDetail()
             {
                 DocumentNo=prno,
                 ItemId=itemid,
                 VendorId=vendorid,
-                RequestedDate=reqdate,
                 Quantity=qty,
                 TotalPrice=totalprice,
             };
@@ -110,7 +109,7 @@ namespace Serene_AMS.DAL.Repository
             context.tblprlineitems.Add(obj);
         }
 
-        public tblprlineitem addprlineitem(string itype, string item, int qty, decimal price, string vendor, DateTime reqdate)
+        public tblprlineitem addprlineitem(string itype, string item, int qty, decimal price, string vendor)
         {
             var add = new tblprlineitem()
             {
@@ -119,7 +118,6 @@ namespace Serene_AMS.DAL.Repository
                 Quantity=qty,
                 ItemPrice=price,
                 VendorName=vendor,
-                RequestedDate=reqdate,
                 Status="Pending",
                 Date=DateTime.Now.Date,
             };
@@ -223,6 +221,14 @@ namespace Serene_AMS.DAL.Repository
             return context.tblVendors;
         }
 
+        public void itemqtydelivered(int Prdocno, int itemid, int qty)
+        {
+            var obj = context.tblDocDetails.Where(x => x.DocumentNo == Prdocno && x.ItemId==itemid).FirstOrDefault();
+            obj.DeliveredQuantity = qty;
+            obj.RemainingQuantity = obj.Quantity - qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
         public void rejectpr(int id)
         {
             var obj = context.tblDocuments.Where(x => x.DocumentNo == id).FirstOrDefault();
@@ -243,12 +249,11 @@ namespace Serene_AMS.DAL.Repository
 
         }
 
-        public void SetVendorforItem(int detailid, int Itemid, int vendorid,DateTime deliverydate,int Poreference)
+        public void SetVendorforItem(int detailid, int Itemid, int vendorid,int Poreference)
         {
             var obj = context.tblDocDetails.Where(x => x.Id == detailid).FirstOrDefault();
             obj.ItemId = Itemid;
             obj.VendorId = vendorid;
-            obj.DeliveryDate = deliverydate;
             obj.POReference = Poreference;
             context.Entry(obj).State = EntityState.Modified;
         }
@@ -319,13 +324,12 @@ namespace Serene_AMS.DAL.Repository
             context.Entry(obj).State = EntityState.Modified;
         }
 
-        public void updatqty(int Id, string item, int qty,DateTime requesteddate)
+        public void updatqty(int Id, string item, int qty)
         {
             var price = context.tblItems.Where(x => x.ItemName == item).FirstOrDefault();
             var obj = context.tblDocDetails.Where(x => x.Id == Id).FirstOrDefault();
             obj.Quantity = qty;
             obj.TotalPrice = qty * price.ItemPrice;
-            obj.RequestedDate = requesteddate;
             context.Entry(obj).State = EntityState.Modified;
         }
 

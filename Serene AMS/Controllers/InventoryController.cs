@@ -135,7 +135,7 @@ namespace Serene_AMS.Controllers
                 obj.updateDocstatus(model.DocNo);
                 obj.Save();
             }
-            obj.updatqty(model.Id, model.ItemName, model.Quantity, model.RequestedDate);
+            obj.updatqty(model.Id, model.ItemName, model.Quantity);
             obj.Save();
 
             TempData["UpdateMessage3"] = "Success";
@@ -195,14 +195,12 @@ namespace Serene_AMS.Controllers
                         {
                             item.ItemName,
                             doc.Quantity,
-                            doc.RequestedDate,
                             doc.TotalPrice
 
                         }).Select(x => new ProcureVM()
                         {
                             ItemName = x.ItemName,
                             Quantity = (int)x.Quantity,
-                            RequestedDate = (DateTime)x.RequestedDate,
                             Total = (int)x.TotalPrice
 
                         }).ToList();
@@ -237,7 +235,7 @@ namespace Serene_AMS.Controllers
         public ActionResult PRDoc()
         {
             IProcure obj = new Procure();
-            var DocNo = obj.GetDoc().Select(x => new ProcureVM { DocNo = x.DocumentNo, Createdby = x.CreatedBy, Createdon = (DateTime)x.CreationDate }).LastOrDefault();
+            var DocNo = obj.GetDoc().Select(x => new ProcureVM { DocNo = x.DocumentNo, Createdby = x.CreatedBy, Createdon = (DateTime)x.CreationDate}).LastOrDefault();
             return View(DocNo);
         }
         public ActionResult GetPOHeader(int Docno)
@@ -295,14 +293,12 @@ namespace Serene_AMS.Controllers
                         {
                             doc.ItemName,
                             doc.Quantity,
-                            doc.DeliveryDate,
                             doc.TotalPrice
 
                         }).Select(x => new ProcureVM()
                         {
                             ItemName = x.ItemName,
                             Quantity = (int)x.Quantity,
-                            DeliveryDate = (DateTime)x.DeliveryDate,
                             Total = (int)x.TotalPrice
 
                         }).ToList();
@@ -341,7 +337,7 @@ namespace Serene_AMS.Controllers
                     ItemName = dr["ItemName"].ToString(),
                     Quantity = Convert.ToInt32(dr["Quantity"]),
                     VendorName = dr["VendorName"].ToString(),
-                    RequestedDate = Convert.ToDateTime(dr["RequestedDate"])
+                   
 
 
                 });
@@ -364,7 +360,7 @@ namespace Serene_AMS.Controllers
                     ItemName = dr["ItemName"].ToString(),
                     Quantity = Convert.ToInt32(dr["Quantity"]),
                     VendorName = dr["VendorName"].ToString(),
-                    RequestedDate = Convert.ToDateTime(dr["RequestedDate"])
+                    
 
                 });
             }
@@ -505,7 +501,7 @@ namespace Serene_AMS.Controllers
                         obj.Save();
                         obj.setstatusonpocreate(model.DocNo);
                         obj.Save();
-                        obj.SetVendorforItem(model.Id, model.ItemId, model.VendorId, model.DeliveryDate, add.DocumentNo);
+                        obj.SetVendorforItem(model.Id, model.ItemId, model.VendorId, add.DocumentNo);
                         obj.Save();
                         return Json(new { model, message = "Purchase Order Created with Document No. " + add.DocumentNo + " and Vendor Selected for Item " + model.ItemName + "", code = 1 }, JsonRequestBehavior.AllowGet);
                     }
@@ -515,7 +511,7 @@ namespace Serene_AMS.Controllers
 
                         SelectList vendorlst = new SelectList(list, "VendorId", "VendorName");
                         ViewBag.getvendorlist = vendorlst;
-                        obj.SetVendorforItem(model.Id, model.ItemId, model.VendorId, model.DeliveryDate, db.getPODocNo());
+                        obj.SetVendorforItem(model.Id, model.ItemId, model.VendorId,  db.getPODocNo());
                         obj.Save();
                         return Json(new { model, message = "Vendor Selected for Item " + model.ItemName + "", code = 1 }, JsonRequestBehavior.AllowGet);
 
@@ -531,7 +527,7 @@ namespace Serene_AMS.Controllers
                         obj.Save();
                         obj.setstatusonpocreate(model.DocNo);
                         obj.Save();
-                        obj.SetVendorforItem(model.Id, model.ItemId, model.VendorId, model.DeliveryDate, add.DocumentNo);
+                        obj.SetVendorforItem(model.Id, model.ItemId, model.VendorId,  add.DocumentNo);
                         obj.Save();
                         return Json(new { model, message = "Purchase Order Created with Document No. " + add.DocumentNo + " and Vendor Selected for each Item", code = 1 }, JsonRequestBehavior.AllowGet);
 
@@ -590,7 +586,7 @@ namespace Serene_AMS.Controllers
 
                     if (anyrecord == null)
                     {
-                        var adddet = obj.AddPrdetails(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName), pr.RequestedDate, pr.Quantity, pr.TotalPrice);
+                        var adddet = obj.AddPrdetails(add.DocumentNo, getid.getItemid(pr.ItemName), getid.getVendorId(pr.VendorName), pr.Quantity, pr.TotalPrice);
                         obj.docdetails(adddet);
                         obj.Save();
                         obj.vendorselect(add.DocumentNo, getid.getVendorId(pr.VendorName));
@@ -619,7 +615,7 @@ namespace Serene_AMS.Controllers
             return Json(db.getDocumentNo(), JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult PostPrItems(string type, string item, int qty, decimal price, string vendor, DateTime redate)
+        public JsonResult PostPrItems(string type, string item, int qty, decimal price, string vendor)
         {
             IProcure obj = new Procure();
             bool flag = db.getItemName(item);
@@ -637,7 +633,7 @@ namespace Serene_AMS.Controllers
 
                 if (vendorcheck==null)
                 {
-                    var add = obj.addprlineitem(type, item, qty, price, vendor, redate);
+                    var add = obj.addprlineitem(type, item, qty, price, vendor);
                     obj.Addprline(add);
                     obj.Save();
                    
@@ -669,7 +665,7 @@ namespace Serene_AMS.Controllers
                     Quantity = Convert.ToInt32(dr["Quantity"]),
                     ItemPrice = Convert.ToDecimal(dr["ItemPrice"]),
                     VendorName=dr["VendorName"].ToString(),
-                    RequestedDate = Convert.ToDateTime(dr["RequestedDate"])
+                  
                    
 
                 });
@@ -749,6 +745,142 @@ namespace Serene_AMS.Controllers
             obj.Save();
 
             return Json(new {message="Purchase Order "+add.Docno+" Created With Reference to Purchase Request "+model.Prno+"" },JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ViewPOforGR()
+        {
+            return View();
+        }
+        public JsonResult GetPOlistforGR()
+        {
+            IProcure repo =new Procure();
+            var Data = (from u in repo.GetDoc()
+                        join doctype in repo.GetDoctypes() on u.DTypeId equals doctype.TypeId
+                        where u.DocStatus == "Complete" && u.DTypeId == 3 && (u.Status==null || u.Status=="Partial Delivery")
+                        select new
+                        {
+                            u.DocumentNo,
+                            u.Docno,
+                            doctype.DocumentType
+
+                        }).ToList();
+            return Json(new {data=Data },JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult CreateGR(int? id)
+        {
+            IProcure obj = new Procure();
+
+            var data = (from doc in obj.GetDoc()
+                        join v in obj.GetVendor() on doc.VendorId equals v.VendorId
+                        where doc.DocumentNo == id && doc.DTypeId == 3
+                        select new ProcureVM()
+                        {
+                            DocNo=doc.DocumentNo,
+                            Prreferenceno=(int)doc.PrReferenceNo,
+                            Prno=doc.Docno,
+                            VendorName=v.VendorName
+                        }).FirstOrDefault();            
+          
+
+            
+            return View(data);
+        }
+        public JsonResult RemoveItemsforGR(int id)
+        {
+            ReqList li = new ReqList();
+            DataSet ds = li.NotShow_iteminddl(id);
+            List<ProcureVM> list = new List<ProcureVM>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                list.Add(new ProcureVM
+                {
+                    ItemId = Convert.ToInt32(dr["ItemId"]),
+                    ItemName = dr["ItemName"].ToString()
+
+                });
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetItemsforGR(int id)
+         {
+            ReqList li = new ReqList();
+            DataSet ds = li.Show_iteminddl(id);
+            List<ProcureVM> list = new List<ProcureVM>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                list.Add(new ProcureVM
+                {
+                    ItemId = Convert.ToInt32(dr["ItemId"]),
+                    ItemName = dr["ItemName"].ToString()
+
+                });
+            }
+
+            return Json(list,JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetItemsData(int id)
+        {
+            ReqList li = new ReqList();
+            DataSet ds = li.Show_itemDataingrid(id);
+            List<ProcureVM> list = new List<ProcureVM>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                list.Add(new ProcureVM
+                {
+                   ItemType=dr["ItemType"].ToString(),
+                   ItemName=dr["ItemName"].ToString(),
+                   Quantity=Convert.ToInt32(dr["Quantity"])
+                });
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult RemoveItemsData(int id)
+        {
+            ReqList li = new ReqList();
+            DataSet ds = li.Remove_itemDataingrid(id);
+            List<ProcureVM> list = new List<ProcureVM>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                list.Add(new ProcureVM
+                {
+                    ItemType = dr["ItemType"].ToString(),
+                    ItemName = dr["ItemName"].ToString(),
+                    Quantity = Convert.ToInt32(dr["Quantity"])
+                });
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetQuantityData(int id)
+        {
+            ReqList li = new ReqList();
+            DataSet ds = li.Show_QtyDataingrid(id);
+            List<ProcureVM> list = new List<ProcureVM>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                list.Add(new ProcureVM
+                {
+                   
+                    ItemName = dr["ItemName"].ToString(),
+                    DeliveredQuantity = Convert.ToInt32(dr["DeliveredQuantity"]),
+                    RemainingQuantity= Convert.ToInt32(dr["RemainingQuantity"])
+                });
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult PostQuantityItems(int PrDocno,int item,int qty)
+        {
+            IProcure obj = new Procure();
+            obj.itemqtydelivered(PrDocno,item,qty);
+            obj.Save();
+            return Json( JsonRequestBehavior.AllowGet);
         }
 
     }

@@ -1119,6 +1119,8 @@
     <Content Include="Views\Inventory\CreatePR.cshtml" />
     <Content Include="Views\Inventory\ConfirmRejectPartial.cshtml" />
     <Content Include="Views\Inventory\CreatePO.cshtml" />
+    <Content Include="Views\Inventory\ViewPOforGR.cshtml" />
+    <Content Include="Views\Inventory\CreateGR.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

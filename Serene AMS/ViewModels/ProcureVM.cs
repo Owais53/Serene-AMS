@@ -59,11 +59,20 @@ namespace Serene_AMS.ViewModels
         public int Prreferenceno { get; set; }
         public int VendorId { get; set; }
         public string Prno { get; set; }
+        public int DeliveredQuantity { get; set; }
+        public int RemainingQuantity { get; set; }
         public string ReturnCreationDateForDisplay
         {
             get
             {
                 return this.Createdon.ToString("d");
+            }
+        }
+        public string ReturnRequestedDateForDisplay
+        {
+            get
+            {
+                return this.RequestedDate.ToString("d");
             }
         }
         public IEnumerable<ProcureVM> PoData { get; set; }

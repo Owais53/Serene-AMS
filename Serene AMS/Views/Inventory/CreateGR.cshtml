@@ -1,0 +1,209 @@
+﻿@model Serene_AMS.ViewModels.ProcureVM
+@{
+    ViewBag.Title = "CreateGR";
+}
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Create Goods Receipt
+        </li>
+    </ol>
+</nav>
+
+<div class="ibox">
+    <div class="ibox-body">
+        @using (Html.BeginForm("CreateGR", "Inventory", FormMethod.Get))
+        {
+        <div class="row ">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-10">
+                        Document No<br />
+                        @Html.EditorFor(model => model.Prno, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        <label id="lbltype" style="color:red;"></label>
+                    </div>
+                    @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @type = "hidden", @id = "txtdocnoforgr" } })
+                    @Html.EditorFor(model => model.Prreferenceno, new { htmlAttributes = new { @class = "form-control", @type = "hidden", @id = "txtprref" } })
+                </div>
+            </div>
+            <div class="col-md-4">
+                Vendor<br />
+                @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control", @readonly = "reaadonly" } })
+                <label id="lblvendor" style="color:red;"></label>
+            </div>
+            <div class="col-md-4">
+                <button type="button" id="btnretrieve" class="btn btn-primary">Retrieve Data</button>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="row">
+                        <div class="col-sm-4">Item</div>
+                        <div class="col-sm-8">
+                            <select id="selectitemgr" class="form-control"><option id="select" value="0">Select Item</option></select>
+                            <label id="lblitemgr" style="color:red;"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">Quantity Delivered</div>
+                        <div class="col-sm-8"><input type="number" class="form-control" id="txtqtygr" /><label id="lblqtygr" style="color:red;"></label></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-8"><button type="button" id="btnAddqty" class="btn btn-primary">Add Quantity</button></div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+
+                    <div style=" background-color:#0094ff; color:#ecf0f1; padding:10px">Purchase Items</div>
+                    @********table here***********@
+                    <div id="orderItems" class="tablecontainer" style="height:260px; overflow-y:scroll; border:1px solid #BFAEAE">
+                        <table id="tbllineforgr" class="table table-striped table-hover responsive table-responsive">
+                            <thead>
+                                <tr style="background-color:#0094ff; color:#ecf0f1" id="getgrheader">
+                                    <th>Item Type</th>
+                                    <th>Item Name</th>
+                                    <th>Ordered Quanity</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="getgrline"></tbody>
+                            <tfoot>
+
+                            </tfoot>
+
+
+                        </table>
+                    </div>
+                    <div>
+                        <br />
+                        <button type="submit" id="btnsavetodb" class="btn btn-primary">Submit</button>
+
+
+                    </div>
+                </div>
+            </div>
+
+        }
+        </div>
+</div>
+@section scripts{
+    
+    
+    
+    <script type="text/javascript">
+         $("body").on("click", "#btnAddqty", function (e) {
+                
+                var selitemgr = $("#selectitemgr option:selected");
+                var txtqtygr = $("#txtqtygr");
+               
+
+                var tBody = $("#tbllineforpr>TBODY")[0];
+                if ( $("#selectitemgr").val() == 0 || txtqtygr.val() == "" ) {
+                   
+                    if ($("#selectitemgr").val() == 0) {
+                        document.getElementById('lblitemgr').innerHTML = 'Please Select Item';
+                    }
+                    else {
+                        document.getElementById('lblitemgr').innerHTML = '';
+                    }
+                    if (txtqtygr.val() == "") {
+                        document.getElementById('lblqtygr').innerHTML = 'Please Enter Quantity Delivered';
+                    }
+                    else {
+                        document.getElementById('lblqtygr').innerHTML = '';
+                    }
+                   
+                }
+                else {
+                   
+                    if ($("#selectitemgr").val() != 0) {
+                        document.getElementById('lblitemgr').innerHTML = '';
+                    }
+
+                    if (txtqtygr.val() != "") {
+                        document.getElementById('lblqtygr').innerHTML = '';
+                    }
+                  
+                    e.preventDefault();
+                    $.ajax({
+                     type: "POST",
+                        url: '@Url.Action("PostQuantityItems")',
+                        data: JSON.stringify({ PrDocno: $("#txtprref").val(), item: $("#selectitemgr").val(), qty: txtqtygr.val() }), //use id here
+                     dataType: "json",
+                     contentType: "application/json; charset=utf-8",
+                     success: function (res) {
+                       
+                    },
+                  error: function () {
+                  alert("Error while Posting data");
+                 }
+                    });
+                    getupdatedquantitydata();
+                }
+            });
+
+        $("#btnretrieve").click(function (e) {
+            e.preventDefault();
+            $.get("/Inventory/RemoveItemsforGR", { id: $("#txtprref").val() }, function (res) {
+
+                $.each(res, function (index, row) {
+                    $("#" + row.ItemId + "").remove();
+                   
+                });
+
+            })
+            $.get("/Inventory/GetItemsforGR", { id: $("#txtprref").val() }, function (res) {
+
+                $.each(res, function (index, row) {
+                    $("#" + row.ItemId + "").remove();
+                    $("#selectitemgr").append("<option id=" + row.ItemId + " value=" + row.ItemId + ">" + row.ItemName + "</option>")
+
+                });
+
+            })
+            $.get("/Inventory/RemoveItemsData", { id: $("#txtprref").val() }, function (res) {
+
+                $.each(res, function (index, row) {
+                    $("#" + row.ItemName + "").remove();
+
+                });
+
+            })
+            $.get("/Inventory/GetItemsData", { id: $("#txtprref").val() }, function (res) {
+
+                $.each(res, function (index, row) {
+
+                    $("#getgrline").append("<tr id=" + row.ItemName + "><td>" + row.ItemType + "</td><td>" + row.ItemName + "</td><td>" + row.Quantity + "</td>tr>")
+
+                });
+
+            })
+        })
+        function getupdatedquantitydata() {
+            $.get("/Inventory/GetQuantityData", { id: $("#txtprref").val() }, function (res) {
+
+                $.each(res, function (index, row) {
+                    $("#dqty").remove();
+                    $("#rqty").remove();
+                    $("#dqty" + row.ItemName + "").remove();
+                    $("#rqty" + row.ItemName + "").remove();
+                    $("#getgrheader").append("<td id='dqty'>Delivered Quantity</td><td id='rqty'>Remaining Quantity</td>")
+                    $("#" + row.ItemName + "").append("<td id='dqty" + row.ItemName + "'>" + row.DeliveredQuantity + "</td><td id='rqty" + row.ItemName + "'>" + row.RemainingQuantity + "</td>")
+
+                });
+
+            })
+        }
+    </script>
+
+
+
+
+
+}

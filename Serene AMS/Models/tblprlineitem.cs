@@ -20,7 +20,6 @@ namespace Serene_AMS.Models
         public Nullable<int> Quantity { get; set; }
         public Nullable<decimal> ItemPrice { get; set; }
         public string VendorName { get; set; }
-        public Nullable<System.DateTime> RequestedDate { get; set; }
         public string Status { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
     }

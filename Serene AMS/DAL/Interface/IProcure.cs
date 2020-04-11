@@ -31,23 +31,24 @@ namespace Serene_AMS.DAL.Interface
         void UpdateDocType(int Typeid,int DocNofrom,int DocNoto);
         tblDocument CreatePRItems(ProcureVM model);
         void AddPRItems(tblDocument obj);
-        void updatqty(int Id, string item, int qty,DateTime requesteddate);
+        void updatqty(int Id, string item, int qty);
         void updateDocstatus(int Docno);
         tblVendor addvendor(string name,string contact,int Itypeid,string address,string vtype);
         void Addvendors(tblVendor obj);
-        void SetVendorforItem(int detailid,int Itemid,int vendorid,DateTime Deliverydate,int PoReference);
+        void SetVendorforItem(int detailid,int Itemid,int vendorid,int PoReference);
         tblDocument AddPowithref(int PRref,int vendorid);
         void AddPO(tblDocument obj);
         void setstatusonpocreate(int docnoofpr);
         tblDocument Addpr();
-        tblDocDetail AddPrdetails(int prno,int itemid,int vendorid,DateTime? reqdate,int? qty,decimal? totalprice);
+        tblDocDetail AddPrdetails(int prno,int itemid,int vendorid,int? qty,decimal? totalprice);
         void docdetails(tblDocDetail obj);
         void upatedocdetail(int doc,string prno);
         void updateduplicate(int doc, int itemid, int vendorid, int? qty, decimal? price, int prevqty, decimal prevprice);
-        tblprlineitem addprlineitem(string itype,string item,int qty,decimal price,string vendor,DateTime reqdate);
+        tblprlineitem addprlineitem(string itype,string item,int qty,decimal price,string vendor);
         void Addprline(tblprlineitem obj);
         void updateprlineitem(string item, string vendor, int qty, decimal itemprice);
         void rejectpr(int id);
         void vendorselect(int docno, int vendorid);
+        void itemqtydelivered(int Prdocno, int itemid, int qty);
     }
 }
