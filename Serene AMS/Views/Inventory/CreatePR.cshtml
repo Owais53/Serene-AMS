@@ -240,8 +240,14 @@
                         data: JSON.stringify({ type: seltype.text(), item: selitem.text(), qty: txtqty.val(), price: txtprice.val(), vendor: selvendor.text(), redate: reqdate.val() }), //use id here
                      dataType: "json",
                     contentType: "application/json; charset=utf-8",
-                    success: function () {
+                    success: function (res) {
+                        if (res.code == 1) {
+                            $.notify(res.message, {
+                                globalPosition: "top center",
+                                className: "error"
 
+                            });
+                        }
                     },
                   error: function () {
                   alert("Error while Posting data");

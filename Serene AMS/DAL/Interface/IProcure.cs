@@ -48,5 +48,6 @@ namespace Serene_AMS.DAL.Interface
         void Addprline(tblprlineitem obj);
         void updateprlineitem(string item, string vendor, int qty, decimal itemprice);
         void rejectpr(int id);
+        void vendorselect(int docno, int vendorid);
     }
 }

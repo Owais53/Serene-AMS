@@ -328,5 +328,12 @@ namespace Serene_AMS.DAL.Repository
             obj.RequestedDate = requesteddate;
             context.Entry(obj).State = EntityState.Modified;
         }
+
+        public void vendorselect(int docno, int vendorid)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo==docno).FirstOrDefault();
+            obj.VendorId = vendorid;
+            context.Entry(obj).State = EntityState.Modified;
+        }
     }
 }

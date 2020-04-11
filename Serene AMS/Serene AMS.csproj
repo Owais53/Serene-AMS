@@ -1114,10 +1114,11 @@
     <Content Include="Views\Inventory\PRDetailsPartial.cshtml" />
     <Content Include="Views\Inventory\POVendorPartial.cshtml" />
     <Content Include="Views\Inventory\PODoc.cshtml" />
-    <Content Include="Views\Inventory\PODocPartial.cshtml" />
+    <Content Include="Views\Inventory\PRtoPOPartial.cshtml" />
     <Content Include="Scripts\jsrender.min" />
     <Content Include="Views\Inventory\CreatePR.cshtml" />
     <Content Include="Views\Inventory\ConfirmRejectPartial.cshtml" />
+    <Content Include="Views\Inventory\CreatePO.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

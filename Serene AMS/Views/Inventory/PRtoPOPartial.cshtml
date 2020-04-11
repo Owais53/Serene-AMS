@@ -1,0 +1,28 @@
+﻿@model Serene_AMS.ViewModels.ProcureVM
+
+@using (Ajax.BeginForm("GetPRDataPartial", "Inventory", new AjaxOptions { OnSuccess = "SuccessPostPo", OnFailure = "FailurePostpo" }))
+{
+    <div class="modal-content responsive" id="pomodal">
+        <div class="modal-header">
+            <h4 class="modal-title"></h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+        <div class="modal-body" style="overflow: auto">
+            @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @id = "getdocnoofpr", @type = "hidden" } })
+            @Html.EditorFor(model => model.Prno, new { htmlAttributes = new { @class = "form-control", @id = "getpr", @type = "hidden" } })
+            @Html.EditorFor(model => model.VendorId, new { htmlAttributes = new { @class = "form-control", @id = "getvendor", @type = "hidden" } })
+
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <h5>Convert Purchase Request to Purchase Order</h5>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="postpo">Submit</button>
+            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+}

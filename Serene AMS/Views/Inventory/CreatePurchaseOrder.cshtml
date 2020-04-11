@@ -83,7 +83,7 @@
 
                     <div class="modal" id="Modalpo" tabindex="-1" data-backdrop="false">
                         <div class="modal-dialog lg">
-                            @Html.Partial("PODocPartial")
+                            @Html.Partial("PRtoPOPartial")
                         </div>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                     { "data": "DocumentType", "authowidth": false },
                     {
                         "data": "DocumentNo", "render": function (data, type, full) {
-                            return "<button type='button' onclick=Getprforpo('" + data + "') class='btn btn-primary' id='getbtnpo'>View Details</button> <button type='submit' onclick=RejectPr('" + data + "') class='btn btn-danger' id='getbtnp'>Reject</button>"
+                            return "<button type='button' onclick=Getprforpo('" + data + "') class='btn btn-primary' id='getbtnpo'>View Details</button> <button type='button' onclick=Getprdata('" + data + "') class='btn btn-success' id='getbtnpo'>Create PO</button> <button type='submit' onclick=RejectPr('" + data + "') class='btn btn-danger' id='getbtnp'>Reject</button>"
                         },
                     }
                    
@@ -206,7 +206,12 @@
             })
 
         }
-        
+        function Getprdata(id) {
+            $.get("/Inventory/GetPRDataPartial", { DocNo: id }, function (res) {
+                $("#pomodal").html(res);
+                $("#Modalpo").modal('show');
+            })
+        }
        
         function OnSuccess(res) {
             if (res) {
@@ -254,15 +259,29 @@
 
                     });
                     dataTableprpo.ajax.reload();
-
-              
-               
-                      
-                   
+                                                                     
                 
             }
         }
         function OnFailure(res) {
+            alert("UnSuccessfull");
+        }
+        function SuccessPostPo(res) {
+            if (res) {
+                var modal = $("#Modalpo");
+
+                modal.modal('hide');
+                $.notify(res.message, {
+                    globalPosition: "top center",
+                    className: "success"
+
+                });
+                dataTableprpo.ajax.reload();
+
+
+            }
+        }
+        function FailurePostpo(res) {
             alert("UnSuccessfull");
         }
         $("#btnsubmitdocpo").click(function (e) {
