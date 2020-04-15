@@ -271,6 +271,9 @@
     <Compile Include="Models\tblExpens.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblGrItemsPrice.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblItem.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
@@ -1121,6 +1124,7 @@
     <Content Include="Views\Inventory\CreatePO.cshtml" />
     <Content Include="Views\Inventory\ViewPOforGR.cshtml" />
     <Content Include="Views\Inventory\CreateGR.cshtml" />
+    <Content Include="Views\Inventory\CreateInvoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

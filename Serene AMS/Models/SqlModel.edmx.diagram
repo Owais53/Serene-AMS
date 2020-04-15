@@ -52,11 +52,12 @@
         <AssociationConnector Association="HrmsModel.FK_tblExpenses_tblPurchase" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblItem_tblItemType" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblPurchaseitem_tblItem" ManuallyRouted="false" />
-        <AssociationConnector Association="HrmsModel.FK_tblStock_tblItem" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblVendors_tblItemType" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblPurchaseitem_tblPurchase" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_Users_Roles" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblVacancydetails_tblStructure" ManuallyRouted="false" />
+        <AssociationConnector Association="HrmsModel.FK_tblStock_tblItem" />
+        <EntityTypeShape EntityType="HrmsModel.tblGrItemsPrice" Width="1.5" PointX="5.375" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

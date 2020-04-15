@@ -63,6 +63,7 @@
           <Property Name="VendorName" Type="nvarchar(max)" />
           <Property Name="Quantity" Type="int" />
           <Property Name="DeliveredQuantity" Type="int" />
+          <Property Name="PartialDeliveredQuantity" Type="int" />
           <Property Name="RemainingQuantity" Type="int" />
           <Property Name="TotalPrice" Type="money" />
           <Property Name="POReference" Type="int" />
@@ -90,8 +91,11 @@
           <Property Name="Status" Type="varchar" MaxLength="75" />
           <Property Name="VendorId" Type="int" />
           <Property Name="ItemRequestedDate" Type="date" />
+          <Property Name="DeliveryDate" Type="date" />
           <Property Name="ItemName" Type="nvarchar(max)" />
           <Property Name="PrReferenceNo" Type="int" />
+          <Property Name="POReferenceno" Type="int" />
+          <Property Name="StatuschangeReason" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="tblEmployee">
           <Key>
@@ -147,6 +151,17 @@
           <Property Name="PayrollId" Type="int" />
           <Property Name="Amount" Type="money" />
         </EntityType>
+        <EntityType Name="tblGrItemsPrice">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentNo" Type="int" />
+          <Property Name="ItemId" Type="int" />
+          <Property Name="DeliveredQuantity" Type="int" />
+          <Property Name="PartialDeliveredQuantity" Type="int" />
+          <Property Name="ItemPrice" Type="money" />
+        </EntityType>
         <EntityType Name="tblItem">
           <Key>
             <PropertyRef Name="ItemId" />
@@ -157,6 +172,7 @@
           <Property Name="StorageLocation" Type="varchar" MaxLength="75" />
           <Property Name="ReorderPoint" Type="int" />
           <Property Name="ItemPrice" Type="money" />
+          <Property Name="Availablestock" Type="int" />
         </EntityType>
         <EntityType Name="tblItemType">
           <Key>
@@ -289,8 +305,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <PropertyRef Name="StockId" />
           </Key>
           <Property Name="StockId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ItemId" Type="int" />
-          <Property Name="TotalStockCapacity" Type="int" />
+          <Property Name="SLId" Type="int" />
           <Property Name="AvailableStock" Type="int" />
         </EntityType>
         <EntityType Name="tblStructuredetail">
@@ -548,18 +563,6 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblStock_tblItem">
-          <End Role="tblItem" Type="Self.tblItem" Multiplicity="0..1" />
-          <End Role="tblStock" Type="Self.tblStock" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblItem">
-              <PropertyRef Name="ItemId" />
-            </Principal>
-            <Dependent Role="tblStock">
-              <PropertyRef Name="ItemId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblVacancies_tblDepartment">
           <End Role="tblDepartments" Type="Self.tblDepartments" Multiplicity="0..1" />
           <End Role="tblVacancies" Type="Self.tblVacancies" Multiplicity="*" />
@@ -644,6 +647,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySet Name="tblEmployeeDetail" EntityType="Self.tblEmployeeDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblEmployeeLeaves" EntityType="Self.tblEmployeeLeaves" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblExpenses" EntityType="Self.tblExpenses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblGrItemsPrice" EntityType="Self.tblGrItemsPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblItem" EntityType="Self.tblItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblItemType" EntityType="Self.tblItemType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPosition" EntityType="Self.tblPosition" Schema="dbo" store:Type="Tables" />
@@ -746,10 +750,6 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <End Role="tblEmployee" EntitySet="tblEmployee" />
             <End Role="tblRequestdetail" EntitySet="tblRequestdetail" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblStock_tblItem" Association="Self.FK_tblStock_tblItem">
-            <End Role="tblItem" EntitySet="tblItem" />
-            <End Role="tblStock" EntitySet="tblStock" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblVacancies_tblDepartment" Association="Self.FK_tblVacancies_tblDepartment">
             <End Role="tblDepartments" EntitySet="tblDepartments" />
             <End Role="tblVacancies" EntitySet="tblVacancies" />
@@ -850,6 +850,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <NavigationProperty Name="tblVendor" Relationship="Self.FK_tblDocDetails_tblVendor" FromRole="tblDocDetails" ToRole="tblVendors" />
           <Property Name="DeliveredQuantity" Type="Int32" />
           <Property Name="RemainingQuantity" Type="Int32" />
+          <Property Name="PartialDeliveredQuantity" Type="Int32" />
         </EntityType>
         <EntityType Name="tblDoctype">
           <Key>
@@ -880,6 +881,9 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <NavigationProperty Name="tblDoctype" Relationship="Self.FK_tblDocument_tblDoctype" FromRole="tblDocument" ToRole="tblDoctype" />
           <NavigationProperty Name="tblPurchases" Relationship="Self.FK_tblPurchase_tblDocument" FromRole="tblDocument" ToRole="tblPurchase" />
           <Property Name="ItemRequestedDate" Type="DateTime" Precision="0" />
+          <Property Name="POReferenceno" Type="Int32" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="StatuschangeReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblEmployee">
           <Key>
@@ -955,7 +959,8 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="ItemPrice" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="tblItemType" Relationship="Self.FK_tblItem_tblItemType" FromRole="tblItem" ToRole="tblItemType" />
           <NavigationProperty Name="tblPurchaseitems" Relationship="Self.FK_tblPurchaseitem_tblItem" FromRole="tblItem" ToRole="tblPurchaseitem" />
-          <NavigationProperty Name="tblStocks" Relationship="Self.FK_tblStock_tblItem" FromRole="tblItem" ToRole="tblStock" />
+          <Property Name="Availablestock" Type="Int32" />
+          <NavigationProperty Name="tblStocks" Relationship="HrmsModel.FK_tblStock_tblItem" FromRole="tblItem" ToRole="tblStock" />
         </EntityType>
         <EntityType Name="tblItemType">
           <Key>
@@ -1070,10 +1075,9 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <PropertyRef Name="StockId" />
           </Key>
           <Property Name="StockId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemId" Type="Int32" />
-          <Property Name="TotalStockCapacity" Type="Int32" />
           <Property Name="AvailableStock" Type="Int32" />
-          <NavigationProperty Name="tblItem" Relationship="Self.FK_tblStock_tblItem" FromRole="tblStock" ToRole="tblItem" />
+          <Property Name="SLId" Type="Int32" />
+          <NavigationProperty Name="tblItem" Relationship="HrmsModel.FK_tblStock_tblItem" FromRole="tblStock" ToRole="tblItem" />
         </EntityType>
         <EntityType Name="tblStructuredetail">
           <Key>
@@ -1388,18 +1392,6 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblStock_tblItem">
-          <End Role="tblItem" Type="Self.tblItem" Multiplicity="0..1" />
-          <End Role="tblStock" Type="Self.tblStock" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblItem">
-              <PropertyRef Name="ItemId" />
-            </Principal>
-            <Dependent Role="tblStock">
-              <PropertyRef Name="ItemId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblVendors_tblItemType">
           <End Role="tblItemType" Type="Self.tblItemType" Multiplicity="0..1" />
           <End Role="tblVendors" Type="Self.tblVendor" Multiplicity="*" />
@@ -1550,10 +1542,6 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <End Role="tblItem" EntitySet="tblItems" />
             <End Role="tblPurchaseitem" EntitySet="tblPurchaseitems" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblStock_tblItem" Association="Self.FK_tblStock_tblItem">
-            <End Role="tblItem" EntitySet="tblItems" />
-            <End Role="tblStock" EntitySet="tblStocks" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblVendors_tblItemType" Association="Self.FK_tblVendors_tblItemType">
             <End Role="tblItemType" EntitySet="tblItemTypes" />
             <End Role="tblVendors" EntitySet="tblVendors" />
@@ -1570,7 +1558,35 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <End Role="tblStructuredetail" EntitySet="tblStructuredetails" />
             <End Role="tblVacancydetails" EntitySet="tblVacancydetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblStock_tblItem" Association="HrmsModel.FK_tblStock_tblItem">
+            <End Role="tblItem" EntitySet="tblItems" />
+            <End Role="tblStock" EntitySet="tblStocks" />
+          </AssociationSet>
+          <EntitySet Name="tblGrItemsPrices" EntityType="HrmsModel.tblGrItemsPrice" />
         </EntityContainer>
+        <Association Name="FK_tblStock_tblItem">
+          <End Type="HrmsModel.tblItem" Role="tblItem" Multiplicity="0..1" />
+          <End Type="HrmsModel.tblStock" Role="tblStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="ItemId" />
+            </Principal>
+            <Dependent Role="tblStock">
+              <PropertyRef Name="SLId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tblGrItemsPrice">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentNo" Type="Int32" />
+          <Property Name="ItemId" Type="Int32" />
+          <Property Name="DeliveredQuantity" Type="Int32" />
+          <Property Name="ItemPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PartialDeliveredQuantity" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1630,6 +1646,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocDetails">
             <EntityTypeMapping TypeName="HrmsModel.tblDocDetail">
               <MappingFragment StoreEntitySet="tblDocDetails">
+                <ScalarProperty Name="PartialDeliveredQuantity" ColumnName="PartialDeliveredQuantity" />
                 <ScalarProperty Name="RemainingQuantity" ColumnName="RemainingQuantity" />
                 <ScalarProperty Name="DeliveredQuantity" ColumnName="DeliveredQuantity" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -1658,6 +1675,9 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocuments">
             <EntityTypeMapping TypeName="HrmsModel.tblDocument">
               <MappingFragment StoreEntitySet="tblDocument">
+                <ScalarProperty Name="StatuschangeReason" ColumnName="StatuschangeReason" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="POReferenceno" ColumnName="POReferenceno" />
                 <ScalarProperty Name="ItemRequestedDate" ColumnName="ItemRequestedDate" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
                 <ScalarProperty Name="Docno" ColumnName="Docno" />
@@ -1733,6 +1753,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblItems">
             <EntityTypeMapping TypeName="HrmsModel.tblItem">
               <MappingFragment StoreEntitySet="tblItem">
+                <ScalarProperty Name="Availablestock" ColumnName="Availablestock" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="TypeId" ColumnName="TypeId" />
@@ -1852,9 +1873,8 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblStocks">
             <EntityTypeMapping TypeName="HrmsModel.tblStock">
               <MappingFragment StoreEntitySet="tblStock">
+                <ScalarProperty Name="SLId" ColumnName="SLId" />
                 <ScalarProperty Name="StockId" ColumnName="StockId" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="TotalStockCapacity" ColumnName="TotalStockCapacity" />
                 <ScalarProperty Name="AvailableStock" ColumnName="AvailableStock" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1950,6 +1970,18 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
                 <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
                 <ScalarProperty Name="ReasonofRequest" ColumnName="ReasonofRequest" />
                 <ScalarProperty Name="LastWorkingDate" ColumnName="LastWorkingDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblGrItemsPrices">
+            <EntityTypeMapping TypeName="HrmsModel.tblGrItemsPrice">
+              <MappingFragment StoreEntitySet="tblGrItemsPrice">
+                <ScalarProperty Name="PartialDeliveredQuantity" ColumnName="PartialDeliveredQuantity" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="DeliveredQuantity" ColumnName="DeliveredQuantity" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

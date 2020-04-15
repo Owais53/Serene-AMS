@@ -32,7 +32,8 @@
             </div>
             <div class="col-md-4">
                 Vendor<br />
-                @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control", @readonly = "reaadonly" } })
+                @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.EditorFor(model => model.VendorId, new { htmlAttributes = new { @class = "form-control", @type = "hidden",@id="txtvendoridforgr" } })
                 <label id="lblvendor" style="color:red;"></label>
             </div>
             <div class="col-md-4">
@@ -82,7 +83,7 @@
                     </div>
                     <div>
                         <br />
-                        <button type="submit" id="btnsavetodb" class="btn btn-primary">Submit</button>
+                        <button type="submit" id="btnsavetodbgr" class="btn btn-primary">Submit</button>
 
 
                     </div>
@@ -104,53 +105,66 @@
                
 
                 var tBody = $("#tbllineforpr>TBODY")[0];
-                if ( $("#selectitemgr").val() == 0 || txtqtygr.val() == "" ) {
-                   
-                    if ($("#selectitemgr").val() == 0) {
-                        document.getElementById('lblitemgr').innerHTML = 'Please Select Item';
-                    }
-                    else {
-                        document.getElementById('lblitemgr').innerHTML = '';
-                    }
-                    if (txtqtygr.val() == "") {
-                        document.getElementById('lblqtygr').innerHTML = 'Please Enter Quantity Delivered';
-                    }
-                    else {
-                        document.getElementById('lblqtygr').innerHTML = '';
-                    }
-                   
-                }
-                else {
-                   
-                    if ($("#selectitemgr").val() != 0) {
-                        document.getElementById('lblitemgr').innerHTML = '';
-                    }
+             if ($("#selectitemgr").val() == 0 || txtqtygr.val() == "") {
 
-                    if (txtqtygr.val() != "") {
-                        document.getElementById('lblqtygr').innerHTML = '';
-                    }
-                  
-                    e.preventDefault();
-                    $.ajax({
-                     type: "POST",
-                        url: '@Url.Action("PostQuantityItems")',
-                        data: JSON.stringify({ PrDocno: $("#txtprref").val(), item: $("#selectitemgr").val(), qty: txtqtygr.val() }), //use id here
-                     dataType: "json",
-                     contentType: "application/json; charset=utf-8",
-                     success: function (res) {
-                       
-                    },
-                  error: function () {
-                  alert("Error while Posting data");
+                 if ($("#selectitemgr").val() == 0) {
+                     document.getElementById('lblitemgr').innerHTML = 'Please Select Item';
                  }
-                    });
-                    getupdatedquantitydata();
-                }
-            });
+                 else {
+                     document.getElementById('lblitemgr').innerHTML = '';
+                 }
+                 if (txtqtygr.val() == "") {
+                     document.getElementById('lblqtygr').innerHTML = 'Please Enter Quantity Delivered';
+                 }
+                 else {
+                     document.getElementById('lblqtygr').innerHTML = '';
+                 }
+
+             }
+             else {
+
+                 if ($("#selectitemgr").val() != 0) {
+                     document.getElementById('lblitemgr').innerHTML = '';
+                 }
+
+                 if (txtqtygr.val() != "") {
+                     document.getElementById('lblqtygr').innerHTML = '';
+                 }
+                 $.get("/Inventory/ApplyValidationonQty", { docno: $("#txtprref").val(), itemid: $("#selectitemgr").val() }, function (res) {
+                    
+                     if (txtqtygr.val() > res) {
+                         document.getElementById('lblqtygr').innerHTML = 'Delivered Quantity can not be greater than Ordered Quantity';
+                     } else {
+
+                         e.preventDefault();
+                         $.ajax({
+                             type: "POST",
+                             url: '@Url.Action("PostQuantityItems")',
+                             data: JSON.stringify({ PrDocno: $("#txtprref").val(), item: $("#selectitemgr").val(), qty: txtqtygr.val() }), //use id here
+                             dataType: "json",
+                             contentType: "application/json; charset=utf-8",
+                             success: function (res) {
+                                 $.notify(res.message, {
+                                     globalPosition: "top center",
+                                     className: "error"
+
+                                 });
+                             },
+                             error: function () {
+                                 alert("Error while Posting data");
+                             }
+                         });
+                         document.getElementById('lblqtygr').innerHTML = '';
+
+                         getupdatedquantitydata();
+                     }
+                 })
+               }
+           });
 
         $("#btnretrieve").click(function (e) {
             e.preventDefault();
-            $.get("/Inventory/RemoveItemsforGR", { id: $("#txtprref").val() }, function (res) {
+            $.get("/Inventory/RemoveItemsforGR", { Doc: $("#txtprref").val() }, function (res) {
 
                 $.each(res, function (index, row) {
                     $("#" + row.ItemId + "").remove();
@@ -158,7 +172,7 @@
                 });
 
             })
-            $.get("/Inventory/GetItemsforGR", { id: $("#txtprref").val() }, function (res) {
+            $.get("/Inventory/GetItemsforGR", { Doc: $("#txtprref").val() }, function (res) {
 
                 $.each(res, function (index, row) {
                     $("#" + row.ItemId + "").remove();
@@ -178,12 +192,60 @@
             $.get("/Inventory/GetItemsData", { id: $("#txtprref").val() }, function (res) {
 
                 $.each(res, function (index, row) {
-
+                    $("#" + row.ItemName + "").remove();
                     $("#getgrline").append("<tr id=" + row.ItemName + "><td>" + row.ItemType + "</td><td>" + row.ItemName + "</td><td>" + row.Quantity + "</td>tr>")
 
                 });
 
             })
+            $.get("/Inventory/RemovePartialQuantityData", { id: $("#txtprref").val() }, function (res) {
+
+                $.each(res, function (index, row) {
+                    $("#" + row.ItemName + "").remove();
+
+                });
+
+            })
+            $.get("/Inventory/GetPartialQuantityData", { id: $("#txtprref").val() }, function (res) {
+
+                $.each(res, function (index, row) {
+                   
+                    $("#" + row.ItemName + "").remove();
+                    $("#getgrline").append("<tr id=" + row.ItemName + "><td>" + row.ItemType + "</td><td>" + row.ItemName + "</td><td>" + row.Quantity + "</td>tr>")
+
+                });
+
+            })
+        })
+        $("#btnsavetodbgr").click(function (e) {
+            var grlist = new Array();
+
+            $("#tbllineforgr TBODY TR").each(function () {
+                var row = $(this);
+                var gr = {};
+                gr.ItemName = row.find("TD").eq(1).html();
+                gr.DeliveredQuantity = row.find("TD").eq(3).html();             
+                grlist.push(gr);
+            });
+            e.preventDefault();
+            $.ajax({
+                     type: "POST",
+                url: '@Url.Action("PostGRwithstatus")',
+                data: JSON.stringify({ Docno: $("#txtprref").val(), vendor: $("#txtvendoridforgr").val(), grlists: grlist }), //use id here
+                     dataType: "json",
+                     contentType: "application/json; charset=utf-8",
+                     success: function (res) {
+                         $.notify(res.message, {
+                             globalPosition: "top center",
+                             className: "success"
+
+                         });
+                    },
+                  error: function () {
+                  alert("Error while Posting data");
+                 }
+                    });
+
         })
         function getupdatedquantitydata() {
             $.get("/Inventory/GetQuantityData", { id: $("#txtprref").val() }, function (res) {
@@ -197,8 +259,8 @@
                     $("#" + row.ItemName + "").append("<td id='dqty" + row.ItemName + "'>" + row.DeliveredQuantity + "</td><td id='rqty" + row.ItemName + "'>" + row.RemainingQuantity + "</td>")
 
                 });
-
             })
+          
         }
     </script>
 

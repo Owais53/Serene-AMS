@@ -1,4 +1,4 @@
-﻿
+﻿@model Serene_AMS.ViewModels.ProcureVM
 @{
     ViewBag.Title = "CreatePR";
 
@@ -14,17 +14,18 @@
         </li>
     </ol>
 </nav>
+
 <div class="ibox">
     <div class="ibox-body">
         <div class="row ">
             <div class="col-md-4">
                 <div class="row">
                     <div class="col-md-10">
-                        Item Type<br />                     
+                        Item Type<br />
                         <select id="selecttype" class="form-control" onchange="javascript: ddlitemtypechange(this);"><option id="select" value="0">Select Item Type</option></select>
                         <label id="lbltype" style="color:red;"></label>
                     </div>
-                   
+
                 </div>
             </div>
             <div class="col-md-4">
@@ -32,12 +33,13 @@
                 <select id="selectvendor" class="form-control"><option id="select" value="0">Select Vendor</option></select>
                 <label id="lblvendor" style="color:red;"></label>
             </div>
-            <div class="col-md-4">
-                Requested Date<br />
-                <input type="text" class="form-control" id="dateRequested" />
-                <label id="lblreqdate" style="color:red;"></label>
+           
+                <div class="col-md-4">
+                    Requested Date<br />                   
+                    <input type="text" id="dateReq"/>
+                    <label id="lblreqdate" style="color:red;"></label>
+                </div>
             </div>
-        </div>
         <hr />
         @****************************@
         <div class="row">
@@ -87,13 +89,14 @@
                     <br />
                     <button type="submit" id="btnsavetodb" class="btn btn-primary">Submit</button>
                    
-                   @Html.ActionLink("View PR", "PrintPR", "Inventory", null, new { @id="viewprlink",@class= "btn btn-primary",@style="display: none"} )
+                   @Html.ActionLink("View PR", "PrintPR", "Inventory", null, new { @id = "viewprlink", @class = "btn btn-primary", @style = "display: none" })
                 </div>
             </div>
         </div>
+            }
         </div>
     </div>
-
+            
     <div class="ibox">
 
         <div class="ibox-body">
@@ -135,7 +138,8 @@
                 $.post("/Inventory/DeletePrline", function (res) {
 
                 })
-
+                var minDate = new Date();
+                $("#dateReq").datepicker({ showAnim: 'drop', changeMonth: true, changeYear: false, minDate: minDate, dateFormat: "yy-mm-dd" }).datepicker("setDate", new Date);
             });
             function ddlitemtypechange(id) {
                 $.get("/Inventory/GetItems", { Id: id.value }, function (res) {
@@ -274,7 +278,7 @@
                 $.ajax({
                     type: "POST",
                     url: "/Inventory/CreatePR",
-                    data: JSON.stringify(prlist), 
+                    data: JSON.stringify({ prlists: prlist, datereq: $("#dateReq").val() }), 
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (res) {

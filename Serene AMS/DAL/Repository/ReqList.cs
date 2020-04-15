@@ -101,7 +101,7 @@ namespace Serene_AMS.DAL.Repository
         public DataSet Show_PRItemsdata(int Docno)
         {
            
-            SqlCommand com = new SqlCommand("select doc.DocumentNo,doc.Docno,item.ItemName,det.Quantity,v.VendorName from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo inner join tblItem item on det.ItemId=item.ItemId inner join tblVendors v on det.VendorId=v.VendorId where doc.DocumentNo='" +Docno+ "' and doc.Status='Pending' ", con);
+            SqlCommand com = new SqlCommand("select doc.DocumentNo,doc.Docno,item.ItemName,det.Quantity,v.VendorName,doc.ItemRequestedDate from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo inner join tblItem item on det.ItemId=item.ItemId inner join tblVendors v on det.VendorId=v.VendorId where doc.DocumentNo='" +Docno+ "' and doc.Status='Pending' ", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -110,7 +110,7 @@ namespace Serene_AMS.DAL.Repository
         public DataSet DonotShow_PRItemsdata(int Docno)
         {
 
-            SqlCommand com = new SqlCommand("select doc.DocumentNo,doc.Docno,item.ItemName,det.Quantity,v.VendorName from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo inner join tblItem item on det.ItemId=item.ItemId inner join tblVendors v on det.VendorId=v.VendorId where doc.DocumentNo!='" + Docno + "'", con);
+            SqlCommand com = new SqlCommand("select doc.DocumentNo,doc.Docno,item.ItemName,det.Quantity,v.VendorName,doc.ItemRequestedDate from tblDocument doc inner join tblDocDetails det on doc.DocumentNo=det.DocumentNo inner join tblItem item on det.ItemId=item.ItemId inner join tblVendors v on det.VendorId=v.VendorId where doc.DocumentNo!='" + Docno + "'", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -128,7 +128,7 @@ namespace Serene_AMS.DAL.Repository
         public DataSet Show_iteminddl(int? id)
         {
 
-            SqlCommand com = new SqlCommand("select i.ItemId,i.ItemName from tblDocDetails d inner join tblItem i on d.ItemId=i.ItemId where d.DocumentNo="+id+"", con);
+            SqlCommand com = new SqlCommand("select i.ItemId,i.ItemName from tblDocDetails d inner join tblItem i on d.ItemId=i.ItemId where d.DocumentNo="+id+" and (DeliveredQuantity IS NULL or RemainingQuantity>0)", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -137,7 +137,7 @@ namespace Serene_AMS.DAL.Repository
         public DataSet NotShow_iteminddl(int? id)
         {
 
-            SqlCommand com = new SqlCommand("select i.ItemId,i.ItemName from tblDocDetails d inner join tblItem i on d.ItemId=i.ItemId where d.DocumentNo!=" + id + "", con);
+            SqlCommand com = new SqlCommand("select i.ItemId,i.ItemName from tblDocDetails d inner join tblItem i on d.ItemId=i.ItemId where d.DocumentNo!=" + id + " and (DeliveredQuantity IS NULL or RemainingQuantity>0)", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -146,7 +146,7 @@ namespace Serene_AMS.DAL.Repository
         public DataSet Show_itemDataingrid(int? id)
         {
 
-            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,d.Quantity from tblDocument doc inner join tblDocDetails d on doc.PrReferenceNo=d.DocumentNo inner join tblItem i on d.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where d.DocumentNo="+id+" and doc.Status IS NULL", con);
+            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,d.Quantity from tblDocument doc inner join tblDocDetails d on doc.PrReferenceNo=d.DocumentNo inner join tblItem i on d.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where d.DocumentNo="+id+ " and doc.Status IS NULL and (d.DeliveredQuantity IS NULL or RemainingQuantity!=0)", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -155,7 +155,7 @@ namespace Serene_AMS.DAL.Repository
         public DataSet Remove_itemDataingrid(int? id)
         {
 
-            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,d.Quantity from tblDocument doc inner join tblDocDetails d on doc.PrReferenceNo=d.DocumentNo inner join tblItem i on d.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where d.DocumentNo!="+id+" and doc.Status IS NULL", con);
+            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,d.Quantity from tblDocument doc inner join tblDocDetails d on doc.PrReferenceNo=d.DocumentNo inner join tblItem i on d.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where d.DocumentNo!="+id+" and doc.Status IS NULL and (d.DeliveredQuantity IS NULL or RemainingQuantity!=0)", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -170,7 +170,42 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_QtyDataingridpartial(int? id)
+        {
 
+            SqlCommand com = new SqlCommand("select i.ItemName,d.PartialDeliveredQuantity,d.RemainingQuantity from tblDocDetails d inner join tblItem i on d.ItemId=i.ItemId where d.DocumentNo=" + id + " and d.PartialDeliveredQuantity IS NOT NULL", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_QtyPartialDataingrid(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,d.RemainingQuantity from tblDocument doc inner join tblDocDetails d on doc.PrReferenceNo=d.DocumentNo inner join tblItem i on d.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where d.DocumentNo="+id+ " and doc.Status='Partial Delivery' and RemainingQuantity>0", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet NotShow_QtyPartialDataingrid(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,d.RemainingQuantity from tblDocument doc inner join tblDocDetails d on doc.PrReferenceNo=d.DocumentNo inner join tblItem i on d.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where d.DocumentNo!=" + id + " and doc.Status='Partial Delivery' and RemainingQuantity>0", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_itempriceofgringrid(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,d.Quantity from tblDocument doc inner join tblDocDetails d on doc.PrReferenceNo=d.DocumentNo inner join tblItem i on d.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where d.DocumentNo=" + id + " and doc.Status IS NULL and (d.DeliveredQuantity IS NULL or RemainingQuantity!=0)", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
 
     }
 }

@@ -25,6 +25,8 @@
                 <tr style="background-color:#0094ff; color:#ecf0f1">
                     <th>Document No</th>
                     <th>Document</th>
+                    <th>Vendor</th>
+                    <th>Requested Date</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -33,6 +35,8 @@
                 <tr>
                     <th>Document No</th>
                     <th>Document</th>
+                    <th>Vendor</th>
+                    <th>Requested Date</th>
                     <th>Action</th>
                 </tr>
             </tfoot>
@@ -129,6 +133,14 @@
 
                     { "data": "Docno", "authowidth": false },
                     { "data": "DocumentType", "authowidth": false },
+                    { "data": "VendorName", "authowidth": false },
+                    {
+                        "data": "ItemRequestedDate", "render": function (mydata) {
+                            var date = new Date(parseInt(mydata.substr(6)));
+                            var month = date.getMonth() + 1;
+                            return date.getDate() + "/" + month + "/" + date.getFullYear();
+                        },
+                    },
                     {
                         "data": "DocumentNo", "render": function (data, type, full) {
                             return "<button type='button' onclick=Getprforpo('" + data + "') class='btn btn-primary' id='getbtnpo'>View Details</button> <button type='button' onclick=Getprdata('" + data + "') class='btn btn-success' id='getbtnpo'>Create PO</button> <button type='submit' onclick=RejectPr('" + data + "') class='btn btn-danger' id='getbtnp'>Reject</button>"

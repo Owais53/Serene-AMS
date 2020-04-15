@@ -19,6 +19,7 @@ namespace Serene_AMS.DAL.Interface
         IEnumerable<tblDocDetail> GetDocDetail();
         IEnumerable<tblVendor> GetVendor();
         IEnumerable<tblprlineitem> Getprline();
+      
         void AddTypes(tblItemType obj);
         tblItemType AddItemtype(string ItemType);
         IEnumerable<tblItem> Getitems();
@@ -36,10 +37,10 @@ namespace Serene_AMS.DAL.Interface
         tblVendor addvendor(string name,string contact,int Itypeid,string address,string vtype);
         void Addvendors(tblVendor obj);
         void SetVendorforItem(int detailid,int Itemid,int vendorid,int PoReference);
-        tblDocument AddPowithref(int PRref,int vendorid);
+        tblDocument AddPowithref(int PRref,int vendorid,DateTime reqdate,DateTime deldate);
         void AddPO(tblDocument obj);
         void setstatusonpocreate(int docnoofpr);
-        tblDocument Addpr();
+        tblDocument Addpr(DateTime reqdate);
         tblDocDetail AddPrdetails(int prno,int itemid,int vendorid,int? qty,decimal? totalprice);
         void docdetails(tblDocDetail obj);
         void upatedocdetail(int doc,string prno);
@@ -50,5 +51,21 @@ namespace Serene_AMS.DAL.Interface
         void rejectpr(int id);
         void vendorselect(int docno, int vendorid);
         void itemqtydelivered(int Prdocno, int itemid, int qty);
+        tblDocument AddGr(int porefno,int vendor);
+        tblDocument AddGrwithcomp(int porefno, int vendor);
+
+        void addgr(tblDocument obj);
+        void updatestatuscomplete(int docno);
+        void updatestatuspartial(int docno);
+        void itempartialqtydelivered(int Prdocno, int itemid, int qty);
+        tblStock addslinstock(int slid);
+        void addstocksl(tblStock obj);
+        void updateitemstock(int itemid,int qty);
+        void updateslstock(int Slid,int qty);
+        tblGrItemsPrice addGritemsPrice(int docno, int itemid, int deliveredqty);
+        void addpriceofitems(tblGrItemsPrice obj);
+        tblGrItemsPrice addPartialGritemsPrice(int docno, int itemid, int partialdeliveredqty);
+        void calculateitemprice(int docno, int itemid, decimal price);
+        
     }
 }

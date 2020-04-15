@@ -464,6 +464,9 @@ namespace Serene_AMS.Controllers
                 var add = obj.AddSL(model.City, model.StorageLocation);
                 obj.AddStore(add);
                 obj.Save();
+                var add1 = obj.addslinstock(add.SLId);
+                obj.addstocksl(add1);
+                obj.Save();
                 var cityname = new SelectList(new[]
                 {
 
@@ -476,7 +479,7 @@ namespace Serene_AMS.Controllers
                 ViewBag.getcitylist = cityname;
                
                 TempData["SuccessMessage1"] = "Successfully Created";
-                return RedirectToAction("ViewStorageLoaction", "Admin");
+                return RedirectToAction("ViewStorageLocation", "Admin");
             }
             else
             {

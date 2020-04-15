@@ -25,6 +25,7 @@ namespace Serene_AMS.Models
         public Nullable<int> POReference { get; set; }
         public Nullable<int> DeliveredQuantity { get; set; }
         public Nullable<int> RemainingQuantity { get; set; }
+        public Nullable<int> PartialDeliveredQuantity { get; set; }
     
         public virtual tblDocument tblDocument { get; set; }
         public virtual tblVendor tblVendor { get; set; }

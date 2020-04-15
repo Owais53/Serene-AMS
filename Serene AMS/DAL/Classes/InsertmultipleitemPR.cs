@@ -81,6 +81,32 @@ namespace Serene_AMS.DAL.Classes
 
             return false;
         }
+        public bool getRemainingQty(int docno)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select RemainingQuantity from tblDocDetails where DocumentNo="+docno+"";
+                SqlCommand smd = new SqlCommand(s, con);
+
+
+                SqlDataReader sdr = smd.ExecuteReader();
+                while (sdr.Read())
+                {
+                   
+
+                    if (Convert.ToInt32(sdr[0]) > 0)
+                    {
+                        return true;
+
+                    }
+                  
+                }
+
+            }
+
+            return false;
+        }
         public int getDocumentNo()
         {
             int id;
@@ -89,6 +115,49 @@ namespace Serene_AMS.DAL.Classes
                 con.Open();
                 String s = "SELECT max(DocumentNo) FROM [Hrms].[dbo].[tblDocument]";
                 SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getItemidfromgr()
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT  FROM [Hrms].[dbo].[tblDocument]";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getOrderedqty(int docno,int itemid)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT Quantity FROM [Hrms].[dbo].[tblDocDetails] where DocumentNo=@doc and ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@doc", docno);
+                smd.Parameters.AddWithValue("@item", itemid);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getpartialOrderedqty(int docno, int itemid)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT RemainingQuantity FROM [Hrms].[dbo].[tblDocDetails] where DocumentNo=@doc and ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@doc", docno);
+                smd.Parameters.AddWithValue("@item", itemid);
                 id = (int)smd.ExecuteScalar();
 
             }
@@ -143,6 +212,109 @@ namespace Serene_AMS.DAL.Classes
                 String s = "SELECT ItemId FROM [Hrms].[dbo].[tblItem] Where ItemName=@item";
                 SqlCommand smd = new SqlCommand(s, con);
                 smd.Parameters.AddWithValue("@item", item);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getSlid(string item)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select s.SLId from tblItem i inner join tblSL s on i.StorageLocation=s.StorageLocation Where ItemName=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@item", item);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public decimal getItemPriceofGR(int docno,int itemid)
+        {
+            decimal id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select i.ItemPrice from tblGrItemsPrice p inner join tblItem i on p.ItemId=i.ItemId where p.DocumentNo=@no and p.ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@no", docno);
+                smd.Parameters.AddWithValue("@item", itemid);
+                id = (decimal)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public decimal getItemPriceofGRPartial(int docno, int itemid)
+        {
+            decimal id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select (ItemPrice*PartialDeliveredQuantity) from tblItem i inner join tblDocDetails d on i.ItemId=d.ItemId where d.DocumentNo=@no and d.ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@no", docno);
+                smd.Parameters.AddWithValue("@item", itemid);
+                id = (decimal)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getqty(int itemid,int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT Quantity FROM [Hrms].[dbo].[tblDocDetails] Where ItemId=@item and DocumentNo=@doc";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@item", itemid);
+                smd.Parameters.AddWithValue("@doc", docno);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getqtyforpartial(int itemid, int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT RemainingQuantity FROM [Hrms].[dbo].[tblDocDetails] Where ItemId=@item and DocumentNo=@doc";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@item", itemid);
+                smd.Parameters.AddWithValue("@doc", docno);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getPono(int prrefno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT DocumentNo FROM [Hrms].[dbo].[tblDocument] Where PrReferenceNo=@no";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@no", prrefno);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getdeliverqty(int docno,int itemid)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select DeliveredQuantity from tblDocDetails where DocumentNo=@no and ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@no", docno);
+                smd.Parameters.AddWithValue("@item", docno);
                 id = (int)smd.ExecuteScalar();
 
             }

@@ -24,6 +24,42 @@ namespace Serene_AMS.DAL.Repository
             context = this.context;
         }
 
+        public tblDocument AddGr(int porefno,int vendor)
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblDocument()
+            {
+                DTypeId=4,
+                CreationDate=DateTime.Now.Date,
+                CreatedBy=user,
+                DocStatus="Complete",
+                Status="Partial",
+                VendorId=vendor,
+                POReferenceno=porefno,
+            };
+            return add;
+        }
+        public tblDocument AddGrwithcomp(int porefno,int vendor)
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblDocument()
+            {
+                DTypeId = 4,
+                CreationDate = DateTime.Now.Date,
+                CreatedBy = user,
+                DocStatus = "Complete",
+                Status = "Complete",
+                VendorId=vendor,
+                POReferenceno=porefno,
+
+            };
+            return add;
+        }
+        public void addgr(tblDocument obj)
+        {
+            context.tblDocuments.Add(obj);
+        }
+
         public tblItem Additem(int Typeid, string itemname, string SL, int reorderpoint, decimal price)
         {
             var add = new tblItem()
@@ -33,6 +69,7 @@ namespace Serene_AMS.DAL.Repository
                 StorageLocation=SL,
                 ReorderPoint=reorderpoint,
                 ItemPrice=price,
+                Availablestock=0,
             };
             return add;
         }
@@ -56,7 +93,7 @@ namespace Serene_AMS.DAL.Repository
             context.tblDocuments.Add(obj);
         }
 
-        public tblDocument AddPowithref(int PRref,int vendorid)
+        public tblDocument AddPowithref(int PRref,int vendorid,DateTime reqdate,DateTime deldate)
         {
             var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
             var add = new tblDocument()
@@ -67,11 +104,13 @@ namespace Serene_AMS.DAL.Repository
                 DocStatus="Complete",
                 PrReferenceNo=PRref,
                 VendorId=vendorid,
+                ItemRequestedDate=reqdate,
+                DeliveryDate=deldate,
             };
             return add;
         }
 
-        public tblDocument Addpr()
+        public tblDocument Addpr(DateTime reqdate)
         {
             var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
             var add = new tblDocument()
@@ -81,6 +120,8 @@ namespace Serene_AMS.DAL.Repository
                 CreatedBy = user,
                 DocStatus="Complete",
                 Status="Pending",
+                ItemRequestedDate=reqdate,
+               
 
             };
             return add;
@@ -95,6 +136,8 @@ namespace Serene_AMS.DAL.Repository
                 VendorId=vendorid,
                 Quantity=qty,
                 TotalPrice=totalprice,
+                PartialDeliveredQuantity=0,
+                RemainingQuantity =-1,
             };
             return add;
         }
@@ -130,6 +173,7 @@ namespace Serene_AMS.DAL.Repository
             {
                 City = city,
                 StorageLocation=SL,
+
                 
             };
             return add;
@@ -324,6 +368,22 @@ namespace Serene_AMS.DAL.Repository
             context.Entry(obj).State = EntityState.Modified;
         }
 
+        public void updatestatuscomplete(int docno)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == docno).FirstOrDefault();
+            obj.Status = "Complete Delivery";
+
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void updatestatuspartial(int docno)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == docno).FirstOrDefault();
+            obj.Status = "Partial Delivery";
+            
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
         public void updatqty(int Id, string item, int qty)
         {
             var price = context.tblItems.Where(x => x.ItemName == item).FirstOrDefault();
@@ -337,6 +397,84 @@ namespace Serene_AMS.DAL.Repository
         {
             var obj = context.tblDocuments.Where(x => x.DocumentNo==docno).FirstOrDefault();
             obj.VendorId = vendorid;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void itempartialqtydelivered(int Prdocno, int itemid, int qty)
+        {
+            var checkstatus = context.tblDocuments.Where(x => x.PrReferenceNo == Prdocno && x.Status == "Partial Delivery").FirstOrDefault();
+            if (checkstatus != null)
+            {
+                var obj = context.tblDocDetails.Where(x => x.DocumentNo == Prdocno && x.ItemId == itemid).FirstOrDefault();
+                obj.DeliveredQuantity = obj.DeliveredQuantity + qty;
+                obj.PartialDeliveredQuantity = qty;               
+                obj.RemainingQuantity = obj.RemainingQuantity - qty;
+                context.Entry(obj).State = EntityState.Modified;
+            }
+        }
+
+        public tblStock addslinstock(int slid)
+        {
+            var add = new tblStock()
+            {
+                SLId=slid,
+                AvailableStock=0,
+            };
+            return add;
+        }
+
+        public void addstocksl(tblStock obj)
+        {
+            context.tblStocks.Add(obj);
+        }
+
+        public void updateitemstock(int itemid,int qty)
+        {
+            var obj = context.tblItems.Where(x => x.ItemId == itemid).FirstOrDefault();
+            obj.Availablestock = obj.Availablestock+qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void updateslstock(int Slid,int qty)
+        {
+            var obj = context.tblStocks.Where(x => x.SLId == Slid).FirstOrDefault();
+            obj.AvailableStock = obj.AvailableStock + qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public tblGrItemsPrice addGritemsPrice(int docno, int itemid, int deliveredqty)
+        {
+            var add = new tblGrItemsPrice()
+            {
+                DocumentNo=docno,
+                ItemId=itemid,
+                DeliveredQuantity=deliveredqty,
+                
+            };
+            return add;
+        }
+
+        public void addpriceofitems(tblGrItemsPrice obj)
+        {
+            context.tblGrItemsPrices.Add(obj);
+        }
+
+        public tblGrItemsPrice addPartialGritemsPrice(int docno, int itemid, int partialdeliveredqty)
+        {
+            var add = new tblGrItemsPrice()
+            {
+                DocumentNo = docno,
+                ItemId = itemid,
+                PartialDeliveredQuantity=partialdeliveredqty,
+
+            };
+            return add;
+        }
+
+        public void calculateitemprice(int docno, int itemid, decimal price)
+        {
+            var obj = context.tblGrItemsPrices.Where(x => x.ItemId == itemid && x.DocumentNo==docno).FirstOrDefault();
+            obj.ItemPrice = obj.DeliveredQuantity * price;
             context.Entry(obj).State = EntityState.Modified;
         }
     }
