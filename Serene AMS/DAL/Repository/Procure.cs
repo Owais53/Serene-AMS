@@ -477,5 +477,63 @@ namespace Serene_AMS.DAL.Repository
             obj.ItemPrice = obj.DeliveredQuantity * price;
             context.Entry(obj).State = EntityState.Modified;
         }
+
+        public tblInvoiceReceipt AddIR(int Grno, decimal total, decimal paid, decimal balance)
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblInvoiceReceipt()
+            {
+               
+                GRReferenceNo=Grno,
+                TotalAmount=total,
+                PaidAmount=paid,
+                Balance=balance,
+                Createdon=DateTime.Now.Date,
+                Createdby=user,
+                Status="Complete"
+            };
+            return add;
+        }
+        public tblInvoiceReceipt AddIRPartial(int Grno, decimal total, decimal paid, decimal balance)
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblInvoiceReceipt()
+            {
+             
+                GRReferenceNo = Grno,
+                TotalAmount = total,
+                PaidAmount = paid,
+                Balance = balance,
+                Createdon = DateTime.Now.Date,
+                Createdby = user,
+                Status = "Partial"
+            };
+            return add;
+        }
+        public void addInvoiceR(tblInvoiceReceipt obj)
+        {
+            context.tblInvoiceReceipts.Add(obj);
+        }
+
+        public void statuscompletepay(int Grno)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == Grno).FirstOrDefault();
+            obj.Status = "Paid";
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void statuspartialpay(int Grno)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == Grno).FirstOrDefault();
+            obj.Status = "Partially Paid";
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void getIRno(int IRid,string IRno)
+        {
+            var obj = context.tblInvoiceReceipts.Where(x => x.InvoiceReceiptId == IRid).FirstOrDefault();
+            obj.InvoiceReceiptNo = IRno;
+            context.Entry(obj).State = EntityState.Modified;
+        }
     }
 }

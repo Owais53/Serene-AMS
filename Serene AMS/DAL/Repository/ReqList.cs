@@ -206,6 +206,24 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_gritemininvoicegrid(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,p.DeliveredQuantity,p.ItemPrice from tblGritemsPrice p inner join tblItem i on p.ItemId=i.ItemId where p.DocumentNo="+id+"", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Remove_gritemininvoicegrid(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,p.DeliveredQuantity,p.ItemPrice from tblGritemsPrice p inner join tblItem i on p.ItemId=i.ItemId where p.DocumentNo!=" + id + "", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
 
     }
 }

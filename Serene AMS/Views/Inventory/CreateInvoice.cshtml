@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="col-md-10">
                         Document No<br />
-                        @Html.EditorFor(model => model.Prno, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.EditorFor(model => model.Grno, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                         <label id="lbltype" style="color:red;"></label>
                     </div>
                     @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @type = "hidden", @id = "txtdocnoforgr" } })
@@ -36,6 +36,7 @@
                 @Html.EditorFor(model => model.VendorId, new { htmlAttributes = new { @class = "form-control", @type = "hidden", @id = "txtvendoridforgr" } })
                 <label id="lblvendor" style="color:red;"></label>
             </div>
+           
             <div class="col-md-4">
                 <button type="button" id="btnretrieveprice" class="btn btn-primary">Retrieve Data</button>
             </div>
@@ -45,7 +46,7 @@
 
                 <div class="row">
                     <div class="col-sm-4">Total Amount</div>
-                    <div class="col-sm-8"><input type="number" class="form-control" id="txttotalamount" /><label id="lbltotalamount" style="color:red;"></label></div>
+                    <div class="col-sm-8"><input type="number" class="form-control" id="txttotalamount" readonly="readonly"/><label id="lbltotalamount" style="color:red;"></label></div>
                 </div>
 
                 <div class="row">
@@ -71,7 +72,7 @@
 
                             </tr>
                         </thead>
-                        <tbody id="getgrline"></tbody>
+                        <tbody id="getgrlineforinvoice"></tbody>
                         <tfoot>
 
                         </tfoot>
@@ -81,7 +82,7 @@
                 </div>
                 <div>
                     <br />
-                    <button type="submit" id="btnsavetodbgr" class="btn btn-primary">Submit</button>
+                    <button type="submit" id="btnsavetodbir" class="btn btn-primary">Submit</button>
 
 
                 </div>
@@ -93,19 +94,58 @@
 @section scripts{
 
     <script type="text/javascript">
+        $(function () {
+            $("#txtpaidamount").on("keyup", function () {
+                var txttotal = $("#txttotalamount").val();
+                var txtpaid = $("#txtpaidamount").val();
+                var balance = txttotal - txtpaid
 
-    
+                if (txtpaid > txttotal) {
+                    txtpaid.val(txttotal);
+                    $("#txtbalance").val(0);
+                }
+                else {
+                    $("#txtbalance").val(balance);
+                }
+            });
+        });
+       
 
         $("#btnretrieveprice").click(function (e) {
             e.preventDefault();
+            $.get("/Inventory/RemoveGRItemswithPrice", { Doc: $("#txtdocnoforgr").val() }, function (res) {
 
-            $.post("/Inventory/CalculatePrice", { docno: $("#txtdocnoforgr").val() }, function (res) {
-
+                $.each(res, function (index, row) {
+                    $("#Invoice" + row.ItemName + "").remove();
+                 
+                });
 
             })
+            $.get("/Inventory/GetGRItemswithPrice", { Doc: $("#txtdocnoforgr").val() }, function (res) {
 
+                $.each(res, function (index, row) {
+                    $("#Invoice" + row.ItemName + "").remove();
+                    $("#getgrlineforinvoice").append("<tr id='Invoice" + row.ItemName + "'><td>" + row.ItemName + "</td><td>" + row.Quantity + "</td><td>" + row.ItemPrice + "</td></tr>")
+
+                });
+
+            })
+            $.get("/Inventory/GetTotalPrice", { Doc: $("#txtdocnoforgr").val() }, function (res) {
+
+                $("#txttotalamount").val(res);
+            })
         })
+        $("#btnsavetodbir").click(function (e) {
+            e.preventDefault();
+            $.post("/Inventory/PostInvoicewithstatus", { Docno: $("#txtdocnoforgr").val(), total: $("#txttotalamount").val(), paid: $("#txtpaidamount").val(), balance: $("#txtbalance").val() }, function (res) {
 
+                $.notify(res.message, {
+                    globalPosition: "top center",
+                    className: "success"
+
+                });
+            });
+        });
     </script>
 
 

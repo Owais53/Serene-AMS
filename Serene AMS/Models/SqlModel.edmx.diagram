@@ -58,6 +58,7 @@
         <AssociationConnector Association="HrmsModel.FK_tblVacancydetails_tblStructure" ManuallyRouted="false" />
         <AssociationConnector Association="HrmsModel.FK_tblStock_tblItem" />
         <EntityTypeShape EntityType="HrmsModel.tblGrItemsPrice" Width="1.5" PointX="5.375" PointY="8.75" />
+        <EntityTypeShape EntityType="HrmsModel.tblInvoiceReceipt" Width="1.5" PointX="7.375" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

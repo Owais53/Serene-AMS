@@ -162,6 +162,20 @@
           <Property Name="PartialDeliveredQuantity" Type="int" />
           <Property Name="ItemPrice" Type="money" />
         </EntityType>
+        <EntityType Name="tblInvoiceReceipt">
+          <Key>
+            <PropertyRef Name="InvoiceReceiptId" />
+          </Key>
+          <Property Name="InvoiceReceiptId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceReceiptNo" Type="varchar(max)" />
+          <Property Name="GRReferenceNo" Type="int" />
+          <Property Name="TotalAmount" Type="money" />
+          <Property Name="PaidAmount" Type="money" />
+          <Property Name="Balance" Type="money" />
+          <Property Name="Createdby" Type="varchar" MaxLength="100" />
+          <Property Name="Createdon" Type="date" />
+          <Property Name="Status" Type="varchar" MaxLength="75" />
+        </EntityType>
         <EntityType Name="tblItem">
           <Key>
             <PropertyRef Name="ItemId" />
@@ -648,6 +662,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySet Name="tblEmployeeLeaves" EntityType="Self.tblEmployeeLeaves" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblExpenses" EntityType="Self.tblExpenses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblGrItemsPrice" EntityType="Self.tblGrItemsPrice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblInvoiceReceipt" EntityType="Self.tblInvoiceReceipt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblItem" EntityType="Self.tblItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblItemType" EntityType="Self.tblItemType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPosition" EntityType="Self.tblPosition" Schema="dbo" store:Type="Tables" />
@@ -1563,6 +1578,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
             <End Role="tblStock" EntitySet="tblStocks" />
           </AssociationSet>
           <EntitySet Name="tblGrItemsPrices" EntityType="HrmsModel.tblGrItemsPrice" />
+          <EntitySet Name="tblInvoiceReceipts" EntityType="HrmsModel.tblInvoiceReceipt" />
         </EntityContainer>
         <Association Name="FK_tblStock_tblItem">
           <End Type="HrmsModel.tblItem" Role="tblItem" Multiplicity="0..1" />
@@ -1586,6 +1602,20 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="DeliveredQuantity" Type="Int32" />
           <Property Name="ItemPrice" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="PartialDeliveredQuantity" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tblInvoiceReceipt">
+          <Key>
+            <PropertyRef Name="InvoiceReceiptId" />
+          </Key>
+          <Property Name="InvoiceReceiptId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceReceiptNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="GRReferenceNo" Type="Int32" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Createdby" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Createdon" Type="DateTime" Precision="0" />
+          <Property Name="Status" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1982,6 +2012,21 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblInvoiceReceipts">
+            <EntityTypeMapping TypeName="HrmsModel.tblInvoiceReceipt">
+              <MappingFragment StoreEntitySet="tblInvoiceReceipt">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Createdon" ColumnName="Createdon" />
+                <ScalarProperty Name="Createdby" ColumnName="Createdby" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="GRReferenceNo" ColumnName="GRReferenceNo" />
+                <ScalarProperty Name="InvoiceReceiptNo" ColumnName="InvoiceReceiptNo" />
+                <ScalarProperty Name="InvoiceReceiptId" ColumnName="InvoiceReceiptId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

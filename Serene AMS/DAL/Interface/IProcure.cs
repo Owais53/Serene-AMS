@@ -66,6 +66,11 @@ namespace Serene_AMS.DAL.Interface
         void addpriceofitems(tblGrItemsPrice obj);
         tblGrItemsPrice addPartialGritemsPrice(int docno, int itemid, int partialdeliveredqty);
         void calculateitemprice(int docno, int itemid, decimal price);
-        
+        tblInvoiceReceipt AddIR( int Grno, decimal total, decimal paid, decimal balance);
+        tblInvoiceReceipt AddIRPartial(int Grno, decimal total, decimal paid, decimal balance);
+        void addInvoiceR(tblInvoiceReceipt obj);
+        void statuscompletepay(int Grno);
+        void statuspartialpay(int Grno);
+        void getIRno(int IRid,string IRno);
     }
 }

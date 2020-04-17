@@ -289,8 +289,14 @@
                             }
                             @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
-                               
+
                                 <li>@Html.ActionLink("Create GR", "ViewPOforGR", "Inventory")</li>
+
+                            }
+                            @if (Session["RoleName"].ToString() == "Finance Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                            {
+
+                                <li>@Html.ActionLink("Create Invoice Receipt", "ViewGRforInvoice", "Inventory")</li>
 
                             }
                         </ul>

@@ -120,6 +120,34 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
+        public decimal getTotalPrice(int Doc)
+        {
+            decimal id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select Sum(ItemPrice) from tblGritemsPrice where DocumentNo=@doc";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@doc",Doc);
+                id = (decimal)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public decimal getPartiallPrice(int Doc)
+        {
+            decimal id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select Balance from tblInvoiceReceipt where GRReferenceNo=@doc and Balance!=0";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@doc", Doc);
+                id = (decimal)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
         public int getItemidfromgr()
         {
             int id;

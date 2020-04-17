@@ -47,6 +47,7 @@ namespace Serene_AMS.ViewModels
         public String ItemsID { get; set; }
         public int DocNo { get; set; }
        public int Quantity { get; set; }
+        public string status { get; set; }
         public DateTime Createdon { get; set; }
         public string Createdby { get; set; }
         public decimal unitprice { get; set; }
@@ -59,6 +60,7 @@ namespace Serene_AMS.ViewModels
         public int Prreferenceno { get; set; }
         public int VendorId { get; set; }
         public string Prno { get; set; }
+        public string Grno { get; set; }
         public int DeliveredQuantity { get; set; }
         public int RemainingQuantity { get; set; }
         public string ReturnCreationDateForDisplay
