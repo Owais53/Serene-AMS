@@ -151,7 +151,23 @@
 
             });
 
+            $.ajax({
+                type: 'GET',
+                url: '/Inventory/GetDocPO',
+                success: function (response) {
 
+                    $("#appendselect").append('')
+                    $.each(response, function (i, v1) {
+
+                        $("#appendselect").append($('<option id="' + v1.DocumentNo + '" value="' + v1.DocumentNo + '">' + v1.DocumentNo + '</option>'))
+                    });
+
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
 
         });
         function Getprforpo(id) {
@@ -225,18 +241,19 @@
             })
         }
        
-        function OnSuccess(res) {
+        
+        function SuccessPostPo(res) {
             if (res) {
                 $.ajax({
                     type: 'GET',
                     url: '/Inventory/RemoveDocPO',
-                    success: function (response) {                      
+                    success: function (response) {
 
                         $.each(response, function (i, v1) {
-                            
+
                             $("#" + v1.DocumentNo + "").remove();
                         });
-                       
+
 
                     },
                     error: function (error) {
@@ -244,42 +261,22 @@
                     }
                 })
                 $.ajax({
-                       type: 'GET',
-                       url: '/Inventory/GetDocPO',
+                    type: 'GET',
+                    url: '/Inventory/GetDocPO',
                     success: function (response) {
-                       
+
                         $("#appendselect").append('')
                         $.each(response, function (i, v1) {
 
-                               $("#appendselect").append($('<option id="' + v1.DocumentNo + '" value="' + v1.DocumentNo + '">' + v1.DocumentNo + '</option>'))
-                           });
-                          
+                            $("#appendselect").append($('<option id="' + v1.DocumentNo + '" value="' + v1.DocumentNo + '">' + v1.DocumentNo + '</option>'))
+                        });
+
 
                     },
-                       error: function (error) {
-                           console.log(error);
-                       }
+                    error: function (error) {
+                        console.log(error);
+                    }
                 })
-              
-                var modal = $("#Modalconfirmreject");
-               
-
-                    modal.modal('hide');
-                    $.notify(res.message, {
-                        globalPosition: "top center",
-                        className: "success"
-
-                    });
-                    dataTableprpo.ajax.reload();
-                                                                     
-                
-            }
-        }
-        function OnFailure(res) {
-            alert("UnSuccessfull");
-        }
-        function SuccessPostPo(res) {
-            if (res) {
                 var modal = $("#Modalpo");
 
                 modal.modal('hide');

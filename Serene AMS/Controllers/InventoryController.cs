@@ -272,9 +272,10 @@ namespace Serene_AMS.Controllers
                         where doc.DocumentNo == id
                         select new ProcureVM()
                         {
-                            DocNo = doc.DocumentNo,
+                            DocNo = (int)doc.PrReferenceNo,
                             Createdby = doc.CreatedBy,
                             Createdon = (DateTime)doc.CreationDate,
+                            DeliveryDate=(DateTime)doc.DeliveryDate,
                             VendorName = vendor.VendorName,
                             Address = vendor.Address,
                             Contact = vendor.Contact,
@@ -287,19 +288,21 @@ namespace Serene_AMS.Controllers
 
             IProcure obj = new Procure();
 
-            var list = (from doc in obj.GetDocDetail()
-                        where doc.POReference == id
+            var list = (from doc in obj.GetDoc()
+                        join detail in obj.GetDocDetail() on doc.PrReferenceNo equals detail.DocumentNo
+                        join item in obj.Getitems() on detail.ItemId equals item.ItemId
+                        where doc.PrReferenceNo == id
                         select new
                         {
-                            doc.ItemName,
-                            doc.Quantity,
-                            doc.TotalPrice
+                           item.ItemName,
+                           detail.Quantity,
+                           detail.TotalPrice
 
                         }).Select(x => new ProcureVM()
                         {
                             ItemName = x.ItemName,
                             Quantity = (int)x.Quantity,
-                            Total = (int)x.TotalPrice
+                            Total=(decimal)x.TotalPrice
 
                         }).ToList();
 

@@ -70,6 +70,13 @@ namespace Serene_AMS.ViewModels
                 return this.Createdon.ToString("d");
             }
         }
+        public string ReturnDeliveryDateForDisplay
+        {
+            get
+            {
+                return this.DeliveryDate.ToString("d");
+            }
+        }
         public string ReturnRequestedDateForDisplay
         {
             get

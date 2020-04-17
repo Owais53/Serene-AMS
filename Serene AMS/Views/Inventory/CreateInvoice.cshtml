@@ -100,13 +100,9 @@
                 var txtpaid = $("#txtpaidamount").val();
                 var balance = txttotal - txtpaid
 
-                if (txtpaid > txttotal) {
-                    txtpaid.val(txttotal);
-                    $("#txtbalance").val(0);
-                }
-                else {
+               
                     $("#txtbalance").val(balance);
-                }
+                
             });
         });
        

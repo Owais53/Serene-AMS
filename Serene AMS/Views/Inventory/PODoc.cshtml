@@ -65,6 +65,9 @@
                                         <li>
                                             <span class="font-strong" id="getcreatedon">Created on:</span> @Html.DisplayFor(x => x.ReturnCreationDateForDisplay)
                                         </li>
+                                        <li>
+                                            <span class="font-strong" id="getcreatedon">Dekivery Date:</span> @Html.DisplayFor(x => x.ReturnDeliveryDateForDisplay)
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -87,7 +90,6 @@
                     <tr>
                         <th>Item</th>
                         <th>Quantity</th>
-                        <th>Delivery Date</th>
                         <th class="text-right">Total</th>
 
                     </tr>
@@ -129,7 +131,7 @@
                             var date = new Date(parseInt(v.DeliveryDate.substr(6)));
                             var month = date.getMonth() + 1;
                            
-                            $("#getporecord").append($('<tr><td><div><strong>' + v.ItemName + '</strong></div></td><td>' + v.Quantity + '</td><td>' + date.getFullYear() + "/" + month + "/" + date.getDate() + '</td><td>' + v.Total + '</td></tr>'))
+                            $("#getporecord").append($('<tr><td><div><strong>' + v.ItemName + '</strong></div></td><td>' + v.Quantity + '</td><td>' + v.Total + '</td></tr>'))
 
                         });
 
