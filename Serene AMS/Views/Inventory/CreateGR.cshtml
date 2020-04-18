@@ -84,8 +84,8 @@
                     <div>
                         <br />
                         <button type="submit" id="btnsavetodbgr" class="btn btn-primary">Submit</button>
-
-
+                        <div id="hiddengrno"></div>
+                      
                     </div>
                 </div>
             </div>
@@ -238,8 +238,9 @@
                          $.notify(res.message, {
                              globalPosition: "top center",
                              className: "success"
-
-                         });
+                                
+                         });                        
+                         $("#hiddengrno").append("<a href='@Url.Action("GRReport","Inventory")?id=" + res.Grno + "' class='btn btn-primary'>Print GR</a>")
                     },
                   error: function () {
                   alert("Error while Posting data");

@@ -84,7 +84,7 @@
                     <br />
                     <button type="submit" id="btnsavetodbir" class="btn btn-primary">Submit</button>
 
-
+                    <div id="getlinktoprintir"></div>
                 </div>
             </div>
         </div>
@@ -140,6 +140,7 @@
                     className: "success"
 
                 });
+                $("#getlinktoprintir").append("<a href='@Url.Action("IRReport","Inventory")?id=" + res.Irno + "' class='btn btn-primary'>Print GR</a>")
             });
         });
     </script>

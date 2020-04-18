@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serene_AMS.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
@@ -63,6 +64,10 @@ namespace Serene_AMS.ViewModels
         public string Grno { get; set; }
         public int DeliveredQuantity { get; set; }
         public int RemainingQuantity { get; set; }
+        public decimal Paid { get; set; }
+        public decimal Balance { get; set; }
+        public List<ProcureVM> GRDetails { get; set; }
+        public List<ProcureVM> IRDetails { get; set; }
         public string ReturnCreationDateForDisplay
         {
             get

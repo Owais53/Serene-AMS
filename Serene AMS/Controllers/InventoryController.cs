@@ -1027,7 +1027,7 @@ namespace Serene_AMS.Controllers
 
 
                     }
-                    return Json(new { message = "Goods Receipt " + add1.Docno + " Created with Status Partial Delivery" }, JsonRequestBehavior.AllowGet);
+                    return Json(new {Grno=add1.DocumentNo, message = "Goods Receipt " + add1.Docno + " Created with Status Partial Delivery" }, JsonRequestBehavior.AllowGet);
 
                 }
                 else
@@ -1055,7 +1055,7 @@ namespace Serene_AMS.Controllers
 
                     }
 
-                    return Json(new { message = "Goods Receipt " + add.Docno + " Created with Status Complete Delivery" }, JsonRequestBehavior.AllowGet);
+                    return Json(new {Grno=add.DocumentNo, message = "Goods Receipt " + add.Docno + " Created with Status Complete Delivery" }, JsonRequestBehavior.AllowGet);
                 }
 
 
@@ -1100,7 +1100,7 @@ namespace Serene_AMS.Controllers
                 obj.Save();
                 obj.statuscompletepay(Docno);
                 obj.Save();
-                return Json(new { message = "Invoice Receipt Created with " + add.InvoiceReceiptNo + " and Status Paid" }, JsonRequestBehavior.AllowGet);
+                return Json(new {Irno=add.InvoiceReceiptId, message = "Invoice Receipt Created with " + add.InvoiceReceiptNo + " and Status Paid" }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -1112,7 +1112,7 @@ namespace Serene_AMS.Controllers
                 obj.Save();
                 obj.statuspartialpay(Docno);
                 obj.Save();
-                return Json(new { message = "Invoice Receipt Created with " + add.InvoiceReceiptNo + " and Status Partially Paid" }, JsonRequestBehavior.AllowGet);
+                return Json(new {Irno=add.InvoiceReceiptId, message = "Invoice Receipt Created with " + add.InvoiceReceiptNo + " and Status Partially Paid" }, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -1202,6 +1202,102 @@ namespace Serene_AMS.Controllers
 
                 return Json(db.getTotalPrice(Doc), JsonRequestBehavior.AllowGet);
             }
+        }
+        public ActionResult GRReport(int? id)
+        {
+            IProcure obj = new Procure();
+            var data = (from doc in obj.GetDoc()
+                        join v in obj.GetVendor() on doc.VendorId equals v.VendorId
+                        where doc.DTypeId == 4 && doc.DocumentNo == id
+                        select new
+                        {
+                            doc.Docno,
+                            doc.CreationDate,
+                            doc.CreatedBy,
+                            v.VendorName,
+                            doc.Status
+                        }).Select(x => new ProcureVM()
+                        {
+                            Grno=x.Docno,
+                            Createdon=(DateTime)x.CreationDate,
+                            Createdby=x.CreatedBy,
+                            VendorName=x.VendorName,
+                            GRDetails=GetGrDetails(id)
+                        }).FirstOrDefault();
+
+            Report _report = new Report();
+            byte[] abytes = _report.PrepareReport(data);
+            return File(abytes, "application/pdf");
+        }
+        public List<ProcureVM> GetGrDetails(int? id)
+        {
+            ReqList li = new ReqList();
+            DataSet ds = li.Show_griteminreport(id);
+            List<ProcureVM> procure = new List<ProcureVM>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                procure.Add(new ProcureVM
+                {
+                    ItemName = dr["ItemName"].ToString(),
+                    DeliveredQuantity = Convert.ToInt32(dr["DeliveredQuantity"])
+                });
+            }
+            return procure;
+
+        }
+        public ActionResult IRReport(int? id)
+        {
+            IProcure obj = new Procure();
+            var data = (from ir in obj.Getir()
+                        join doc in obj.GetDoc() on ir.GRReferenceNo equals doc.DocumentNo
+                        join v in obj.GetVendor() on doc.VendorId equals v.VendorId
+                        where ir.InvoiceReceiptId == id
+                        select new
+                        {
+                           ir.InvoiceReceiptNo,
+                           ir.Createdby,
+                           ir.Createdon,
+                           ir.Status,
+                           ir.TotalAmount,
+                           ir.PaidAmount,
+                           ir.Balance,
+                           v.VendorName
+
+                        }).Select(x => new ProcureVM()
+                        {
+                            Grno = x.InvoiceReceiptNo,
+                            Createdon = (DateTime)x.Createdon,
+                            Createdby = x.Createdby,
+                            VendorName = x.VendorName,
+                            Total=(decimal)x.TotalAmount,
+                            Paid =(decimal)x.PaidAmount,
+                            Balance=(decimal)x.Balance,
+                            status=x.Status,
+                            IRDetails = GetIrDetails(id)
+                        }).FirstOrDefault();
+
+            Report _report = new Report();
+            byte[] abytes = _report.PrepareIRReport(data);
+            return File(abytes, "application/pdf");
+        }
+        public List<ProcureVM> GetIrDetails(int? id)
+        {
+            ReqList li = new ReqList();
+            DataSet ds = li.Show_iritempriceinreport(id);
+            List<ProcureVM> procure = new List<ProcureVM>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                procure.Add(new ProcureVM
+                {
+                    ItemName = dr["ItemName"].ToString(),
+                    DeliveredQuantity = Convert.ToInt32(dr["DeliveredQuantity"]),
+                    ItemPrice=Convert.ToDecimal(dr["ItemPrice"])
+                });
+            }
+            return procure;
+
         }
     }
 }

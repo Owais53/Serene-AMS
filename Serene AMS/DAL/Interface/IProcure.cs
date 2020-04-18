@@ -19,7 +19,8 @@ namespace Serene_AMS.DAL.Interface
         IEnumerable<tblDocDetail> GetDocDetail();
         IEnumerable<tblVendor> GetVendor();
         IEnumerable<tblprlineitem> Getprline();
-      
+        IEnumerable<tblInvoiceReceipt> Getir();
+
         void AddTypes(tblItemType obj);
         tblItemType AddItemtype(string ItemType);
         IEnumerable<tblItem> Getitems();

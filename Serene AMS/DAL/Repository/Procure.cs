@@ -535,5 +535,10 @@ namespace Serene_AMS.DAL.Repository
             obj.InvoiceReceiptNo = IRno;
             context.Entry(obj).State = EntityState.Modified;
         }
+
+        public IEnumerable<tblInvoiceReceipt> Getir()
+        {
+            return context.tblInvoiceReceipts;
+        }
     }
 }

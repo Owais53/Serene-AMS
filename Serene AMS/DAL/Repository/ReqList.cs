@@ -215,6 +215,24 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_griteminreport(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,DeliveredQuantity from tblGrItemsPrice p inner join tblItem i on p.ItemId=i.ItemId where DocumentNo="+id+"", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_iritempriceinreport(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,gr.DeliveredQuantity,gr.ItemPrice from tblInvoiceReceipt ir inner join tblGrItemsPrice gr on ir.GRReferenceNo=gr.DocumentNo inner join tblItem i on gr.ItemId=i.ItemId where ir.InvoiceReceiptId="+id+"", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
         public DataSet Remove_gritemininvoicegrid(int? id)
         {
 
