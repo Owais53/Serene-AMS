@@ -16,6 +16,7 @@ namespace Serene_AMS.DAL.Classes
         Document _document;
         Font _fontStyle;
         Font _fontStyleNotBold;
+        PdfPTable _pdfgrTable = new PdfPTable(3);
         PdfPTable _pdfTable = new PdfPTable(4);
         PdfPCell _pdfPCell;
         MemoryStream _memoryStream = new MemoryStream();
@@ -28,17 +29,17 @@ namespace Serene_AMS.DAL.Classes
             _document = new Document(PageSize.A4, 0f, 0f, 1f, 0f);
             _document.SetPageSize(PageSize.A4);
             _document.SetMargins(20f, 20f, 20f, 20f);
-            _pdfTable.WidthPercentage = 100;
-            _pdfTable.HorizontalAlignment = Element.ALIGN_LEFT;
+            _pdfgrTable.WidthPercentage = 100;
+            _pdfgrTable.HorizontalAlignment = Element.ALIGN_LEFT;
             _fontStyle = FontFactory.GetFont("Tahoma", 8f, 1);
             PdfWriter.GetInstance(_document, _memoryStream);
             _document.Open();
-            _pdfTable.SetWidths(new float[] { 20f, 150f, 100f });
+            _pdfgrTable.SetWidths(new float[] { 20f, 150f, 100f });
 
             this.ReportGRHeader();
             this.ReportGRBody();
-            _pdfTable.HeaderRows = 2;
-            _document.Add(_pdfTable);
+            _pdfgrTable.HeaderRows = 2;
+            _document.Add(_pdfgrTable);
             _document.Close();
             return _memoryStream.ToArray();
 
@@ -54,8 +55,8 @@ namespace Serene_AMS.DAL.Classes
             _pdfPCell.Border = 0;
             _pdfPCell.BackgroundColor = BaseColor.WHITE;
             _pdfPCell.ExtraParagraphSpace = 1;
-            _pdfTable.AddCell(_pdfPCell);
-            _pdfTable.CompleteRow();
+            _pdfgrTable.AddCell(_pdfPCell);
+            _pdfgrTable.CompleteRow();
 
             _fontStyle = FontFactory.GetFont("Tahoma", 9f, 1);
             _pdfPCell = new PdfPCell(new Phrase("Serene Air Engineering Services", _fontStyle));
@@ -64,8 +65,8 @@ namespace Serene_AMS.DAL.Classes
             _pdfPCell.Border = 0;
             _pdfPCell.BackgroundColor = BaseColor.WHITE;
             _pdfPCell.ExtraParagraphSpace = 0;
-            _pdfTable.AddCell(_pdfPCell);
-            _pdfTable.CompleteRow();
+            _pdfgrTable.AddCell(_pdfPCell);
+            _pdfgrTable.CompleteRow();
         }
         private void ReportGRBody()
         {
@@ -75,13 +76,13 @@ namespace Serene_AMS.DAL.Classes
             _pdfPCell = new PdfPCell(GRDetails());
             _pdfPCell.Colspan = 2;
             _pdfPCell.Border = 0;
-            _pdfTable.AddCell(_pdfPCell);
+            _pdfgrTable.AddCell(_pdfPCell);
 
             _pdfPCell = new PdfPCell(Detail());
             _pdfPCell.Colspan = 2;
             _pdfPCell.Border = 0;
-            _pdfTable.AddCell(_pdfPCell);
-            _pdfTable.CompleteRow();
+            _pdfgrTable.AddCell(_pdfPCell);
+            _pdfgrTable.CompleteRow();
 
           
             _fontStyle = FontFactory.GetFont("Tahoma", 8f, 1);
@@ -89,22 +90,22 @@ namespace Serene_AMS.DAL.Classes
             _pdfPCell.HorizontalAlignment = Element.ALIGN_CENTER;
             _pdfPCell.VerticalAlignment = Element.ALIGN_MIDDLE;
             _pdfPCell.BackgroundColor = BaseColor.LIGHT_GRAY;
-            _pdfTable.AddCell(_pdfPCell);
+            _pdfgrTable.AddCell(_pdfPCell);
 
             _fontStyle = FontFactory.GetFont("Tahoma", 10f, 1);
             _pdfPCell = new PdfPCell(new Phrase("Item Name", _fontStyle));
             _pdfPCell.HorizontalAlignment = Element.ALIGN_CENTER;
             _pdfPCell.VerticalAlignment = Element.ALIGN_MIDDLE;
             _pdfPCell.BackgroundColor = BaseColor.LIGHT_GRAY;
-            _pdfTable.AddCell(_pdfPCell);
+            _pdfgrTable.AddCell(_pdfPCell);
 
 
             _pdfPCell = new PdfPCell(new Phrase("Delivered Quantity", _fontStyle));
             _pdfPCell.HorizontalAlignment = Element.ALIGN_CENTER;
             _pdfPCell.VerticalAlignment = Element.ALIGN_MIDDLE;
             _pdfPCell.BackgroundColor = BaseColor.LIGHT_GRAY;
-            _pdfTable.AddCell(_pdfPCell);
-            _pdfTable.CompleteRow();
+            _pdfgrTable.AddCell(_pdfPCell);
+            _pdfgrTable.CompleteRow();
 
             _fontStyle = FontFactory.GetFont("Tahoma", 9f, 0);
             int serialNumber = 1;
@@ -114,20 +115,20 @@ namespace Serene_AMS.DAL.Classes
                 _pdfPCell.HorizontalAlignment = Element.ALIGN_CENTER;
                 _pdfPCell.VerticalAlignment = Element.ALIGN_MIDDLE;
                 _pdfPCell.BackgroundColor = BaseColor.WHITE;
-                _pdfTable.AddCell(_pdfPCell);
+                _pdfgrTable.AddCell(_pdfPCell);
 
                 _pdfPCell = new PdfPCell(new Phrase(procure.ItemName, _fontStyle));
                 _pdfPCell.HorizontalAlignment = Element.ALIGN_CENTER;
                 _pdfPCell.VerticalAlignment = Element.ALIGN_MIDDLE;
                 _pdfPCell.BackgroundColor = BaseColor.WHITE;
-                _pdfTable.AddCell(_pdfPCell);
+                _pdfgrTable.AddCell(_pdfPCell);
 
                 _pdfPCell = new PdfPCell(new Phrase(procure.DeliveredQuantity.ToString(), _fontStyle));
                 _pdfPCell.HorizontalAlignment = Element.ALIGN_CENTER;
                 _pdfPCell.VerticalAlignment = Element.ALIGN_MIDDLE;
                 _pdfPCell.BackgroundColor = BaseColor.WHITE;
-                _pdfTable.AddCell(_pdfPCell);
-                _pdfTable.CompleteRow();
+                _pdfgrTable.AddCell(_pdfPCell);
+                _pdfgrTable.CompleteRow();
             }
 
 

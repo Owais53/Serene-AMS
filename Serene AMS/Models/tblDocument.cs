@@ -34,7 +34,8 @@ namespace Serene_AMS.Models
         public Nullable<System.DateTime> ItemRequestedDate { get; set; }
         public Nullable<int> POReferenceno { get; set; }
         public Nullable<System.DateTime> DeliveryDate { get; set; }
-        public string StatuschangeReason { get; set; }
+        public Nullable<int> GRReferencenoforReturn { get; set; }
+        public string Reasonofreturn { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocDetail> tblDocDetails { get; set; }

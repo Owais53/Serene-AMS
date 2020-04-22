@@ -51,7 +51,10 @@ namespace Serene_AMS.ViewModels
         public string status { get; set; }
         public DateTime Createdon { get; set; }
         public string Createdby { get; set; }
+        public string Reasonofreturn { get; set; }
         public decimal unitprice { get; set; }
+        public int RejectedQuantity { get; set; }
+        public int ApprovedQuantity { get; set; }
         public decimal Total { get; set; }
         public decimal Totalforall { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
@@ -59,6 +62,7 @@ namespace Serene_AMS.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime DeliveryDate { get; set; }
         public int Prreferenceno { get; set; }
+        public int Poreferenceno { get; set; }
         public int VendorId { get; set; }
         public string Prno { get; set; }
         public string Grno { get; set; }

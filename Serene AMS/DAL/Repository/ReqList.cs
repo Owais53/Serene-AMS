@@ -170,6 +170,15 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_QtyRejectedDataingrid(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,d.ReturnQuantity,d.ApprovedQuantity from tblGrItemsPrice d inner join tblItem i on d.ItemId=i.ItemId where d.DocumentNo=" + id + "", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
         public DataSet Show_QtyDataingridpartial(int? id)
         {
 
@@ -242,6 +251,25 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_GRdataforrd(int? id)
+        {
 
+            SqlCommand com = new SqlCommand("select i.ItemName,gr.DeliveredQuantity from tblGrItemsPrice gr inner join tblItem i on gr.ItemId=i.ItemId where DocumentNo=" + id + "", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+       
+        public DataSet Show_GRdataforrdddl(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select gr.ItemId,i.ItemName from tblGrItemsPrice gr inner join tblItem i on gr.ItemId=i.ItemId where DocumentNo=" + id + "", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+     
     }
 }

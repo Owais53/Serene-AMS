@@ -73,5 +73,10 @@ namespace Serene_AMS.DAL.Interface
         void statuscompletepay(int Grno);
         void statuspartialpay(int Grno);
         void getIRno(int IRid,string IRno);
+        void updategrlineforrdquality(int Grno,int itemid,int qty);
+        tblDocument Addrd(int vendorid, int grref, string reasonofreturn);
+        void updategrstatustoopen(int grno);
+        tblreturnlineitem Addreturn(int rno, int grno,int vendorid, int itemid, int dqty, int rqty, int Approvedbyqualityqty);
+        void addr(tblreturnlineitem obj);
     }
 }

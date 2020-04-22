@@ -28,6 +28,7 @@ namespace Serene_AMS.Models
         public Nullable<int> ReorderPoint { get; set; }
         public Nullable<decimal> ItemPrice { get; set; }
         public Nullable<int> Availablestock { get; set; }
+        public Nullable<int> Qualityinspectionstock { get; set; }
     
         public virtual tblItemType tblItemType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

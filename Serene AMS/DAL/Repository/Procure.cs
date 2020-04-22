@@ -70,6 +70,7 @@ namespace Serene_AMS.DAL.Repository
                 ReorderPoint=reorderpoint,
                 ItemPrice=price,
                 Availablestock=0,
+                Qualityinspectionstock=0,
             };
             return add;
         }
@@ -431,7 +432,7 @@ namespace Serene_AMS.DAL.Repository
         public void updateitemstock(int itemid,int qty)
         {
             var obj = context.tblItems.Where(x => x.ItemId == itemid).FirstOrDefault();
-            obj.Availablestock = obj.Availablestock+qty;
+            obj.Qualityinspectionstock = obj.Qualityinspectionstock + qty;
             context.Entry(obj).State = EntityState.Modified;
         }
 
@@ -449,7 +450,9 @@ namespace Serene_AMS.DAL.Repository
                 DocumentNo=docno,
                 ItemId=itemid,
                 DeliveredQuantity=deliveredqty,
-                
+                ReturnQuantity=0,
+                MissingQuantity=0,
+                ApprovedQuantity=0,
             };
             return add;
         }
@@ -539,6 +542,61 @@ namespace Serene_AMS.DAL.Repository
         public IEnumerable<tblInvoiceReceipt> Getir()
         {
             return context.tblInvoiceReceipts;
+        }
+
+        public void updategrlineforrdquality(int Grno, int itemid, int qty)
+        {
+            var obj = context.tblGrItemsPrices.Where(x => x.DocumentNo==Grno && x.ItemId==itemid).FirstOrDefault();
+            obj.ReturnQuantity = qty;
+            obj.ApprovedQuantity = obj.DeliveredQuantity - qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public tblDocument Addrd(int vendorid, int grref, string reasonofreturn)
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblDocument()
+            {
+              
+                DTypeId=5,
+                CreationDate=DateTime.Now.Date,
+                CreatedBy=user,
+                DocStatus="Complete",
+                Status="InProgress",
+                VendorId=vendorid,
+                GRReferencenoforReturn=grref,
+                Reasonofreturn=reasonofreturn,
+            };
+            return add;
+        }
+
+        public void updategrstatustoopen(int grno)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == grno).FirstOrDefault();
+            obj.DocStatus = "Open";
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public tblreturnlineitem Addreturn(int rno, int grno,int vendorid, int itemid, int dqty, int rqty, int Approvedbyqualityqty)
+        {
+            var add = new tblreturnlineitem()
+            {
+                ReturnNo=rno,
+                Grreferenceno=grno,
+                VendorId=vendorid,
+                ItemId=itemid,
+                DeliveredQuantity=dqty,
+                RejectedQuantity=rqty,
+                ApprovedQtybyQuality=Approvedbyqualityqty,
+                MissingQuantity=0,
+                AvailableQuantity=0,
+            };
+            return add;
+        }
+
+        public void addr(tblreturnlineitem obj)
+        {
+            context.tblreturnlineitems.Add(obj);
         }
     }
 }

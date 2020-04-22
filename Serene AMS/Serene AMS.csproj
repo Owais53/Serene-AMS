@@ -204,7 +204,9 @@
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\RecruitmentController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
+    <Compile Include="Controllers\ReturnController.cs" />
     <Compile Include="DAL\Classes\DataTableparams.cs" />
     <Compile Include="DAL\Classes\InsertmultipleitemPR.cs" />
     <Compile Include="DAL\Classes\NumberSequence.cs" />
@@ -312,6 +314,9 @@
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblRequestdetail.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblreturnlineitem.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblRole.cs">
@@ -1136,12 +1141,15 @@
     <Content Include="Views\Inventory\CreateGR.cshtml" />
     <Content Include="Views\Inventory\CreateInvoice.cshtml" />
     <Content Include="Views\Inventory\ViewGRforInvoice.cshtml" />
+    <Content Include="Views\Return\ReturnDelivery.cshtml" />
+    <Content Include="Views\Return\CreateReturnDelivery.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="CV\" />
     <Folder Include="Reports\" />
     <Folder Include="TestPaper\" />
+    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
