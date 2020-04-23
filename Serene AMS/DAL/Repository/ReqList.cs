@@ -179,6 +179,24 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_QtyMissingDataingrid(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,d.MissingQuantity,d.ApprovedQuantity from tblGrItemsPrice d inner join tblItem i on d.ItemId=i.ItemId where d.DocumentNo=" + id + "", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_QtyMissingDataingridforrdm(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,d.MissingQuantity,d.AvailableQuantity from tblreturnlineitem d inner join tblItem i on d.ItemId=i.ItemId where d.Grreferenceno=" + id + "", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
         public DataSet Show_QtyDataingridpartial(int? id)
         {
 
@@ -260,7 +278,15 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
-       
+        public DataSet Show_GRdataforrdm(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,rd.ApprovedQtybyQuality from tblreturnlineitem rd inner join tblitem i on rd.ItemId=i.ItemId where Grreferenceno="+id+"", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
         public DataSet Show_GRdataforrdddl(int? id)
         {
 
@@ -270,6 +296,15 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
-     
+        public DataSet Show_GRdataforrdmddl(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select r.ItemId,i.ItemName from tblreturnlineitem r inner join tblItem i on r.ItemId=i.ItemId where Grreferenceno="+id+"", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+
     }
 }

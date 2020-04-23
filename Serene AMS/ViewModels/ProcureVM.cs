@@ -48,6 +48,8 @@ namespace Serene_AMS.ViewModels
         public String ItemsID { get; set; }
         public int DocNo { get; set; }
        public int Quantity { get; set; }
+        public string Item { get; set; }
+
         public string status { get; set; }
         public DateTime Createdon { get; set; }
         public string Createdby { get; set; }

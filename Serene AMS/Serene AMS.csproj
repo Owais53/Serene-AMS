@@ -1143,6 +1143,8 @@
     <Content Include="Views\Inventory\ViewGRforInvoice.cshtml" />
     <Content Include="Views\Return\ReturnDelivery.cshtml" />
     <Content Include="Views\Return\CreateReturnDelivery.cshtml" />
+    <Content Include="Views\Return\ApproveItems.cshtml" />
+    <Content Include="Views\Return\TransferStocktoAvailable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

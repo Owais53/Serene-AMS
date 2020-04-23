@@ -20,6 +20,8 @@ namespace Serene_AMS.DAL.Interface
         IEnumerable<tblVendor> GetVendor();
         IEnumerable<tblprlineitem> Getprline();
         IEnumerable<tblInvoiceReceipt> Getir();
+        IEnumerable<tblreturnlineitem> Getreturnd();
+        IEnumerable<tblGrItemsPrice> GetGrline();
 
         void AddTypes(tblItemType obj);
         tblItemType AddItemtype(string ItemType);
@@ -63,6 +65,7 @@ namespace Serene_AMS.DAL.Interface
         void addstocksl(tblStock obj);
         void updateitemstock(int itemid,int qty);
         void updateslstock(int Slid,int qty);
+        void minusslstock(int Slid, int qty);
         tblGrItemsPrice addGritemsPrice(int docno, int itemid, int deliveredqty);
         void addpriceofitems(tblGrItemsPrice obj);
         tblGrItemsPrice addPartialGritemsPrice(int docno, int itemid, int partialdeliveredqty);
@@ -77,6 +80,13 @@ namespace Serene_AMS.DAL.Interface
         tblDocument Addrd(int vendorid, int grref, string reasonofreturn);
         void updategrstatustoopen(int grno);
         tblreturnlineitem Addreturn(int rno, int grno,int vendorid, int itemid, int dqty, int rqty, int Approvedbyqualityqty);
+        tblreturnlineitem Addreturnformissing(int rno, int grno, int vendorid, int itemid, int dqty, int rqty, int Approvedqty);
         void addr(tblreturnlineitem obj);
+        void minusitemsfromqualitystock(int itemid,int rejectedquantity);
+        void addmissingquantityinreturnline(int Grno, int itemid, int qty);
+        void addmissingqtyinGrline(int Grno, int itemid, int qty);
+        void transferqualitystocktoavailable(int itemid,int qty);
+        void ApproveGR(int Grno);
+        void minusAvailablestock(int itemid, int qty);
     }
 }

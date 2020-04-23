@@ -97,6 +97,7 @@
           <Property Name="POReferenceno" Type="int" />
           <Property Name="GRReferencenoforReturn" Type="int" />
           <Property Name="Reasonofreturn" Type="varchar(max)" />
+          <Property Name="GRApproved" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="tblEmployee">
           <Key>
@@ -921,6 +922,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
           <Property Name="GRReferencenoforReturn" Type="Int32" />
           <Property Name="Reasonofreturn" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="GRApproved" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblEmployee">
           <Key>
@@ -1747,6 +1749,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocuments">
             <EntityTypeMapping TypeName="HrmsModel.tblDocument">
               <MappingFragment StoreEntitySet="tblDocument">
+                <ScalarProperty Name="GRApproved" ColumnName="GRApproved" />
                 <ScalarProperty Name="Reasonofreturn" ColumnName="Reasonofreturn" />
                 <ScalarProperty Name="GRReferencenoforReturn" ColumnName="GRReferencenoforReturn" />
                 <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />

@@ -598,5 +598,83 @@ namespace Serene_AMS.DAL.Repository
         {
             context.tblreturnlineitems.Add(obj);
         }
+
+        public void minusitemsfromqualitystock(int itemid, int rejectedquantity)
+        {
+            var obj = context.tblItems.Where(x => x.ItemId == itemid).FirstOrDefault();
+            obj.Qualityinspectionstock = obj.Qualityinspectionstock-rejectedquantity;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void minusslstock(int Slid, int qty)
+        {
+            var obj = context.tblStocks.Where(x => x.SLId == Slid).FirstOrDefault();
+            obj.AvailableStock = obj.AvailableStock - qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void addmissingquantityinreturnline(int Grno, int itemid, int qty)
+        {
+            var obj = context.tblreturnlineitems.Where(x => x.Grreferenceno == Grno && x.ItemId == itemid).FirstOrDefault();
+            obj.MissingQuantity = qty;
+            obj.AvailableQuantity = obj.ApprovedQtybyQuality - qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void addmissingqtyinGrline(int Grno, int itemid, int qty)
+        {
+            var obj = context.tblGrItemsPrices.Where(x => x.DocumentNo == Grno && x.ItemId == itemid).FirstOrDefault();
+            obj.MissingQuantity = qty;
+            obj.ApprovedQuantity = obj.DeliveredQuantity - qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void transferqualitystocktoavailable(int itemid, int qty)
+        {
+            var obj = context.tblItems.Where(x => x.ItemId == itemid).FirstOrDefault();
+            obj.Qualityinspectionstock = obj.Qualityinspectionstock - qty;
+            obj.Availablestock = obj.Availablestock + qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void ApproveGR(int Grno)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == Grno).FirstOrDefault();
+            obj.GRApproved = "Yes";
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public IEnumerable<tblreturnlineitem> Getreturnd()
+        {
+            return context.tblreturnlineitems;
+        }
+        public IEnumerable<tblGrItemsPrice> GetGrline()
+        {
+            return context.tblGrItemsPrices;
+        }
+
+        public void minusAvailablestock(int itemid, int qty)
+        {
+            var obj = context.tblItems.Where(x => x.ItemId == itemid).FirstOrDefault();
+            obj.Availablestock = obj.Availablestock - qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public tblreturnlineitem Addreturnformissing(int rno, int grno, int vendorid, int itemid, int dqty, int rqty, int Approvedqty)
+        {
+            var add = new tblreturnlineitem()
+            {
+                ReturnNo = rno,
+                Grreferenceno = grno,
+                VendorId = vendorid,
+                ItemId = itemid,
+                DeliveredQuantity = dqty,
+                RejectedQuantity = 0,
+                ApprovedQtybyQuality = dqty,
+                MissingQuantity = rqty,
+                AvailableQuantity = Approvedqty,
+            };
+            return add;
+        }
     }
 }

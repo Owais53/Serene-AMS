@@ -307,10 +307,16 @@
                             <span class="nav-label">Purchase Return</span><i class="fa fa-angle-left arrow"></i>
                         </a>
                         <ul class="nav-2-level collapse">
-                            @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                            @if (Session["RoleName"].ToString() == "Quality Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
 
                                 <li>@Html.ActionLink("Create Return Delivery", "ReturnDelivery", "Return")</li>
+
+                            }
+                            @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                            {
+
+                                <li>@Html.ActionLink("Approve GR Items", "ApproveItems", "Return")</li>
 
                             }
                         </ul>

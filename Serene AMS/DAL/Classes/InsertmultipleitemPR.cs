@@ -120,6 +120,19 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
+        public string getReturnNo(int Docno)
+        {
+            string id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT Docno FROM [Hrms].[dbo].[tblDocument] where GRReferencenoforReturn="+Docno+" and DTypeId=5";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (string)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
         public decimal getTotalPrice(int Doc)
         {
             decimal id;
