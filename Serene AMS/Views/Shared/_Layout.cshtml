@@ -324,10 +324,25 @@
                     <li>
                         <a href="javascript:;">
                             <i class="sidebar-item-icon fa fa-bar-chart"></i>
+                            <span class="nav-label">Issue Goods</span><i class="fa fa-angle-left arrow"></i>
+                        </a>
+                        <ul class="nav-2-level collapse">
+                            @if (Session["RoleName"].ToString() == "Quality Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                            {
+
+                                <li>@Html.ActionLink("Create Goods Issue", "CreateGoodsIssue", "Inventory")</li>
+
+                            }
+                           
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="sidebar-item-icon fa fa-bar-chart"></i>
                             <span class="nav-label">Reports</span><i class="fa fa-angle-left arrow"></i>
                         </a>
                         <ul class="nav-2-level collapse">
-                          
+
                             @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
                             {
 

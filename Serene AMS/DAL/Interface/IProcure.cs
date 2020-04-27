@@ -26,7 +26,7 @@ namespace Serene_AMS.DAL.Interface
         void AddTypes(tblItemType obj);
         tblItemType AddItemtype(string ItemType);
         IEnumerable<tblItem> Getitems();
-        tblItem Additem(int typeid,string itemname,string SL,int reorderpoint,decimal price);
+        tblItem Additem(int typeid,string itemname,string SL,int isconsumable,int reorderpoint,decimal price);
         void Additems(tblItem obj);
         void UpdateSL(int SLid, string city, string SL);
         void UpdateItemType(int id,string itemtype);

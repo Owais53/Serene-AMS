@@ -193,6 +193,7 @@
           <Property Name="StorageLocation" Type="varchar" MaxLength="75" />
           <Property Name="ReorderPoint" Type="int" />
           <Property Name="ItemPrice" Type="money" />
+          <Property Name="IsConsumable" Type="int" />
           <Property Name="Availablestock" Type="int" />
           <Property Name="Qualityinspectionstock" Type="int" />
         </EntityType>
@@ -1008,6 +1009,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="Availablestock" Type="Int32" />
           <NavigationProperty Name="tblStocks" Relationship="HrmsModel.FK_tblStock_tblItem" FromRole="tblItem" ToRole="tblStock" />
           <Property Name="Qualityinspectionstock" Type="Int32" />
+          <Property Name="IsConsumable" Type="Int32" />
         </EntityType>
         <EntityType Name="tblItemType">
           <Key>
@@ -1842,6 +1844,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblItems">
             <EntityTypeMapping TypeName="HrmsModel.tblItem">
               <MappingFragment StoreEntitySet="tblItem">
+                <ScalarProperty Name="IsConsumable" ColumnName="IsConsumable" />
                 <ScalarProperty Name="Qualityinspectionstock" ColumnName="Qualityinspectionstock" />
                 <ScalarProperty Name="Availablestock" ColumnName="Availablestock" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />

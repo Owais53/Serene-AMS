@@ -91,7 +91,7 @@ namespace Serene_AMS.DAL.Repository
             context.tblDocuments.Add(obj);
         }
 
-        public tblItem Additem(int Typeid, string itemname, string SL, int reorderpoint, decimal price)
+        public tblItem Additem(int Typeid, string itemname, string SL,int isconsumable,int reorderpoint, decimal price)
         {
             var add = new tblItem()
             {
@@ -99,6 +99,7 @@ namespace Serene_AMS.DAL.Repository
                 TypeId=Typeid,
                 StorageLocation=SL,
                 ReorderPoint=reorderpoint,
+                IsConsumable=isconsumable,
                 ItemPrice=price,
                 Availablestock=0,
                 Qualityinspectionstock=0,

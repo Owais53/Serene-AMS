@@ -538,7 +538,7 @@ namespace Serene_AMS.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateItems(ProcureVM model)
+        public ActionResult CreateItems(ProcureVM model,FormCollection form)
         {
             IProcure obj = new Procure();
             SetDocNumber doc = new SetDocNumber();
@@ -554,8 +554,10 @@ namespace Serene_AMS.Controllers
 
                 SelectList lists = new SelectList(SL, "StorageLocation", "StorageLocation");
                 ViewBag.getSLlist = lists;
-                
-                  var add = obj.Additem(model.TypeId, model.ItemName, model.StorageLocation, model.ReorderPoint, model.ItemPrice);              
+                var chkconsume = form["getonetime"];
+                var isconusmable = Convert.ToInt32(chkconsume);
+
+                var add = obj.Additem(model.TypeId, model.ItemName, model.StorageLocation,isconusmable,model.ReorderPoint, model.ItemPrice);              
                     obj.Additems(add);
                     obj.Save();
                     TempData["SuccessMessage1"] = "Successfully Created";

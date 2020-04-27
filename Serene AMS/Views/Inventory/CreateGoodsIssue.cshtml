@@ -1,0 +1,208 @@
+﻿
+@{
+                /**/
+
+                ViewBag.Title = "CreateGoodsIssue";
+}
+
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index","Home")">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Create Goods Issue
+        </li>
+    </ol>
+</nav>
+<div class="ibox">
+    <div class="ibox-body">
+        <div class="row">
+            <div id="MainDiv" class="col-md-8">
+                <div class="box box-danger box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td>
+                                      
+                                        <strong>Item</strong><br />
+                                        <input type="text" id="getItem" readonly class="form-control input-sm" />
+                                    </td>
+                                    <td>
+                                        <input type="hidden" id="getAvailability" readonly class="form-control input-sm" />
+                                        <strong>Quantity</strong><br />
+                                        <input type="text" tabindex="1" name="Qty" id="getQty" class="form-control input-sm NumbersOnly" />
+                                    </td>
+
+                                    <td>
+                                        <br />
+                                        <input type="button" tabindex="2" value="Add to list" id="btnAdd" style="float:right; margin-right:10px" class="btn btn-primary btn-sm" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <table class="table table-striped table-hover" id="maintableitem">
+                                <thead>
+                                    <tr style="background-color:#3d566e; color:#ecf0f1">
+                                        <th>
+                                            Item
+                                        </th>
+                                        <th>
+                                            Quantity
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-sm-4 ">
+                <div class="box box-danger box-body" style="height:450px">
+                    <!-- Begin of Form to be serialized  -->
+                    <form id="formSerialized">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12" style="">
+                                        <h4 style=" align-content:center">&nbsp;<span class="glyphicon glyphicon-list"></span> &nbsp; &nbsp;  Issue Items</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12" style="height:250px; ">
+                                        <table class="table table-condensed table-striped" id="tableissue">
+                                            <thead>
+                                                <tr>
+
+                                                    <th>Item</th>
+                                                    <th>Quantity</th>
+                                                    <th>Remove</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tblAppendHere"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <hr />
+
+                               
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+
+<script type="text/javascript">
+    var dataTableitems, dataTablereturngr;
+    $(function () {
+
+        dataTableitems = $('#maintableitem').DataTable({
+            pageLength: 10,
+            "ajax": {
+                "url": '/inventory/GetItemsonetimeList',
+                "type": "get",
+                "datatype": "json"
+            },
+            "columns": [
+
+                { "data": "ItemName", "authowidth": false },
+                { "data": "Availablestock", "authowidth": false }                             
+
+            ]
+
+
+        });
+
+
+    });
+    document.getElementById('maintableitem').onclick = function (event) {
+        event = event || window.event;
+        var target = event.target || event.srcElement;
+        while (target && target.nodeName != 'TR') {
+            target = target.parentElement;
+        }
+        var cells = target.cells;
+        if (!cells.length || target.parentNode.nodeName == 'THEAD') {
+            return;
+        }
+        //alert(cells[1].innerHTML);
+        $(function () {
+            $('#getItem').val($.trim(cells[0].innerHTML));
+           
+        });
+        //clears qty and amt field
+        $('#getQty').val('');
+      
+        //focuses cursor on Qty field
+        document.getElementById('getQty').focus();
+    }
+      $('#btnAdd').on('click', function () {
+        //Validation : Check if salesID and Qty is null
+          if ($('#getQty').val() == '' || $('#getItem').val() == '' || $('#getQty').val() == 0 || !$.isNumeric($('#getQty').val())) {
+              alert("Empty");
+        }
+        else {
+            //check for duplication
+            if (CheckItemDuplication($('#getItem').val())) {
+                
+                $('#tableissue .replacetext' + $('#getItem').val() +'').each(function () {
+
+                    var qtycurrent = $(this).html();               
+                    var qty = $('#getQty').val();
+                    var totalqty = (parseInt(qtycurrent) + parseInt(qty));
+                    if (!isNaN(totalqty)) {
+                     
+                        $('.replacetext' + $('#getItem').val() + '').html('' + totalqty + '');
+                    }
+                });
+                
+            }
+            else {
+                var $table = $('#tblAppendHere');
+                $table.append(
+                    '<tr class="dynamicRows">' +                                      
+                    '<td><input type="hidden" class="txtitem" name="Item"  value= "' + $('#getItem').val() + '"/>' + $('#getItem').val() + '</td>' +
+                    '<td><input type="hidden" name="Qty" value="' + $('#getQty').val() + '"  style="width:60px;"/><span class="replacetext' + $('#getItem').val() + '">' + $('#getQty').val() + '</span></td>' +                
+                    '<td><a href="#" class="btn btn-danger" onclick="removeItem(this)">Remove</a></td>'
+                    + '</tr>'
+                    );
+
+               
+              
+            }
+        }
+    });
+    function removeItem(obj) {
+        $(obj).parent().parent().remove();
+      
+    };
+    function CheckItemDuplication(item) {
+        var flag = false;
+        $('.dynamicRows').each(function () {
+            if ($(this).find('.txtitem').val() == item) {
+                flag = true;
+            }
+        });
+        return flag;
+    };
+</script>
+
+
+}

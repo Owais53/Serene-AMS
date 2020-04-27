@@ -24,7 +24,7 @@ namespace Serene_AMS.Controllers
             var Data = (from doc in obj.GetDoc()
                         join v in obj.GetVendor() on doc.VendorId equals v.VendorId
                         join t in obj.GetDoctypes() on doc.DTypeId equals t.TypeId
-                        where doc.DTypeId == 4 && doc.DocStatus=="Complete" && doc.POReferenceno!=null                          
+                        where doc.DTypeId == 4 && doc.DocStatus=="Complete"                         
                         select new
                         {
                             doc.Docno,
@@ -71,29 +71,58 @@ namespace Serene_AMS.Controllers
          "Name", "Name", "1"
           );
             ViewBag.getreasonlist = levellist;
-
-            var Data = (from doc in obj.GetDoc()
-                        join v in obj.GetVendor() on doc.VendorId equals v.VendorId
-                        join d in obj.GetDoc() on doc.POReferenceno equals d.DocumentNo
-                        where doc.DTypeId == 4 && doc.DocumentNo == id
-                        select new
-                        {
-                            doc.Docno,
-                            doc.POReferenceno,
-                            doc.VendorId,
-                            v.VendorName,
-                            doc.DocumentNo,
-                            d.PrReferenceNo,
-                        }).Select(x => new ProcureVM()
-                        {
-                            Grno = x.Docno,
-                            DocNo = x.DocumentNo,
-                            VendorName = x.VendorName,
-                            VendorId = (int)x.VendorId,
-                            Poreferenceno = (int)x.POReferenceno,
-                            Prreferenceno = (int)x.PrReferenceNo
-                        }).FirstOrDefault();
-            return View(Data);
+            var checkreturnrefno = obj.GetDoc().Where(x => x.DocumentNo == id && x.ReturnReferenceno == null).FirstOrDefault();
+            if (checkreturnrefno != null)
+            {
+                var Data = (from doc in obj.GetDoc()
+                            join v in obj.GetVendor() on doc.VendorId equals v.VendorId
+                            join d in obj.GetDoc() on doc.POReferenceno equals d.DocumentNo
+                            where doc.DTypeId == 4 && doc.DocumentNo == id
+                            select new
+                            {
+                                doc.Docno,
+                                doc.POReferenceno,
+                                doc.VendorId,
+                                v.VendorName,
+                                doc.DocumentNo,
+                                d.PrReferenceNo,
+                            }).Select(x => new ProcureVM()
+                            {
+                                Grno = x.Docno,
+                                DocNo = x.DocumentNo,
+                                VendorName = x.VendorName,
+                                VendorId = (int)x.VendorId,
+                                Poreferenceno = (int)x.POReferenceno,
+                                Prreferenceno = (int)x.PrReferenceNo
+                            }).FirstOrDefault();
+                return View(Data);
+            }
+            else
+            {
+                var Data = (from doc in obj.GetDoc()
+                            join v in obj.GetVendor() on doc.VendorId equals v.VendorId
+                            join d in obj.GetDoc() on doc.ReturnReferenceno equals d.DocumentNo
+                            where doc.DTypeId == 4 && doc.DocumentNo == id
+                            select new
+                            {
+                                doc.Docno,
+                                doc.ReturnReferenceno,
+                                doc.VendorId,
+                                v.VendorName,
+                                doc.DocumentNo,
+                                d.PrReferenceNo,
+                            }).Select(x => new ProcureVM()
+                            {
+                                Grno = x.Docno,
+                                DocNo = x.DocumentNo,
+                                VendorName = x.VendorName,
+                                VendorId = (int)x.VendorId,
+                                Poreferenceno = (int)x.ReturnReferenceno,
+                                Prreferenceno = (int)x.PrReferenceNo
+                            }).FirstOrDefault();
+                return View(Data);
+            }
+            
         }
 
         public ActionResult GetGRDataforReturn(int id)

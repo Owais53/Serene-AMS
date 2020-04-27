@@ -1475,5 +1475,27 @@ namespace Serene_AMS.Controllers
             return procure;
 
         }
+        public ActionResult CreateGoodsIssue()
+        {
+            return View();
+        }
+        public ActionResult GetItemsonetimeList()
+        {
+            IProcure obj = new Procure();          
+                   var Data = (from items in obj.Getitems()                              
+                               where items.IsConsumable == 1
+                               select new
+                               {
+                                   items.ItemName,
+                                   items.Availablestock
+
+                               }).Select(x => new
+                               {
+                                   x.ItemName,
+                                   x.Availablestock
+
+                               }).ToList();
+            return Json(new {data=Data},JsonRequestBehavior.AllowGet);
+        }
     }
 }
