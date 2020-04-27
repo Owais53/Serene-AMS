@@ -134,6 +134,24 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_returniteminddl(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select r.ItemId,i.ItemName from tblreturnlineitem r inner join tblItem i on r.ItemId=i.ItemId where ReturnNo="+id+"", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_returniteminddlPartial(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select r.ItemId,i.ItemName from tblreturnlineitem r inner join tblItem i on r.ItemId=i.ItemId where ReturnNo=" + id + " and RemainingQuantity>0", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
         public DataSet NotShow_iteminddl(int? id)
         {
 
@@ -170,6 +188,15 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_QtyDataingridReturn(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,d.ReturnQuantity,d.RemainingQuantity from tblreturnlineitem d inner join tblItem i on d.ItemId=i.ItemId where d.ReturnNo=" + id + " and d.ReturnQuantity>=0 and d.RemainingQuantity>=0", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
         public DataSet Show_QtyRejectedDataingrid(int? id)
         {
 
@@ -197,6 +224,7 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+
         public DataSet Show_QtyDataingridpartial(int? id)
         {
 
@@ -206,6 +234,16 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_QtyDataingridpartialReturn(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,d.PartialReturnQuantity,d.RemainingQuantity from tblreturnlineitem d inner join tblItem i on d.ItemId=i.ItemId where d.ReturnNo=" + id + " and d.PartialReturnQuantity>=0 and d.RemainingQuantity>=0", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+      
         public DataSet Show_QtyPartialDataingrid(int? id)
         {
 
@@ -245,7 +283,7 @@ namespace Serene_AMS.DAL.Repository
         public DataSet Show_griteminreport(int? id)
         {
 
-            SqlCommand com = new SqlCommand("select i.ItemName,DeliveredQuantity from tblGrItemsPrice p inner join tblItem i on p.ItemId=i.ItemId where DocumentNo="+id+"", con);
+            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,p.DeliveredQuantity,p.ItemPrice from tblGrItemsPrice p inner join tblItem i on p.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where DocumentNo="+id+"", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -255,6 +293,15 @@ namespace Serene_AMS.DAL.Repository
         {
 
             SqlCommand com = new SqlCommand("select i.ItemName,gr.DeliveredQuantity,gr.ItemPrice from tblInvoiceReceipt ir inner join tblGrItemsPrice gr on ir.GRReferenceNo=gr.DocumentNo inner join tblItem i on gr.ItemId=i.ItemId where ir.InvoiceReceiptId="+id+"", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_returniteminreport(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,r.DeliveredQuantity,r.RejectedQuantity from tblreturnlineitem r inner join tblItem i on r.ItemId=i.ItemId where ReturnNo="+id+"", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -278,10 +325,46 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Remove_GRdataforrd(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,gr.DeliveredQuantity from tblGrItemsPrice gr inner join tblItem i on gr.ItemId=i.ItemId where DocumentNo=" + id + " and gr.Approved='Yes'", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
         public DataSet Show_GRdataforrdm(int? id)
         {
 
-            SqlCommand com = new SqlCommand("select i.ItemName,rd.ApprovedQtybyQuality from tblreturnlineitem rd inner join tblitem i on rd.ItemId=i.ItemId where Grreferenceno="+id+"", con);
+            SqlCommand com = new SqlCommand("select i.ItemName,rd.ApprovedQtybyQuality from tblreturnlineitem rd inner join tblitem i on rd.ItemId=i.ItemId where Grreferenceno="+id+" and rd.Approved='No'", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_ReturndataforGR(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,r.RejectedQuantity from tblreturnlineitem r inner join tblItem i on r.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where ReturnNo="+id+"", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_ReturndataforGRPartial(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select t.ItemType,i.ItemName,r.RemainingQuantity from tblreturnlineitem r inner join tblItem i on r.ItemId=i.ItemId inner join tblItemType t on i.TypeId=t.Id where ReturnNo=" + id + " and RemainingQuantity>0", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Remove_GRdataforrdm(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,rd.ApprovedQtybyQuality from tblreturnlineitem rd inner join tblitem i on rd.ItemId=i.ItemId where Grreferenceno=" + id + " and rd.Approved='Yes'", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);

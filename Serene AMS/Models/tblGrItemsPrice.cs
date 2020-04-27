@@ -23,5 +23,6 @@ namespace Serene_AMS.Models
         public Nullable<int> ReturnQuantity { get; set; }
         public Nullable<int> MissingQuantity { get; set; }
         public Nullable<int> ApprovedQuantity { get; set; }
+        public string Approved { get; set; }
     }
 }

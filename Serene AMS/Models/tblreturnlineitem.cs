@@ -24,5 +24,9 @@ namespace Serene_AMS.Models
         public Nullable<int> AvailableQuantity { get; set; }
         public Nullable<int> DeliveredQuantity { get; set; }
         public Nullable<int> VendorId { get; set; }
+        public string Approved { get; set; }
+        public Nullable<int> ReturnQuantity { get; set; }
+        public Nullable<int> RemainingQuantity { get; set; }
+        public Nullable<int> PartialReturnQuantity { get; set; }
     }
 }

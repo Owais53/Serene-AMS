@@ -55,7 +55,9 @@ namespace Serene_AMS.DAL.Interface
         void vendorselect(int docno, int vendorid);
         void itemqtydelivered(int Prdocno, int itemid, int qty);
         tblDocument AddGr(int porefno,int vendor);
+        tblDocument AddGrforReturn(int returnrefno, int vendor);
         tblDocument AddGrwithcomp(int porefno, int vendor);
+        tblDocument AddGrwithcompReturn(int returnrefno, int vendor);
 
         void addgr(tblDocument obj);
         void updatestatuscomplete(int docno);
@@ -77,7 +79,7 @@ namespace Serene_AMS.DAL.Interface
         void statuspartialpay(int Grno);
         void getIRno(int IRid,string IRno);
         void updategrlineforrdquality(int Grno,int itemid,int qty);
-        tblDocument Addrd(int vendorid, int grref, string reasonofreturn);
+        tblDocument Addrd(int vendorid, int grref, string reasonofreturn,DateTime dateofdev,int prref);
         void updategrstatustoopen(int grno);
         tblreturnlineitem Addreturn(int rno, int grno,int vendorid, int itemid, int dqty, int rqty, int Approvedbyqualityqty);
         tblreturnlineitem Addreturnformissing(int rno, int grno, int vendorid, int itemid, int dqty, int rqty, int Approvedqty);
@@ -88,5 +90,10 @@ namespace Serene_AMS.DAL.Interface
         void transferqualitystocktoavailable(int itemid,int qty);
         void ApproveGR(int Grno);
         void minusAvailablestock(int itemid, int qty);
+        void updategrapprove(int grno,int itemid);
+        void updaterdapprove(int grno, int itemid);
+        void itemqtydeliveredreturn(int docno, int itemid, int qty);
+        void itempartialqtydeliveredreturn(int docno, int itemid, int qty);
+        void updatestatusdoctorejected(int docno);
     }
 }

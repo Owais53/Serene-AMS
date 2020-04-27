@@ -1145,13 +1145,13 @@
     <Content Include="Views\Return\CreateReturnDelivery.cshtml" />
     <Content Include="Views\Return\ApproveItems.cshtml" />
     <Content Include="Views\Return\TransferStocktoAvailable.cshtml" />
+    <Content Include="Views\Reports\StockReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="CV\" />
     <Folder Include="Reports\" />
     <Folder Include="TestPaper\" />
-    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

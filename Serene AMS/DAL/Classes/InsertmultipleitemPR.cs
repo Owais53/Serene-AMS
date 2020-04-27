@@ -107,6 +107,32 @@ namespace Serene_AMS.DAL.Classes
 
             return false;
         }
+        public bool getRemainingQtyforReturn(int docno)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select RemainingQuantity from tblreturnlineitem where ReturnNo=" + docno + "";
+                SqlCommand smd = new SqlCommand(s, con);
+
+
+                SqlDataReader sdr = smd.ExecuteReader();
+                while (sdr.Read())
+                {
+
+
+                    if (Convert.ToInt32(sdr[0]) > 0)
+                    {
+                        return true;
+
+                    }
+
+                }
+
+            }
+
+            return false;
+        }
         public int getDocumentNo()
         {
             int id;
@@ -116,6 +142,100 @@ namespace Serene_AMS.DAL.Classes
                 String s = "SELECT max(DocumentNo) FROM [Hrms].[dbo].[tblDocument]";
                 SqlCommand smd = new SqlCommand(s, con);
                 id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getLastItemGrNo(int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select ItemId from tblGrItemsPrice where DocumentNo="+docno+" and id=(SELECT MAX(id)  FROM tblGrItemsPrice where DocumentNo="+docno+")";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getLastItemRdNo(int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select ItemId from tblreturnlineitem where Grreferenceno=" + docno + " and id=(SELECT MAX(id) FROM tblreturnlineitem where Grreferenceno=" + docno + ")";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getPrrefforgr(int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select PrReferenceNo from tblDocument where DocumentNo=" + docno + "";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getGrrefforreturn(int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select GrReferencenoforReturn from tblDocument where DocumentNo=" + docno + "";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getPorefforgr(int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select DocumentNo from tblDocument where (PrReferenceNo=" + docno + " or GrReferencenoforReturn="+docno+")";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+                
+
+            }
+            return id;
+        }
+        public int gettypeidgr(int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select DTypeId from tblDocument where DocumentNo=" + docno + "";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+
+            }
+            return id;
+        }
+        public int getreturnrefforgr(int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select DocumentNo from tblDocument where GrReferencenoforReturn=" + docno + " and DTypeId=5";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
 
             }
             return id;
@@ -189,6 +309,21 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
+        public int getOrderedqtyforreturn(int docno, int itemid)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT RejectedQuantity FROM [Hrms].[dbo].[tblreturnlineitem] where ReturnNo=@doc and ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@doc", docno);
+                smd.Parameters.AddWithValue("@item", itemid);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
         public int getpartialOrderedqty(int docno, int itemid)
         {
             int id;
@@ -196,6 +331,21 @@ namespace Serene_AMS.DAL.Classes
             {
                 con.Open();
                 String s = "SELECT RemainingQuantity FROM [Hrms].[dbo].[tblDocDetails] where DocumentNo=@doc and ItemId=@item";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@doc", docno);
+                smd.Parameters.AddWithValue("@item", itemid);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getpartialOrderedqtyreturn(int docno, int itemid)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT RemainingQuantity FROM [Hrms].[dbo].[tblreturnlineitem] where ReturnNo=@doc and ItemId=@item";
                 SqlCommand smd = new SqlCommand(s, con);
                 smd.Parameters.AddWithValue("@doc", docno);
                 smd.Parameters.AddWithValue("@item", itemid);

@@ -49,7 +49,7 @@ namespace Serene_AMS.ViewModels
         public int DocNo { get; set; }
        public int Quantity { get; set; }
         public string Item { get; set; }
-
+       
         public string status { get; set; }
         public DateTime Createdon { get; set; }
         public string Createdby { get; set; }
@@ -74,6 +74,15 @@ namespace Serene_AMS.ViewModels
         public decimal Balance { get; set; }
         public List<ProcureVM> GRDetails { get; set; }
         public List<ProcureVM> IRDetails { get; set; }
+        public DateTime GeneratedDate { get; set; }
+
+        public string ReturnGeneratedDateForDisplay
+        {
+            get
+            {
+                return this.GeneratedDate.ToString("d");
+            }
+        }
         public string ReturnCreationDateForDisplay
         {
             get

@@ -8,13 +8,13 @@
             <a href="@Url.Action("Index","Home")">Dashboard</a>
         </li>
         <li class="breadcrumb-item active">
-            Select PO to Create GR
+            Select PO or Return to Create GR
         </li>
     </ol>
 </nav>
 <div class="ibox">
     <div class="ibox-body">
-
+        <div style=" background-color:#0094ff; color:#ecf0f1; padding:10px">Purchase Order</div>
         <table id="tblpolistforgr" class="table table-striped table-hover responsive table-responsive">
             <thead>
                 <tr style="background-color:#0094ff; color:#ecf0f1">
@@ -40,12 +40,36 @@
 
 
         </table>
+        <div style=" background-color:#0094ff; color:#ecf0f1; padding:10px">Return Delivery</div>
+        <table id="tblreturnlistforgr" class="table table-striped table-hover responsive table-responsive">
+            <thead>
+                <tr style="background-color:#0094ff; color:#ecf0f1">
+                    <th>Document No</th>
+                    <th>Document</th>
+                    <th>Vendor</th>
+                    <th>Delivery Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                    <th>Document No</th>
+                    <th>Document</th>
+                    <th>Vendor</th>
+                    <th>Delivery Date</th>
+                    <th>Action</th>
+                </tr>
+            </tfoot>
+
+
+        </table>
     </div>
 </div>
 @section scripts{
 
     <script type="text/javascript">
-        var  dataTablepogr;
+        var  dataTablepogr,dataTablereturngr;
         $(function () {
 
             dataTablepogr = $('#tblpolistforgr').DataTable({
@@ -74,8 +98,8 @@
                       },
                     },
                     {
-                        "data": "DocumentNo", "render": function (data, full, meta) {
-                            return "<a href='@Url.Action("CreateGR","Inventory")?id=" + data+"' class='btn btn-primary' id='getlinktogr'>Create Goods Receipt</a>"
+                        "data": "DocumentNo", "render": function (data, full, meta) {                          
+                            return "<button type='button' id='getlinktogr' onclick=GetPrforGr('" + data + "') class='btn btn-primary'>Create Goods Receipt</button>"
                         },
                     }
 
@@ -85,8 +109,56 @@
 
 
             });
+             dataTablereturngr = $('#tblreturnlistforgr').DataTable({
+                pageLength: 10,
+                "ajax": {
+                    "url": '/Return/GetReturnlistforGR',
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
 
+                    { "data": "Docno", "authowidth": false },
+                    { "data": "DocumentType", "authowidth": false },
+                    { "data": "VendorName", "authowidth": false },                   
+                    { "data": "DeliveryDate",  "render": function (data) {
+                        var date = new Date(parseInt(data.substr(6)));
+                        var month = date.getMonth() + 1;
+                        return date.getDate() + "/" + month + "/" + date.getFullYear();
+                      },
+                    },
+                    {
+                        "data": "DocumentNo", "render": function (data, full, meta) {
+                            return "<button type='button' id='getlinktogr' onclick=GetPrnoforGr('" + data + "') class='btn btn-primary'>Create Goods Receipt</button>"
+                        },
+                    }
+
+
+
+                ]
+
+
+            });
         });
+        function GetPrforGr(id) {
+           
+            $.get("/Inventory/GetPrforGr", { Pono: id }, function (res) {
+                if (res) {
+                    window.location = "/Inventory/CreateGR/" + res + "";
+                }
+               
+            })
+        }
+        function GetPrnoforGr(id) {
+
+            $.get("/Inventory/GetGrforreturn", { returnno: id }, function (res) {
+                if (res) {
+                    window.location = "/Inventory/CreateGR/" + res + "";
+                }
+
+            })
+        }
+     
 </script>
 
 }

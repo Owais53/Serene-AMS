@@ -95,6 +95,7 @@
           <Property Name="ItemName" Type="nvarchar(max)" />
           <Property Name="PrReferenceNo" Type="int" />
           <Property Name="POReferenceno" Type="int" />
+          <Property Name="ReturnReferenceno" Type="int" />
           <Property Name="GRReferencenoforReturn" Type="int" />
           <Property Name="Reasonofreturn" Type="varchar(max)" />
           <Property Name="GRApproved" Type="varchar" MaxLength="50" />
@@ -166,6 +167,7 @@
           <Property Name="MissingQuantity" Type="int" />
           <Property Name="ApprovedQuantity" Type="int" />
           <Property Name="ItemPrice" Type="money" />
+          <Property Name="Approved" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="tblInvoiceReceipt">
           <Key>
@@ -319,6 +321,10 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="ApprovedQtybyQuality" Type="int" />
           <Property Name="MissingQuantity" Type="int" />
           <Property Name="AvailableQuantity" Type="int" />
+          <Property Name="ReturnQuantity" Type="int" />
+          <Property Name="PartialReturnQuantity" Type="int" />
+          <Property Name="RemainingQuantity" Type="int" />
+          <Property Name="Approved" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="tblRoles">
           <Key>
@@ -923,6 +929,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="GRReferencenoforReturn" Type="Int32" />
           <Property Name="Reasonofreturn" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="GRApproved" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReturnReferenceno" Type="Int32" />
         </EntityType>
         <EntityType Name="tblEmployee">
           <Key>
@@ -1631,6 +1638,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="ReturnQuantity" Type="Int32" />
           <Property Name="MissingQuantity" Type="Int32" />
           <Property Name="ApprovedQuantity" Type="Int32" />
+          <Property Name="Approved" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblInvoiceReceipt">
           <Key>
@@ -1660,6 +1668,10 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <Property Name="AvailableQuantity" Type="Int32" />
           <Property Name="DeliveredQuantity" Type="Int32" />
           <Property Name="VendorId" Type="Int32" />
+          <Property Name="Approved" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReturnQuantity" Type="Int32" />
+          <Property Name="RemainingQuantity" Type="Int32" />
+          <Property Name="PartialReturnQuantity" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1749,6 +1761,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblDocuments">
             <EntityTypeMapping TypeName="HrmsModel.tblDocument">
               <MappingFragment StoreEntitySet="tblDocument">
+                <ScalarProperty Name="ReturnReferenceno" ColumnName="ReturnReferenceno" />
                 <ScalarProperty Name="GRApproved" ColumnName="GRApproved" />
                 <ScalarProperty Name="Reasonofreturn" ColumnName="Reasonofreturn" />
                 <ScalarProperty Name="GRReferencenoforReturn" ColumnName="GRReferencenoforReturn" />
@@ -2053,6 +2066,7 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblGrItemsPrices">
             <EntityTypeMapping TypeName="HrmsModel.tblGrItemsPrice">
               <MappingFragment StoreEntitySet="tblGrItemsPrice">
+                <ScalarProperty Name="Approved" ColumnName="Approved" />
                 <ScalarProperty Name="ApprovedQuantity" ColumnName="ApprovedQuantity" />
                 <ScalarProperty Name="MissingQuantity" ColumnName="MissingQuantity" />
                 <ScalarProperty Name="ReturnQuantity" ColumnName="ReturnQuantity" />
@@ -2083,6 +2097,10 @@ warning 6002: The table/view 'Hrms.dbo.tblRequestdetail' does not have a primary
           <EntitySetMapping Name="tblreturnlineitems">
             <EntityTypeMapping TypeName="HrmsModel.tblreturnlineitem">
               <MappingFragment StoreEntitySet="tblreturnlineitem">
+                <ScalarProperty Name="PartialReturnQuantity" ColumnName="PartialReturnQuantity" />
+                <ScalarProperty Name="RemainingQuantity" ColumnName="RemainingQuantity" />
+                <ScalarProperty Name="ReturnQuantity" ColumnName="ReturnQuantity" />
+                <ScalarProperty Name="Approved" ColumnName="Approved" />
                 <ScalarProperty Name="VendorId" ColumnName="VendorId" />
                 <ScalarProperty Name="DeliveredQuantity" ColumnName="DeliveredQuantity" />
                 <ScalarProperty Name="AvailableQuantity" ColumnName="AvailableQuantity" />

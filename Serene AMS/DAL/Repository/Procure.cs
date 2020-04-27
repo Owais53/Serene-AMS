@@ -39,6 +39,21 @@ namespace Serene_AMS.DAL.Repository
             };
             return add;
         }
+        public tblDocument AddGrforReturn(int returnrefno, int vendor)
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblDocument()
+            {
+                DTypeId = 4,
+                CreationDate = DateTime.Now.Date,
+                CreatedBy = user,
+                DocStatus = "Complete",
+                Status = "Partial",
+                VendorId = vendor,
+                ReturnReferenceno = returnrefno,
+            };
+            return add;
+        }
         public tblDocument AddGrwithcomp(int porefno,int vendor)
         {
             var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
@@ -51,6 +66,22 @@ namespace Serene_AMS.DAL.Repository
                 Status = "Complete",
                 VendorId=vendor,
                 POReferenceno=porefno,
+
+            };
+            return add;
+        }
+        public tblDocument AddGrwithcompReturn(int returnrefno, int vendor)
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblDocument()
+            {
+                DTypeId = 4,
+                CreationDate = DateTime.Now.Date,
+                CreatedBy = user,
+                DocStatus = "Complete",
+                Status = "Complete",
+                VendorId = vendor,
+                ReturnReferenceno = returnrefno,
 
             };
             return add;
@@ -273,6 +304,13 @@ namespace Serene_AMS.DAL.Repository
             obj.RemainingQuantity = obj.Quantity - qty;
             context.Entry(obj).State = EntityState.Modified;
         }
+        public void itemqtydeliveredreturn(int docno, int itemid, int qty)
+        {
+            var obj = context.tblreturnlineitems.Where(x => x.ReturnNo == docno && x.ItemId == itemid).FirstOrDefault();
+            obj.ReturnQuantity = qty;
+            obj.RemainingQuantity = obj.RejectedQuantity - qty;
+            context.Entry(obj).State = EntityState.Modified;
+        }
 
         public void rejectpr(int id)
         {
@@ -413,6 +451,18 @@ namespace Serene_AMS.DAL.Repository
                 context.Entry(obj).State = EntityState.Modified;
             }
         }
+        public void itempartialqtydeliveredreturn(int docno, int itemid, int qty)
+        {
+            var checkstatus = context.tblDocuments.Where(x => x.DocumentNo == docno && x.Status == "Partial Delivery").FirstOrDefault();
+            if (checkstatus != null)
+            {
+                var obj = context.tblreturnlineitems.Where(x => x.ReturnNo == docno && x.ItemId == itemid).FirstOrDefault();
+                obj.ReturnQuantity = obj.ReturnQuantity+ qty;
+                obj.PartialReturnQuantity = qty;
+                obj.RemainingQuantity = obj.RemainingQuantity - qty;
+                context.Entry(obj).State = EntityState.Modified;
+            }
+        }
 
         public tblStock addslinstock(int slid)
         {
@@ -453,6 +503,7 @@ namespace Serene_AMS.DAL.Repository
                 ReturnQuantity=0,
                 MissingQuantity=0,
                 ApprovedQuantity=0,
+                Approved="No",
             };
             return add;
         }
@@ -480,7 +531,12 @@ namespace Serene_AMS.DAL.Repository
             obj.ItemPrice = obj.DeliveredQuantity * price;
             context.Entry(obj).State = EntityState.Modified;
         }
-
+        public void updatestatusdoctorejected(int docno)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo == docno).FirstOrDefault();
+            obj.Status = "Rejected";
+            context.Entry(obj).State = EntityState.Modified;
+        }
         public tblInvoiceReceipt AddIR(int Grno, decimal total, decimal paid, decimal balance)
         {
             var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
@@ -552,7 +608,7 @@ namespace Serene_AMS.DAL.Repository
             context.Entry(obj).State = EntityState.Modified;
         }
 
-        public tblDocument Addrd(int vendorid, int grref, string reasonofreturn)
+        public tblDocument Addrd(int vendorid, int grref, string reasonofreturn,DateTime dateofdev,int prref)
         {
             var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
             var add = new tblDocument()
@@ -566,6 +622,8 @@ namespace Serene_AMS.DAL.Repository
                 VendorId=vendorid,
                 GRReferencenoforReturn=grref,
                 Reasonofreturn=reasonofreturn,
+                DeliveryDate=dateofdev,
+                PrReferenceNo=prref,
             };
             return add;
         }
@@ -590,6 +648,10 @@ namespace Serene_AMS.DAL.Repository
                 ApprovedQtybyQuality=Approvedbyqualityqty,
                 MissingQuantity=0,
                 AvailableQuantity=0,
+                ReturnQuantity=0,
+                PartialReturnQuantity=0,
+                RemainingQuantity=-1,
+                Approved="No",
             };
             return add;
         }
@@ -675,6 +737,20 @@ namespace Serene_AMS.DAL.Repository
                 AvailableQuantity = Approvedqty,
             };
             return add;
+        }
+
+        public void updategrapprove(int grno, int itemid)
+        {
+            var obj = context.tblGrItemsPrices.Where(x => x.ItemId == itemid && x.DocumentNo==grno).FirstOrDefault();
+            obj.Approved = "Yes";
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void updaterdapprove(int grno, int itemid)
+        {
+            var obj = context.tblreturnlineitems.Where(x => x.ItemId == itemid && x.Grreferenceno == grno).FirstOrDefault();
+            obj.Approved = "Yes";
+            context.Entry(obj).State = EntityState.Modified;
         }
     }
 }

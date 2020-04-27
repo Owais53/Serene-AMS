@@ -53,7 +53,7 @@
                                
                                 <th>Item</th>
                                 <th>Quantity</th> 
-                                <th></th>
+                                <th><input type="checkbox" name="headercheck" id="checkAll"></th>
                             </tr>
                         </thead>
                         <tbody id="getrdmline"></tbody>
@@ -149,7 +149,7 @@
 
                 $.each(res, function (index, row) {
 
-                    $("#getrdmline").append("<tr id=" + row.ItemName + "><td>" + row.ItemName + "</td><td>" + row.Quantity + "</td><td><input type='checkbox' id='checkAll' class='table-checkbox'/></td></tr>")
+                    $("#getrdmline").append("<tr id=" + row.ItemName + "><td>" + row.ItemName + "</td><td>" + row.Quantity + "</td><td><input type='checkbox' class='table-checkbox'/></td></tr>")
 
                 });
 
@@ -159,16 +159,7 @@
         $("#btnsavetodbrdm").click(function (e) {
             var rdmlist = new Array();
 
-            $("#tbllineforrdm TBODY TR").each(function () {
-                var row = $(this);
-                var rdm = {};
-                rdm.ItemName = row.find("TD").eq(0).html();
-                rdm.DeliveredQuantity = row.find("TD").eq(1).html();
-                rdm.RejectedQuantity = row.find("TD").eq(2).html();
-                rdm.ApprovedQuantity = row.find("TD").eq(3).html();
-                rdmlist.push(rdm);
-            });
-            var objlist = new Array();
+           
             var headers = $("#tbllineforrdm thead th").filter(function () {
                 return !$(this).find('#checkAll').length;
             }).map(function () {
@@ -176,14 +167,14 @@
             }).get();
            
             var arr = $('#tbllineforrdm .table-checkbox:checked').map(function () {
-                var obj = {};
+                var rdm = {};
 
                 $(this).parent().siblings().each(function (i) {
-                    obj[headers[i]] = $(this).text().trim();
-                    objlist.push(obj);
+                    rdm[headers[i]] = $(this).text().trim();
+                    rdmlist.push(rdm);
                 })
 
-                return obj;
+                return rdm;
             });
             
             
@@ -191,16 +182,20 @@
             $.ajax({
                      type: "POST",
                 url: '/Return/PostRDMwithstatus',
-                data: JSON.stringify({ Docno: $("#txtdocnoforgr").val(), Grno: $("#txtgrrdm").val(), vendor: $("#txtvendoridforrdm").val(), objlists: objlist }),
+                data: JSON.stringify({ Docno: $("#txtdocnoforgr").val(), Grno: $("#txtgrrdm").val(), vendor: $("#txtvendoridforrdm").val(), rdmlists: rdmlist }),
                      dataType: "json",
                      contentType: "application/json; charset=utf-8",
                      success: function (res) {
+                         if (res.code == 1) {
+                             window.location = "/return/ApproveItems";
+                         }
                          $.notify(res.message, {
                              globalPosition: "top center",
                              className: "success"
-
-                         });
-
+                            
+                         });                        
+                         
+                         removeapprovedrecord();
                     },
                   error: function () {
                   alert("Error while Posting data");
@@ -208,6 +203,15 @@
                     });
 
         })
+        function removeapprovedrecord() {
+            $.get("/Return/RemoveGRDataforReturnforrdm", { id: $("#txtdocnoforgr").val() }, function (res) {
+
+                $.each(res, function (index, row) {
+                    $("#" + row.ItemName + "").remove();
+                });
+            })
+
+        }
         function getupdatedquantitydataforrdm() {
             $.get("/Return/GetQuantityDataforrdm", { id: $("#txtdocnoforgr").val() }, function (res) {
 

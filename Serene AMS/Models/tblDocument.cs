@@ -37,6 +37,7 @@ namespace Serene_AMS.Models
         public Nullable<int> GRReferencenoforReturn { get; set; }
         public string Reasonofreturn { get; set; }
         public string GRApproved { get; set; }
+        public Nullable<int> ReturnReferenceno { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocDetail> tblDocDetails { get; set; }

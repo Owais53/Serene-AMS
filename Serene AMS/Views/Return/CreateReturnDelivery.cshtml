@@ -25,7 +25,7 @@
                 <div class="row">
                     <div class="col-md-10">
                         Document No<br />
-                        @Html.EditorFor(model => model.Grno, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly",@id="txtgr" } })
+                        @Html.EditorFor(model => model.Grno, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @id = "txtgr" } })
                         <label id="lbltype" style="color:red;"></label>
                     </div>
                     @Html.EditorFor(model => model.DocNo, new { htmlAttributes = new { @class = "form-control", @type = "hidden", @id = "txtdocnoforgr" } })
@@ -33,14 +33,18 @@
                     @Html.EditorFor(model => model.Prreferenceno, new { htmlAttributes = new { @class = "form-control", @type = "hidden", @id = "txtprref" } })
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 Vendor<br />
                 @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.EditorFor(model => model.VendorId, new { htmlAttributes = new { @class = "form-control", @type = "hidden", @id = "txtvendoridforrd" } })
                 <label id="lblvendor" style="color:red;"></label>
             </div>
-           
+            <div class="col-md-4">
+                Delivery Date<br />
+                <input type="text" class="form-control" id="datedev" />
+                <label id="lbldevdate" style="color:red;"></label>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-4">
@@ -90,7 +94,7 @@
                 <div>
                     <br />
                     <button type="submit" id="btnsavetodbrd" class="btn btn-primary">Submit</button>
-                    <div id="hiddengrno"></div>
+                    <div id="hiddenrno"></div>
                  
                 </div>
             </div>
@@ -187,6 +191,8 @@
                 });
 
             })
+            var minDate = new Date();
+            $("#datedev").datepicker({ showAnim: 'drop', changeMonth: true, changeYear: false, minDate: minDate, dateFormat: "yy-mm-dd" }).datepicker("setDate", new Date);
         });
           $("#btnsavetodbrd").click(function (e) {
             var rdlist = new Array();
@@ -204,7 +210,7 @@
             $.ajax({
                      type: "POST",
                 url: '@Url.Action("PostRDwithstatus")',
-                data: JSON.stringify({ Docno: $("#txtdocnoforgr").val(), Grno: $("#txtgr").val() ,vendor: $("#txtvendoridforrd").val(), reasonofr: $("#getreason option:selected").text(), rdlists: rdlist }), 
+                data: JSON.stringify({ Docno: $("#txtdocnoforgr").val(), Grno: $("#txtgr").val(), vendor: $("#txtvendoridforrd").val(), reasonofr: $("#getreason option:selected").text(), dateofdev: $("#datedev").val(), Prref: $("#txtprref").val(), rdlists: rdlist }), 
                      dataType: "json",
                      contentType: "application/json; charset=utf-8",
                      success: function (res) {
@@ -212,9 +218,11 @@
                              globalPosition: "top center",
                              className: "success"
                                 
-                         });                        
-                        
-                    },
+                         });
+                       
+                          $("#hiddenrno").append("<a href='@Url.Action("ReturnReport","Reports")?id=" + res.Returnno + "' class='btn btn-primary'>Print Return</a>")
+
+                  },
                   error: function () {
                   alert("Error while Posting data");
                  }
