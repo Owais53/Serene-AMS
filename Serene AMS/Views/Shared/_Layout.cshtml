@@ -31,6 +31,7 @@
     <link href="~/Content/default-responsive.css" rel="stylesheet" />
     <link href="~/Content/ej.responsive.css" rel="stylesheet" />
     <link href="~/Content/ejgrid.responsive.css" rel="stylesheet" />
+    <link href="~/Content/highcharts.css" rel="stylesheet" />
     <style type="text/css">
         .breadcrumb-item + .breadcrumb-item::before {
             content: ">";
@@ -333,7 +334,7 @@
                                 <li>@Html.ActionLink("Create Goods Issue", "CreateGoodsIssue", "Inventory")</li>
 
                             }
-                           
+
                         </ul>
                     </li>
                     <li>
@@ -347,7 +348,7 @@
                             {
 
                                 <li>@Html.ActionLink("Stock Report", "StockReport", "Reports")</li>
-
+                                <li>@Html.ActionLink("View Documents", "ViewDocuments", "Reports")</li>
                             }
                         </ul>
                     </li>
@@ -388,7 +389,11 @@
     <!-- PAGE LEVEL SCRIPTS-->
     <script src="~/Scripts/dashboard_1_demo.js" type="text/javascript"></script>
     <script src="~/Scripts/datatables.min.js"></script>
+    <script src="~/Scripts/highcharts.js"></script>
     <a href="~/Scripts/jsrender.min">~/Scripts/jsrender.min</a>
+    <script src="~/Scripts/accessibility.js"></script>
+    <script src="~/Scripts/export-data.js"></script>
+    <script src="~/Scripts/exporting.js"></script>
     <script src="~/Scripts/ej.web.all.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/sweetalert.min.js"></script>
@@ -421,7 +426,7 @@
                    showPromotionnoti();
                    showReqLeavenotires();
                    showReqLeavenoti();
-
+                   showReorderpointnoti();
 
                    $('#countnoti', this).html('&nbsp;');
                })
@@ -535,12 +540,60 @@
                        }
                    })
                }
+                function showReorderpointnoti()
+               {
+                   $("#maincontent").empty();
+                     $.ajax({
+                       type: 'GET',
+                         url: '/Notifications/GetReorderpointnoti',
+
+                       success: function (responses) {
+
+                           $.each(responses, function (i, v) {
+                               $("#maincontent").append($('<div id="getresp"><a href="/Requests/ViewLeaveResponse/' + v.RequestId + '" class="list-group-item"> <div class="media"><div class="media-img"> <img src=@Url.Content("~/img/leaves.png")></div> <div class="media-body"><div class="font-13" style="color:black;">Item ' + v.ItemName + ' has less Stock</div></div></div></a></div>'))
+
+                           });
+
+
+                       },
+                       error: function (error) {
+                           console.log(error);
+                       }
+                   })
+               }
 
            })
            $(function () {
                $.ajax({
                    type: 'GET',
                    url: '/Notifications/GetReqNoticount',
+                   success: function (data) {
+                       $("#countnoti").empty();
+                       $("#countheader").empty();
+                       if (data.RequestId == null) {
+                           $("#countnoti").empty();
+                           $("#countheader").empty();
+                       }
+                       $.each(data, function (i, v) {
+                           $("#getcountvalue").html(v.count);
+                           if (v.count == 0) {
+                               $("#countnoti").append($('<span class="notify-signal">&nbsp;</span>'))
+                               $("#countheader").append($('<div><span><strong>No New</strong> Notification</span></div>'))
+                           }
+                           else {
+                               $("#countnoti").append($('<span style="color:red;">' + v.count + '</span>'))
+                               $("#countheader").append($('<div><span><strong>' + v.count + ' New</strong> Notifications</span></div>'))
+                           }
+                       });
+
+                   },
+                   error: function (error) {
+                       console.log(error);
+                   }
+               })
+               $.ajax({
+                   type: 'GET',
+                   url: '/Notifications/GetReorderNoticount',
                    success: function (data) {
                        $("#countnoti").empty();
                        $("#countheader").empty();

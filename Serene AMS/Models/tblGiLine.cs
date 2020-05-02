@@ -12,17 +12,11 @@ namespace Serene_AMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tblGrItemsPrice
+    public partial class tblGiLine
     {
-        public int id { get; set; }
-        public Nullable<int> DocumentNo { get; set; }
+        public int Id { get; set; }
+        public Nullable<int> GINo { get; set; }
         public Nullable<int> ItemId { get; set; }
-        public Nullable<int> DeliveredQuantity { get; set; }
-        public Nullable<int> PartialDeliveredQuantity { get; set; }
-        public Nullable<int> ReturnQuantity { get; set; }
-        public Nullable<int> MissingQuantity { get; set; }
-        public Nullable<int> ApprovedQuantity { get; set; }
-        public Nullable<decimal> ItemPrice { get; set; }
-        public string Approved { get; set; }
+        public Nullable<int> IssuedQuantity { get; set; }
     }
 }

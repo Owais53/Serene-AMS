@@ -196,9 +196,25 @@
                 success: function (responses) {
 
                     $.each(responses, function (i, v) {
+                        $("#" + v.DocNo + "").remove();
+                    });
+
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+            $.ajax({
+                type: 'GET',
+                url: '/Inventory/GetPrItemsforpo',
+                data: { DocNo: id },
+                success: function (responses) {
+
+                    $.each(responses, function (i, v) {
                         var date = new Date(parseInt(v.RequestedDate.substr(6)));
                         var month = date.getMonth() + 1;
-                      
+                        
                         $("#getitemsofpr").append($('<tr id="' + v.DocNo + '"><td>' + v.Prno + '</td><td>' + v.ItemName + '</td><td>' + v.Quantity + '</td><td>' + v.VendorName + '</td><td>' + date.getFullYear() + "/" + month + "/" + date.getDate() + '</td></tr>'))
 
                     });
@@ -241,7 +257,20 @@
             })
         }
        
-        
+        function OnSuccess(res) {
+            var modal = $("#Modalconfirmreject");
+
+            modal.modal('hide');
+            $.notify(res.message, {
+                globalPosition: "top center",
+                className: "success"
+
+            });
+            dataTableprpo.ajax.reload();
+        }
+        function OnFailure() {
+            alert("Error");
+        }
         function SuccessPostPo(res) {
             if (res) {
                 $.ajax({
@@ -295,7 +324,7 @@
         }
         $("#btnsubmitdocpo").click(function (e) {
             var doc = $("#getdocpovalue").val();
-            window.location.href = '@Url.Action("PODoc", "Inventory", new {id = "doc"})'.replace("doc", doc);
+            window.location.href = '@Url.Action("POReport", "Reports", new {id = "doc"})'.replace("doc", doc);
           
         });
         function ddldocpo(id) {

@@ -18,7 +18,6 @@ namespace Serene_AMS.Models
         public tblItem()
         {
             this.tblPurchaseitems = new HashSet<tblPurchaseitem>();
-            this.tblStocks = new HashSet<tblStock>();
         }
     
         public int ItemId { get; set; }
@@ -27,14 +26,12 @@ namespace Serene_AMS.Models
         public string StorageLocation { get; set; }
         public Nullable<int> ReorderPoint { get; set; }
         public Nullable<decimal> ItemPrice { get; set; }
+        public Nullable<int> IsConsumable { get; set; }
         public Nullable<int> Availablestock { get; set; }
         public Nullable<int> Qualityinspectionstock { get; set; }
-        public Nullable<int> IsConsumable { get; set; }
     
         public virtual tblItemType tblItemType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPurchaseitem> tblPurchaseitems { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblStock> tblStocks { get; set; }
     }
 }

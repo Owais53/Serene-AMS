@@ -50,7 +50,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-4">Quantity Delivered</div>
-                        <div class="col-sm-8"><input type="number" class="form-control" id="txtqtygr" /><label id="lblqtygr" style="color:red;"></label></div>
+                        <div class="col-sm-8"><input type="number" class="form-control" id="txtqtygr" min=-1 oninput="validity.valid||(value='')"/><label id="lblqtygr" style="color:red;"></label></div>
                     </div>
 
                     <div class="row">
@@ -295,14 +295,23 @@
                 data: JSON.stringify({ Docno: $("#txtprref").val(), returnno: $("#txtdocnoforgr").val(), typeid: $("#txttypeidforgr").val(), vendor: $("#txtvendoridforgr").val(), grlists: grlist }), //use id here
                      dataType: "json",
                      contentType: "application/json; charset=utf-8",
-                     success: function (res) {
-                         $.notify(res.message, {
-                             globalPosition: "top center",
-                             className: "success"
-                                
-                         });                        
-                         $("#hiddengrno").append("<a href='@Url.Action("GRReport","Inventory")?id=" + res.Grno + "' class='btn btn-primary'>Print GR</a>")
-                    },
+                success: function (res) {
+                    if (res.code == 0) {
+                        $.notify(res.message, {
+                            globalPosition: "top center",
+                            className: "error"
+
+                        });
+                    } else {
+
+                        $.notify(res.message, {
+                            globalPosition: "top center",
+                            className: "success"
+
+                        });
+                        $("#hiddengrno").append("<a href='@Url.Action("GRReport","Inventory")?id=" + res.Grno + "' class='btn btn-primary'>Print GR</a>")
+                    }
+                   },
                   error: function () {
                   alert("Error while Posting data");
                  }

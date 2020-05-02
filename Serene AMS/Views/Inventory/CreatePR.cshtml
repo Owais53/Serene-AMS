@@ -50,11 +50,11 @@
                 </div>              
                 <div class="row">
                     <div class="col-sm-4">Quantity</div>
-                    <div class="col-sm-8"><input type="number" class="form-control" id="txtqty" /><label id="lblqty" style="color:red;"></label></div>
+                    <div class="col-sm-8"><input type="number" class="form-control" id="txtqty" min=-1 oninput="validity.valid||(value='')"/><label id="lblqty" style="color:red;"></label></div>
                 </div>
                 <div class="row">
                     <div class="col-sm-4">Price</div>
-                    <div class="col-sm-8"><input type="number" class="form-control" id="txtprice" /><label id="lblprice" style="color:red;"></label></div>
+                    <div class="col-sm-8"><input type="number" class="form-control" id="txtprice" min=-1 oninput="validity.valid||(value='')"/><label id="lblprice" style="color:red;"></label></div>
                 </div>
               
                 <div class="row">
@@ -88,8 +88,10 @@
                 <div>
                     <br />
                     <button type="submit" id="btnsavetodb" class="btn btn-primary">Submit</button>
-                   
-                   @Html.ActionLink("View PR", "PrintPR", "Inventory", null, new { @id = "viewprlink", @class = "btn btn-primary", @style = "display: none" })
+                   <div id="appendlinktopr">
+
+                   </div>
+                  
                 </div>
             </div>
         </div>
@@ -295,7 +297,9 @@
                                 className: "success"
 
                             });
-                            $("#viewprlink").show();
+                            $("#appendlinktopr").append("<a href='@Url.Action("PRReport","Reports")?id=" + res.Prno + "' class='btn btn-primary'>Print PR</a>")
+                            
+
                         }
                     }
                 });

@@ -21,11 +21,11 @@ namespace Serene_AMS.Models
         public Nullable<int> VendorId { get; set; }
         public string VendorName { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public Nullable<int> DeliveredQuantity { get; set; }
+        public Nullable<int> PartialDeliveredQuantity { get; set; }
+        public Nullable<int> RemainingQuantity { get; set; }
         public Nullable<decimal> TotalPrice { get; set; }
         public Nullable<int> POReference { get; set; }
-        public Nullable<int> DeliveredQuantity { get; set; }
-        public Nullable<int> RemainingQuantity { get; set; }
-        public Nullable<int> PartialDeliveredQuantity { get; set; }
     
         public virtual tblDocument tblDocument { get; set; }
         public virtual tblVendor tblVendor { get; set; }

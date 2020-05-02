@@ -104,18 +104,18 @@ namespace Serene_AMS.Controllers
                 }
                 else
                 {
-                    Session["UserName"] = user.UserName;
-                    Session["UserId"] = user.UserId;
-                    Session["DepartmentName"] = user.DepartmentName;
-                    Session["RoleName"] = user.RoleName;
-                    Session["isAdmin"] = user.desc;
-                    Session["Employeename"] = user.EmployeeName;
-                    Session["Position"] = user.PositionId;
-                    Session["DepartmentId"] = user.DepartmentId;
-                    Session["EmployeeId"] = user.EmployeeId;
-                    Session["CityName"] = user.CityName;
+                    Session["UserName"] = user1.UserName;
+                    Session["UserId"] = user1.UserId;
+                    Session["DepartmentName"] = user1.DepartmentName;
+                    Session["RoleName"] = user1.RoleName;
+                    Session["isAdmin"] = user1.desc;
+                    Session["Employeename"] = user1.EmployeeName;
+                    Session["Position"] = user1.PositionId;
+                    Session["DepartmentId"] = user1.DepartmentId;
+                    Session["EmployeeId"] = user1.EmployeeId;
                     Session["RequestId"] = user1.RequestId;
-
+                    Session["CityName"] = user1.CityName;
+                   
                     return RedirectToAction("Index", "Home");
 
                 }

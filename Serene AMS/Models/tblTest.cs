@@ -12,10 +12,13 @@ namespace Serene_AMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tblStock
+    public partial class tblTest
     {
-        public int StockId { get; set; }
-        public Nullable<int> SLId { get; set; }
-        public Nullable<int> AvailableStock { get; set; }
+        public int TestId { get; set; }
+        public Nullable<System.DateTime> TestDate { get; set; }
+        public Nullable<int> DepartmentId { get; set; }
+        public Nullable<int> CandidateId { get; set; }
+    
+        public virtual tblCandidate tblCandidate { get; set; }
     }
 }

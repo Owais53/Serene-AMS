@@ -16,14 +16,8 @@ namespace Serene_AMS.Models
     {
         public int ExpenseId { get; set; }
         public Nullable<int> Year { get; set; }
-        public Nullable<int> Month { get; set; }
-        public string CompanyCode { get; set; }
-        public string CityCode { get; set; }
-        public string ExpenseType { get; set; }
-        public Nullable<int> PurchaseId { get; set; }
-        public Nullable<int> PayrollId { get; set; }
+        public string Month { get; set; }
+        public Nullable<System.DateTime> ExpenseDate { get; set; }
         public Nullable<decimal> Amount { get; set; }
-    
-        public virtual tblPurchase tblPurchase { get; set; }
     }
 }

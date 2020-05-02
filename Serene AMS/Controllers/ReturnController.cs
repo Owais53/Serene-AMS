@@ -260,22 +260,24 @@ namespace Serene_AMS.Controllers
         }
         public ActionResult TransferStocktoAvailable(int? id)
         {
-           
+            var checkreturnrefno = obj.GetDoc().Where(x => x.DocumentNo == id && x.ReturnReferenceno == null).FirstOrDefault();
+            if (checkreturnrefno != null)
+            {
                 var Data = (from doc in obj.GetDoc()
                             join v in obj.GetVendor() on doc.VendorId equals v.VendorId
                             join d in obj.GetDoc() on doc.POReferenceno equals d.DocumentNo
                             where doc.DTypeId == 4 && doc.DocumentNo == id
                             select new
                             {
-                               
+
                                 doc.Docno,
                                 doc.POReferenceno,
                                 doc.VendorId,
                                 v.VendorName,
                                 doc.DocumentNo,
                                 d.PrReferenceNo,
-                                
-                                
+
+
                             }).Select(x => new ProcureVM()
                             {
                                 Grno = x.Docno,
@@ -286,7 +288,35 @@ namespace Serene_AMS.Controllers
                                 Prreferenceno = (int)x.PrReferenceNo
                             }).FirstOrDefault();
                 return View(Data);
-            
+            }
+            else
+            {
+                var Data = (from doc in obj.GetDoc()
+                            join v in obj.GetVendor() on doc.VendorId equals v.VendorId
+                            join d in obj.GetDoc() on doc.ReturnReferenceno equals d.DocumentNo
+                            where doc.DTypeId == 4 && doc.DocumentNo == id
+                            select new
+                            {
+
+                                doc.Docno,
+                                doc.ReturnReferenceno,
+                                doc.VendorId,
+                                v.VendorName,
+                                doc.DocumentNo,
+                                d.PrReferenceNo,
+
+
+                            }).Select(x => new ProcureVM()
+                            {
+                                Grno = x.Docno,
+                                DocNo = x.DocumentNo,
+                                VendorName = x.VendorName,
+                                VendorId = (int)x.VendorId,
+                                Poreferenceno = (int)x.ReturnReferenceno,
+                                Prreferenceno = (int)x.PrReferenceNo
+                            }).FirstOrDefault();
+                return View(Data);
+            }
            
         }
         public JsonResult GetReturnNo(int id)

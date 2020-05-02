@@ -53,14 +53,23 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_Reordernoticounts()
+        {
+            
+            SqlCommand com = new SqlCommand("select Totalcount = (select Count(*) as NotiCount from tblItem where ReorderPoint>=Availablestock and IsConsumable=1)", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
 
+        }
         public DataSet Show_Reqnoticounts()
         {
             var req = System.Web.HttpContext.Current.Session["RequestId"].ToString();
             var roles = System.Web.HttpContext.Current.Session["RoleName"].ToString();
             var emp = System.Web.HttpContext.Current.Session["EmployeeId"].ToString();
 
-            SqlCommand com = new SqlCommand("select Totalcount = (select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and RequestType='Transfer' and AuthorizedRole='" + roles + "') +(select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Transfer' and RequestId='" + req + "' and IsSeen='False')+(select Count(*) as NotiCount from tblEmployee emp inner join tblEmployeeDetail det on emp.EmployeeId=det.EmployeeId inner join tblPosition pos on emp.PositionId=pos.Id where emp.EmployeeId=" + emp + " and det.IsSalaryset='True' and det.IsSeenPromotion='False')+(select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and RequestType='Leave' and AuthorizedRole='" + roles + "')+(select COUNT(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Leave' and RequestId='" + req + "' and IsSeen='False')", con);
+            SqlCommand com = new SqlCommand("select Totalcount = (select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and RequestType='Transfer' and AuthorizedRole='" + roles + "') +(select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Transfer' and RequestId='" + req + "' and IsSeen='False')+(select Count(*) as NotiCount from tblEmployee emp inner join tblEmployeeDetail det on emp.EmployeeId=det.EmployeeId inner join tblPosition pos on emp.PositionId=pos.Id where emp.EmployeeId=" + emp + " and det.IsSalaryset='True' and det.IsSeenPromotion='False')+(select Count(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status='Pending' and RequestType='Leave' and AuthorizedRole='" + roles + "')+(select COUNT(*) as NotiCount from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Leave' and r.EmployeeId='" + emp + "' and IsSeen='False')", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -72,6 +81,15 @@ namespace Serene_AMS.DAL.Repository
             var emp = System.Web.HttpContext.Current.Session["EmployeeId"].ToString();
 
             SqlCommand com = new SqlCommand("select * from tblEmployee emp inner join tblEmployeeDetail det on emp.EmployeeId=det.EmployeeId inner join tblPosition pos on emp.PositionId=pos.Id where emp.EmployeeId='"+emp+"' and det.IsSalaryset='True' and det.IsSeenPromotion='False'", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_Reorderpointnoti()
+        {
+            
+            SqlCommand com = new SqlCommand("select * from tblItem where ReorderPoint>=Availablestock and IsConsumable=1", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -90,9 +108,9 @@ namespace Serene_AMS.DAL.Repository
         public DataSet Show_Reqleavenotires()
         {
             
-            var req = System.Web.HttpContext.Current.Session["RequestId"].ToString();
+            var req = System.Web.HttpContext.Current.Session["EmployeeId"].ToString();
 
-            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Leave' and RequestId='" + req + "' and IsSeen='False'", con);
+            SqlCommand com = new SqlCommand("select * from tblRequests r Inner join tblEmployee emp on r.EmployeeId=emp.EmployeeId Inner join tblPosition pos on r.PositionId=pos.Id where Status!='Pending' and RequestType='Leave' and r.EmployeeId='" + req + "' and IsSeen='False'", con);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -307,6 +325,24 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Show_priteminreport(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,r.Quantity,r.TotalPrice from tblDocDetails r inner join tblItem i on r.ItemId=i.ItemId where DocumentNo=" + id + "", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Show_poiteminreport(int? id)
+        {
+
+            SqlCommand com = new SqlCommand("select i.ItemName,r.Quantity,r.TotalPrice from tblDocDetails r inner join tblItem i on r.ItemId=i.ItemId where DocumentNo=" + id + "", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
         public DataSet Remove_gritemininvoicegrid(int? id)
         {
 
@@ -388,6 +424,16 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Get_Expenses()
+        {
+
+            SqlCommand com = new SqlCommand("select Sum(Amount) as Total from tblExpenses", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+
 
     }
 }

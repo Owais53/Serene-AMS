@@ -25,14 +25,16 @@
                             <table class="table table-striped">
                                 <tr>
                                     <td>
-                                      
+
                                         <strong>Item</strong><br />
                                         <input type="text" id="getItem" readonly class="form-control input-sm" />
+                                        <label id="lblitemgi" style="color:red;"></label>
                                     </td>
                                     <td>
-                                        <input type="hidden" id="getAvailability" readonly class="form-control input-sm" />
+                                        
                                         <strong>Quantity</strong><br />
                                         <input type="text" tabindex="1" name="Qty" id="getQty" class="form-control input-sm NumbersOnly" />
+                                        <label id="lblqtygi" style="color:red;"></label>
                                     </td>
 
                                     <td>
@@ -95,7 +97,7 @@
                                 </div>
                                 <hr />
 
-                               
+                               <button type="submit" id="btnsavegi" class="btn btn-primary">Submit</button>
 
                             </div>
                         </div>
@@ -156,10 +158,30 @@
       $('#btnAdd').on('click', function () {
         //Validation : Check if salesID and Qty is null
           if ($('#getQty').val() == '' || $('#getItem').val() == '' || $('#getQty').val() == 0 || !$.isNumeric($('#getQty').val())) {
-              alert("Empty");
+              if ($('#getItem').val()=='') {
+
+                  document.getElementById('lblitemgi').innerHTML = 'Please Select Item';
+              }
+              else {
+                  document.getElementById('lblitemgi').innerHTML = '';
+              }
+              if ($('#getQty').val()=='') {
+
+                  document.getElementById('lblqtygi').innerHTML = 'Please Enter Quantity';
+              }
+              else {
+                  document.getElementById('lblitemgi').innerHTML = '';
+              }
         }
         else {
-            //check for duplication
+              if ($('#getItem').val()!='') {
+
+                  document.getElementById('lblitemgi').innerHTML = '';
+              }
+              if ($('#getQty').val() != '') {
+
+                  document.getElementById('lblqtygi').innerHTML = '';
+              }
             if (CheckItemDuplication($('#getItem').val())) {
                 
                 $('#tableissue .replacetext' + $('#getItem').val() +'').each(function () {
@@ -178,8 +200,8 @@
                 var $table = $('#tblAppendHere');
                 $table.append(
                     '<tr class="dynamicRows">' +                                      
-                    '<td><input type="hidden" class="txtitem" name="Item"  value= "' + $('#getItem').val() + '"/>' + $('#getItem').val() + '</td>' +
-                    '<td><input type="hidden" name="Qty" value="' + $('#getQty').val() + '"  style="width:60px;"/><span class="replacetext' + $('#getItem').val() + '">' + $('#getQty').val() + '</span></td>' +                
+                    '<td><span class="txtitem">' + $('#getItem').val() + '</span></td>' +
+                    '<td><span class="replacetext' + $('#getItem').val() + '">' + $('#getQty').val() + '</span></td>' +                
                     '<td><a href="#" class="btn btn-danger" onclick="removeItem(this)">Remove</a></td>'
                     + '</tr>'
                     );
@@ -189,6 +211,49 @@
             }
         }
     });
+     $("#btnsavegi").click(function (e) {
+            var gilist = new Array();
+
+            $("#tableissue TBODY TR").each(function () {
+                var row = $(this);
+                var gi = {};
+                gi.ItemName = row.find("span").eq(0).html();
+                gi.IssuedQuantity = row.find("span").eq(1).html();             
+                gilist.push(gi);
+            });
+            e.preventDefault();
+            $.ajax({
+                     type: "POST",
+                     url: '@Url.Action("PostGI")',
+                     data: JSON.stringify({  gilists: gilist }), 
+                     dataType: "json",
+                     contentType: "application/json; charset=utf-8",
+                     success: function (res) {
+                         if (res.code == 0) {
+
+                             $.notify(res.message, {
+                                 globalPosition: "top center",
+                                 className: "error"
+
+                             });
+                         }
+                         if (res.code == 1) {
+
+                          $.notify(res.message, {
+                            globalPosition: "top center",
+                            className: "success"
+
+                          });
+                         }
+                         dataTableitems.ajax.reload();
+                         $("#hiddengrno").append("<a href='@Url.Action("GRReport","Inventory")?id=" + res.Grno + "' class='btn btn-primary'>Print GR</a>")
+                    },
+                  error: function () {
+                  alert("Error while Posting data");
+                 }
+                    });
+
+        })
     function removeItem(obj) {
         $(obj).parent().parent().remove();
       
@@ -196,7 +261,7 @@
     function CheckItemDuplication(item) {
         var flag = false;
         $('.dynamicRows').each(function () {
-            if ($(this).find('.txtitem').val() == item) {
+            if ($(this).find('.txtitem').html() == item) {
                 flag = true;
             }
         });

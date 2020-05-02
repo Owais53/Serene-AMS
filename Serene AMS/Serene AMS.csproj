@@ -280,6 +280,9 @@
     <Compile Include="Models\tblExpens.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblGiLine.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblGrItemsPrice.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
@@ -331,6 +334,9 @@
     <Compile Include="Models\tblStructuredetail.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblTest.cs">
+      <DependentUpon>SqlModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblUser.cs">
       <DependentUpon>SqlModel.tt</DependentUpon>
     </Compile>
@@ -360,6 +366,7 @@
     <Content Include="Content\ej.responsive.css" />
     <Content Include="Content\ej.web.all.min.css" />
     <Content Include="Content\ejgrid.responsive.css" />
+    <Content Include="Content\highcharts.css" />
     <Content Include="Content\main.min.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -782,6 +789,7 @@
     <Content Include="Rotativa\help-wkhtmltopdf.txt" />
     <Content Include="Rotativa\wkhtmltoimage.exe" />
     <Content Include="Rotativa\wkhtmltopdf.exe" />
+    <Content Include="Scripts\accessibility.js" />
     <Content Include="Scripts\alertify.js" />
     <Content Include="Scripts\alertify.min.js" />
     <Content Include="Scripts\animsition.min.js" />
@@ -867,6 +875,9 @@
     <Content Include="fonts\themify.woff" />
     <Content Include="Scripts\dataTables.checkboxes.min.js" />
     <Content Include="Scripts\ej.web.all.min.js" />
+    <Content Include="Scripts\export-data.js" />
+    <Content Include="Scripts\exporting.js" />
+    <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery.multi-select.js" />
     <Content Include="Scripts\jquery.timeselector.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -1147,6 +1158,9 @@
     <Content Include="Views\Return\TransferStocktoAvailable.cshtml" />
     <Content Include="Views\Reports\StockReport.cshtml" />
     <Content Include="Views\Inventory\CreateGoodsIssue.cshtml" />
+    <Content Include="Views\Admin\UserList.cshtml" />
+    <Content Include="Views\Admin\LeaveList.cshtml" />
+    <Content Include="Views\Reports\ViewDocuments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

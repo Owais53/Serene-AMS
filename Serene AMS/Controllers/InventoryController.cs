@@ -604,7 +604,7 @@ namespace Serene_AMS.Controllers
                 }
 
 
-                return Json(new { prlists, message = "PR " + add.Docno + " Created" }, JsonRequestBehavior.AllowGet);
+                return Json(new {prlists,Prno= add.DocumentNo, message = "PR " + add.Docno + " Created" }, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -706,7 +706,7 @@ namespace Serene_AMS.Controllers
             obj.rejectpr(model.DocNo);
             obj.Save();
 
-            return Json(new { code = 0, message = "PR Rejected" }, JsonRequestBehavior.AllowGet);
+            return Json(new { code = 0, message = "Purchase Request Rejected" }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult CreatePO(int Docno)
         {
@@ -1086,7 +1086,7 @@ namespace Serene_AMS.Controllers
         {
             IProcure obj = new Procure();
             NumberSequence seq = new NumberSequence();
-          
+
             if (grlists == null)
             {
                 grlists = new List<ProcureVM>();
@@ -1094,131 +1094,188 @@ namespace Serene_AMS.Controllers
             }
             else
             {
+
+
+
                 if (grlists == null)
                 {
                     grlists = new List<ProcureVM>();
 
                 }
+
                 if (typeid == 3)
                 {
+
                     bool flag = db.getRemainingQty(Docno);
 
 
                     if (flag)
                     {
-                        var add1 = obj.AddGr(db.getPono(Docno), vendor);
-                        obj.addgr(add1);
-                        obj.Save();
-                        string no = seq.GenerateNo("GR", add1.DocumentNo);
-                        obj.upatedocdetail(add1.DocumentNo, no);
-                        obj.Save();
-                        obj.updatestatuspartial(db.getPono(Docno));
-                        obj.Save();
-                        foreach (ProcureVM gr in grlists)
+                        var checkstatus = obj.GetDoc().Where(x => x.Status == "Partial Delivery" && x.DocumentNo == db.getPono(Docno)).FirstOrDefault();
+                        if (checkstatus == null)
                         {
-                            var addprice2 = obj.addGritemsPrice(add1.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
-                            obj.addpriceofitems(addprice2);
+                            var add1 = obj.AddGr(db.getPono(Docno), vendor);
+                            obj.addgr(add1);
                             obj.Save();
-                            obj.calculateitemprice(add1.DocumentNo, db.getItemid(gr.ItemName), db.getItemPriceofGR(add1.DocumentNo, db.getItemid(gr.ItemName)));
+                            string no = seq.GenerateNo("GR", add1.DocumentNo);
+                            obj.upatedocdetail(add1.DocumentNo, no);
                             obj.Save();
-                            obj.updateslstock(db.getSlid(gr.ItemName), gr.DeliveredQuantity);
+                            obj.updatestatuspartial(db.getPono(Docno));
                             obj.Save();
-                            obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
-                            obj.Save();
+                            foreach (ProcureVM gr in grlists)
+                            {
+                                var checkitemqty = obj.GetDocDetail().Where(x => x.DocumentNo == Docno  && x.PartialDeliveredQuantity == 0).FirstOrDefault();
+                                if (checkitemqty == null)
+                                {
 
+                                    var addprice2 = obj.addGritemsPrice(add1.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
+                                    obj.addpriceofitems(addprice2);
+                                    obj.Save();
+                                    obj.calculateitemprice(add1.DocumentNo, db.getItemid(gr.ItemName), db.getItemPriceofGR(add1.DocumentNo, db.getItemid(gr.ItemName)));
+                                    obj.Save();
+                                    obj.updateslstock(db.getSlid(gr.ItemName), gr.DeliveredQuantity);
+                                    obj.Save();
+                                    obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
+                                    obj.Save();
+                                }
+                                else
+                                {
+                                    db.Deletegr(add1.DocumentNo);
+                                    obj.updatestatustonull(db.getPono(Docno));
+                                    obj.Save();
+                                    return Json(new { code = 0, message = "Please Enter Delivered Quantity of each Item before Submitting" }, JsonRequestBehavior.AllowGet);
+                                }
 
+                            }
+                            return Json(new { Grno = add1.DocumentNo, message = "Goods Receipt " + add1.Docno + " Created with Status Partial Delivery" }, JsonRequestBehavior.AllowGet);
                         }
-                        return Json(new { Grno = add1.DocumentNo, message = "Goods Receipt " + add1.Docno + " Created with Status Partial Delivery" }, JsonRequestBehavior.AllowGet);
+                        else
+                        {
+                            return Json(new { code = 0, message = "GR already created with status partial" }, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     else
                     {
-                        var add = obj.AddGrwithcomp(db.getPono(Docno), vendor);
-                        obj.addgr(add);
-                        obj.Save();
-                        string no = seq.GenerateNo("GR", add.DocumentNo);
-                        obj.upatedocdetail(add.DocumentNo, no);
-                        obj.Save();
-                        obj.updatestatuscomplete(db.getPono(Docno));
-                        obj.Save();
-                        foreach (ProcureVM gr in grlists)
+                        var checkstatus = obj.GetDoc().Where(x => x.Status == "Complete Delivery" && x.DocumentNo == db.getPono(Docno)).FirstOrDefault();
+                        if (checkstatus == null)
                         {
-                            var addprice2 = obj.addGritemsPrice(add.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
-                            obj.addpriceofitems(addprice2);
+                            var add = obj.AddGrwithcomp(db.getPono(Docno), vendor);
+                            obj.addgr(add);
                             obj.Save();
-                            obj.calculateitemprice(add.DocumentNo, db.getItemid(gr.ItemName), db.getItemPriceofGR(add.DocumentNo, db.getItemid(gr.ItemName)));
+                            string no = seq.GenerateNo("GR", add.DocumentNo);
+                            obj.upatedocdetail(add.DocumentNo, no);
                             obj.Save();
-                            obj.updateslstock(db.getSlid(gr.ItemName), gr.DeliveredQuantity);
+                            obj.updatestatuscomplete(db.getPono(Docno));
                             obj.Save();
-                            obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
-                            obj.Save();
+                            foreach (ProcureVM gr in grlists)
+                            {
+                                var checkitemqty = obj.GetDocDetail().Where(x => x.DocumentNo == Docno && x.DeliveredQuantity == null).LastOrDefault();
+                                if (checkitemqty == null)
+                                {
+                                    var addprice2 = obj.addGritemsPrice(add.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
+                                    obj.addpriceofitems(addprice2);
+                                    obj.Save();
+                                    obj.calculateitemprice(add.DocumentNo, db.getItemid(gr.ItemName), db.getItemPriceofGR(add.DocumentNo, db.getItemid(gr.ItemName)));
+                                    obj.Save();
+                                    obj.updateslstock(db.getSlid(gr.ItemName), gr.DeliveredQuantity);
+                                    obj.Save();
+                                    obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
+                                    obj.Save();
+                                }
+                                else
+                                {
+                                    db.Deletegr(add.DocumentNo);
+                                    obj.updatestatustonull(db.getPono(Docno));
+                                    obj.Save();
+                                    return Json(new { code = 0, message = "Please Enter Delivered Quantity of each Item before Submitting" }, JsonRequestBehavior.AllowGet);
+                                }
 
+                            }
 
+                            return Json(new { Grno = add.DocumentNo, message = "Goods Receipt " + add.Docno + " Created with Status Complete Delivery" }, JsonRequestBehavior.AllowGet);
                         }
 
-                        return Json(new { Grno = add.DocumentNo, message = "Goods Receipt " + add.Docno + " Created with Status Complete Delivery" }, JsonRequestBehavior.AllowGet);
+                        else
+                        {
+                            return Json(new {code=0, message = "GR already created with status Complete" }, JsonRequestBehavior.AllowGet);
+                        }
                     }
-
                 }
                 else
                 {
                     bool flag1 = db.getRemainingQtyforReturn(returnno);
                     if (flag1)
                     {
-                        var add1 = obj.AddGrforReturn(returnno, vendor);
-                        obj.addgr(add1);
-                        obj.Save();
-                        string no = seq.GenerateNo("GR", add1.DocumentNo);
-                        obj.upatedocdetail(add1.DocumentNo, no);
-                        obj.Save();
-                        obj.updatestatuspartial(returnno);
-                        obj.Save();
-                        foreach (ProcureVM gr in grlists)
+                        var checkstatus1 = obj.GetDoc().Where(x => x.Status == "Partial Delivery" && x.DocumentNo == db.getPono(Docno)).FirstOrDefault();
+                        if (checkstatus1 == null)
                         {
-                            var addprice2 = obj.addGritemsPrice(add1.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
-                            obj.addpriceofitems(addprice2);
+                            var add1 = obj.AddGrforReturn(returnno, vendor);
+                            obj.addgr(add1);
                             obj.Save();
-                            obj.calculateitemprice(add1.DocumentNo, db.getItemid(gr.ItemName), db.getItemPriceofGR(add1.DocumentNo, db.getItemid(gr.ItemName)));
+                            string no = seq.GenerateNo("GR", add1.DocumentNo);
+                            obj.upatedocdetail(add1.DocumentNo, no);
                             obj.Save();
-                            obj.updateslstock(db.getSlid(gr.ItemName), gr.DeliveredQuantity);
+                            obj.updatestatuspartial(returnno);
                             obj.Save();
-                            obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
-                            obj.Save();
+                            foreach (ProcureVM gr in grlists)
+                            {
+                                var addprice2 = obj.addGritemsPrice(add1.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
+                                obj.addpriceofitems(addprice2);
+                                obj.Save();
+                                obj.calculateitemprice(add1.DocumentNo, db.getItemid(gr.ItemName), db.getItemPriceofGR(add1.DocumentNo, db.getItemid(gr.ItemName)));
+                                obj.Save();
+                                obj.updateslstock(db.getSlid(gr.ItemName), gr.DeliveredQuantity);
+                                obj.Save();
+                                obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
+                                obj.Save();
 
 
+                            }
+                            return Json(new { Grno = add1.DocumentNo, message = "Goods Receipt " + add1.Docno + " Created with Status Partial Delivery" }, JsonRequestBehavior.AllowGet);
                         }
-                        return Json(new { Grno = add1.DocumentNo, message = "Goods Receipt " + add1.Docno + " Created with Status Partial Delivery" }, JsonRequestBehavior.AllowGet);
-
+                        else
+                        {
+                            return Json(new { code = 0, message = "GR already created with status partial" }, JsonRequestBehavior.AllowGet);
+                        }
                     }
 
                     else
                     {
-                        var add = obj.AddGrwithcompReturn(returnno, vendor);
-                        obj.addgr(add);
-                        obj.Save();
-                        string no = seq.GenerateNo("GR", add.DocumentNo);
-                        obj.upatedocdetail(add.DocumentNo, no);
-                        obj.Save();
-                        obj.updatestatuscomplete(returnno);
-                        obj.Save();
-                        foreach (ProcureVM gr in grlists)
+                        var checkstatus1 = obj.GetDoc().Where(x => x.Status == "Complete Delivery" && x.DocumentNo == db.getPono(Docno)).FirstOrDefault();
+                        if (checkstatus1 == null)
                         {
-                            var addprice2 = obj.addGritemsPrice(add.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
-                            obj.addpriceofitems(addprice2);
+                            var add = obj.AddGrwithcompReturn(returnno, vendor);
+                            obj.addgr(add);
                             obj.Save();
-                            obj.calculateitemprice(add.DocumentNo, db.getItemid(gr.ItemName), db.getItemPriceofGR(add.DocumentNo, db.getItemid(gr.ItemName)));
+                            string no = seq.GenerateNo("GR", add.DocumentNo);
+                            obj.upatedocdetail(add.DocumentNo, no);
                             obj.Save();
-                            obj.updateslstock(db.getSlid(gr.ItemName), gr.DeliveredQuantity);
+                            obj.updatestatuscomplete(returnno);
                             obj.Save();
-                            obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
-                            obj.Save();
+                            foreach (ProcureVM gr in grlists)
+                            {
+                                var addprice2 = obj.addGritemsPrice(add.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
+                                obj.addpriceofitems(addprice2);
+                                obj.Save();
+                                obj.calculateitemprice(add.DocumentNo, db.getItemid(gr.ItemName), db.getItemPriceofGR(add.DocumentNo, db.getItemid(gr.ItemName)));
+                                obj.Save();
+                                obj.updateslstock(db.getSlid(gr.ItemName), gr.DeliveredQuantity);
+                                obj.Save();
+                                obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
+                                obj.Save();
 
 
+                            }
+
+                            return Json(new { Grno = add.DocumentNo, message = "Goods Receipt " + add.Docno + " Created with Status Complete Delivery" }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(new { code = 0, message = "GR already created with status Complete" }, JsonRequestBehavior.AllowGet);
                         }
 
-                        return Json(new { Grno = add.DocumentNo, message = "Goods Receipt " + add.Docno + " Created with Status Complete Delivery" }, JsonRequestBehavior.AllowGet);
                     }
-
                 }
 
             }
@@ -1260,6 +1317,9 @@ namespace Serene_AMS.Controllers
                 obj.Save();
                 obj.statuscompletepay(Docno);
                 obj.Save();
+                var addexp = obj.Addexp(paid);
+                obj.addexpense(addexp);
+                obj.Save();
                 return Json(new {Irno=add.InvoiceReceiptId, message = "Invoice Receipt Created with " + add.InvoiceReceiptNo + " and Status Paid" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1271,6 +1331,9 @@ namespace Serene_AMS.Controllers
                 obj.getIRno(add.InvoiceReceiptId, no);
                 obj.Save();
                 obj.statuspartialpay(Docno);
+                obj.Save();
+                var addexp = obj.Addexp(paid);
+                obj.addexpense(addexp);
                 obj.Save();
                 return Json(new {Irno=add.InvoiceReceiptId, message = "Invoice Receipt Created with " + add.InvoiceReceiptNo + " and Status Partially Paid" }, JsonRequestBehavior.AllowGet);
             }
@@ -1378,30 +1441,67 @@ namespace Serene_AMS.Controllers
         }
         public ActionResult GRReport(int? id)
         {
+            
             IProcure obj = new Procure();
-            var data = (from doc in obj.GetDoc()
-                        join v in obj.GetVendor() on doc.VendorId equals v.VendorId
-                        where doc.DTypeId == 4 && doc.DocumentNo == id
-                        select new
-                        {
-                            doc.Docno,
-                            doc.CreationDate,
-                            doc.CreatedBy,
-                            v.VendorName,
-                            doc.Status
-                        }).Select(x => new ProcureVM()
-                        {
-                            Grno=x.Docno,
-                            Createdon=(DateTime)x.CreationDate,
-                            Createdby=x.CreatedBy,
-                            VendorName=x.VendorName,
-                            GeneratedDate=DateTime.Now.Date,
-                            GRDetails=GetGrDetails(id)
-                        }).FirstOrDefault();
+            var check = obj.GetDoc().Where(x => x.DocumentNo == id && x.POReferenceno != null).FirstOrDefault();
+            if (check != null)
+            {
 
-            Report _report = new Report();
-            byte[] abytes = _report.PrepareReport(data);
-            return File(abytes, "application/pdf");
+
+                var data = (from doc in obj.GetDoc()
+                            join v in obj.GetVendor() on doc.VendorId equals v.VendorId
+                            where doc.DTypeId == 4 && doc.DocumentNo == id
+                            select new
+                            {
+                                doc.Docno,
+                                doc.CreationDate,
+                                doc.CreatedBy,
+                                v.VendorName,
+                                doc.Status,
+                                doc.POReferenceno
+                            }).Select(x => new ProcureVM()
+                            {
+                                Grno = x.Docno,
+                                Createdon = (DateTime)x.CreationDate,
+                                Createdby = x.CreatedBy,
+                                VendorName = x.VendorName,
+                                GeneratedDate = DateTime.Now.Date,
+                                Poreferenceno = (int)x.POReferenceno,
+                                GRDetails = GetGrDetails(id)
+                            }).FirstOrDefault();
+
+                Report _report = new Report();
+                byte[] abytes = _report.PrepareReport(data);
+                return File(abytes, "application/pdf");
+            }
+            else
+            {
+                var data = (from doc in obj.GetDoc()
+                            join v in obj.GetVendor() on doc.VendorId equals v.VendorId
+                            where doc.DTypeId == 4 && doc.DocumentNo == id
+                            select new
+                            {
+                                doc.Docno,
+                                doc.CreationDate,
+                                doc.CreatedBy,
+                                v.VendorName,
+                                doc.Status,
+                                doc.ReturnReferenceno
+                            }).Select(x => new ProcureVM()
+                            {
+                                Grno = x.Docno,
+                                Createdon = (DateTime)x.CreationDate,
+                                Createdby = x.CreatedBy,
+                                VendorName = x.VendorName,
+                                GeneratedDate = DateTime.Now.Date,
+                                returnref = (int)x.ReturnReferenceno,
+                                GRDetails = GetGrDetails(id)
+                            }).FirstOrDefault();
+
+                Report _report = new Report();
+                byte[] abytes = _report.PrepareGRReportForR(data);
+                return File(abytes, "application/pdf");
+            }
         }
         public List<ProcureVM> GetGrDetails(int? id)
         {
@@ -1483,7 +1583,7 @@ namespace Serene_AMS.Controllers
         {
             IProcure obj = new Procure();          
                    var Data = (from items in obj.Getitems()                              
-                               where items.IsConsumable == 1
+                               where items.IsConsumable == 1 && items.Availablestock > items.ReorderPoint
                                select new
                                {
                                    items.ItemName,
@@ -1496,6 +1596,50 @@ namespace Serene_AMS.Controllers
 
                                }).ToList();
             return Json(new {data=Data},JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult PostGI(List<ProcureVM> gilists)
+        {
+            IProcure obj = new Procure();
+            NumberSequence seq = new NumberSequence();
+            if (gilists == null)
+            {
+                gilists = new List<ProcureVM>();
+                return Json(new { code = 0, message = "Please add Quantity before Submitting" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                if (gilists == null)
+                {
+                    gilists = new List<ProcureVM>();
+
+                }
+                var add = obj.AddGI();
+                obj.AddPO(add);
+                obj.Save();
+                string no = seq.GenerateNo("GI", add.DocumentNo);
+                obj.upatedocdetail(add.DocumentNo, no);
+                obj.Save();
+                foreach (ProcureVM gi in gilists)
+                {
+                    var check = obj.Getitems().Where(x => x.ItemId == db.getItemid(gi.ItemName) && x.ReorderPoint >= x.Availablestock).FirstOrDefault();
+                    if (check != null)
+                    {
+                        db.Deletegi(add.DocumentNo);
+                        return Json(new { code = 0, message = "Less Stock Available cannot issue goods" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var add1 = obj.AddGilineitem(add.DocumentNo, db.getItemid(gi.ItemName), gi.IssuedQuantity);
+                        obj.addgiline(add1);
+                        obj.Save();
+                        obj.minusAvailablestock(db.getItemid(gi.ItemName), gi.IssuedQuantity);
+                        obj.Save();
+                        return Json(new { code = 1, message = "Goods Issue " + add.Docno + " Created" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+                return Json(JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

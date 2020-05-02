@@ -29,15 +29,16 @@ namespace Serene_AMS.Models
         public string DocStatus { get; set; }
         public string Status { get; set; }
         public Nullable<int> VendorId { get; set; }
+        public Nullable<System.DateTime> ItemRequestedDate { get; set; }
+        public Nullable<System.DateTime> DeliveryDate { get; set; }
+        public Nullable<System.DateTime> IssuedDate { get; set; }
         public string ItemName { get; set; }
         public Nullable<int> PrReferenceNo { get; set; }
-        public Nullable<System.DateTime> ItemRequestedDate { get; set; }
         public Nullable<int> POReferenceno { get; set; }
-        public Nullable<System.DateTime> DeliveryDate { get; set; }
+        public Nullable<int> ReturnReferenceno { get; set; }
         public Nullable<int> GRReferencenoforReturn { get; set; }
         public string Reasonofreturn { get; set; }
         public string GRApproved { get; set; }
-        public Nullable<int> ReturnReferenceno { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocDetail> tblDocDetails { get; set; }

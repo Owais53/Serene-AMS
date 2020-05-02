@@ -1,4 +1,6 @@
-﻿using Serene_AMS.ViewModels;
+﻿using Serene_AMS.DAL.Interface;
+using Serene_AMS.DAL.Repository;
+using Serene_AMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -140,6 +142,82 @@ namespace Serene_AMS.DAL.Classes
             {
                 con.Open();
                 String s = "SELECT max(DocumentNo) FROM [Hrms].[dbo].[tblDocument]";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getDocTypeId(int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT DTypeId FROM [Hrms].[dbo].[tblDocument] where DocumentNo=@docno";
+                SqlCommand smd = new SqlCommand(s, con);
+                smd.Parameters.AddWithValue("@docno", docno);
+
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getEmpcount()
+        {
+            IEmployeeRepository obj = new EmployeeRepository();
+
+            
+            
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT Count(*) FROM [Hrms].[dbo].[tblEmployee]";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getTotalLeaves()
+        {
+            IEmployeeRepository obj = new EmployeeRepository();
+
+           
+            var empid = System.Web.HttpContext.Current.Session["EmployeeId"].ToString();
+            var checkifcleaveassigned = obj.GetEmpLeaves().Where(x => x.EmployeeId == Convert.ToInt32(empid) && x.CasualLeave != null ).FirstOrDefault();
+            var checkifsleaveassigned = obj.GetEmpLeaves().Where(x => x.EmployeeId == Convert.ToInt32(empid) && x.SickLeave != null).FirstOrDefault();
+
+            if (checkifcleaveassigned == null && checkifsleaveassigned==null ||checkifcleaveassigned==null||checkifsleaveassigned==null)
+            {
+                int a = 0;
+                return a;
+
+            }
+            else
+            {
+               
+                int id;
+                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+                {
+                    con.Open();
+                    String s = "select (CasualLeave+SickLeave) as TotalLeave from tblEmployeeLeaves where EmployeeId=" + empid + "";
+                    SqlCommand smd = new SqlCommand(s, con);
+                    id = (int)smd.ExecuteScalar();
+
+                }
+                return id;
+            }
+           
+        }
+        public int getUserCountNo()
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "SELECT Count(*) FROM [Hrms].[dbo].[tblUsers]";
                 SqlCommand smd = new SqlCommand(s, con);
                 id = (int)smd.ExecuteScalar();
 
@@ -390,6 +468,30 @@ namespace Serene_AMS.DAL.Classes
                 using (SqlCommand com = new SqlCommand("DELETE FROM tblprlineitem WHERE Date<=@date", con))
                 {
                     com.Parameters.AddWithValue("@date", DateTime.Now.Date);
+                    com.ExecuteNonQuery();
+                }
+            }
+        }
+        public void Deletegi(int docno)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                using (SqlCommand com = new SqlCommand("DELETE FROM tblDocument WHERE DocumentNo=@no and DTypeId=6", con))
+                {
+                    com.Parameters.AddWithValue("@no", docno);
+                    com.ExecuteNonQuery();
+                }
+            }
+        }
+        public void Deletegr(int docno)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                using (SqlCommand com = new SqlCommand("DELETE FROM tblDocument WHERE DocumentNo=@no and DTypeId=4", con))
+                {
+                    com.Parameters.AddWithValue("@no", docno);
                     com.ExecuteNonQuery();
                 }
             }

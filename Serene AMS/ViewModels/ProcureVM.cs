@@ -49,7 +49,7 @@ namespace Serene_AMS.ViewModels
         public int DocNo { get; set; }
        public int Quantity { get; set; }
         public string Item { get; set; }
-       
+       public int IssuedQuantity { get; set; }
         public string status { get; set; }
         public DateTime Createdon { get; set; }
         public string Createdby { get; set; }
@@ -68,6 +68,8 @@ namespace Serene_AMS.ViewModels
         public int VendorId { get; set; }
         public string Prno { get; set; }
         public string Grno { get; set; }
+        public int grref { get; set; }
+        public int returnref { get; set; }
         public int DeliveredQuantity { get; set; }
         public int RemainingQuantity { get; set; }
         public decimal Paid { get; set; }

@@ -22,7 +22,7 @@ namespace Serene_AMS.DAL.Interface
         IEnumerable<tblInvoiceReceipt> Getir();
         IEnumerable<tblreturnlineitem> Getreturnd();
         IEnumerable<tblGrItemsPrice> GetGrline();
-
+        IEnumerable<tblExpens> Getexp();
         void AddTypes(tblItemType obj);
         tblItemType AddItemtype(string ItemType);
         IEnumerable<tblItem> Getitems();
@@ -58,9 +58,11 @@ namespace Serene_AMS.DAL.Interface
         tblDocument AddGrforReturn(int returnrefno, int vendor);
         tblDocument AddGrwithcomp(int porefno, int vendor);
         tblDocument AddGrwithcompReturn(int returnrefno, int vendor);
-
+        tblExpens Addexp(decimal amount);
+        void addexpense(tblExpens obj);
         void addgr(tblDocument obj);
         void updatestatuscomplete(int docno);
+        void updatestatustonull(int docno);
         void updatestatuspartial(int docno);
         void itempartialqtydelivered(int Prdocno, int itemid, int qty);
         tblStock addslinstock(int slid);
@@ -91,9 +93,13 @@ namespace Serene_AMS.DAL.Interface
         void ApproveGR(int Grno);
         void minusAvailablestock(int itemid, int qty);
         void updategrapprove(int grno,int itemid);
+      
         void updaterdapprove(int grno, int itemid);
         void itemqtydeliveredreturn(int docno, int itemid, int qty);
         void itempartialqtydeliveredreturn(int docno, int itemid, int qty);
         void updatestatusdoctorejected(int docno);
+        tblDocument AddGI();
+        tblGiLine AddGilineitem(int gino,int itemid,int issueqty);
+        void addgiline(tblGiLine obj);
     }
 }

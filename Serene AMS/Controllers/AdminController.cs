@@ -873,7 +873,44 @@ namespace Serene_AMS.Controllers
         
             return View();
         }
+         public ActionResult UserList()
+        {
+            return View();
+        }
+        public ActionResult GetUsersList()
+        {
+            IUserRepository obj = new UserRepository();
+            var Data = (from users in obj.GetAll()
+                        join role in obj.Getroles() on users.RoleId equals role.Id
+                        join a in obj.Getdep() on users.DepartmentId equals a.DepartmentId
+                        join ad in obj.Getadmin() on users.AdminId equals ad.AdminId
+                        select new
+                        {
+                           users.UserName,
+                           role.RoleName,
+                           ad.IsAdmin,
+                           a.DepartmentName
 
+                        }).ToList();
+            return Json(new { data=Data},JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult LeaveList()
+        {
+            return View();
+        }
+        public ActionResult GetLeaveList()
+        {
+            var empid = System.Web.HttpContext.Current.Session["EmployeeId"].ToString();
+            IEmployeeRepository obj = new EmployeeRepository();
+            var Data = (from leave in obj.GetEmpLeaves()  
+                        where leave.EmployeeId==Convert.ToInt32(empid)
+                        select new
+                        {
+                           leave.CasualLeave,
+                           leave.SickLeave
 
+                        }).ToList();
+            return Json(new { data = Data }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

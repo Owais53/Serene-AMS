@@ -10,6 +10,9 @@ namespace Serene_AMS.DAL.Interface
     public interface IUserRepository
     {
         IEnumerable<tblUser> GetAll();
+        IEnumerable<tblAdmincheck> Getadmin();
+        IEnumerable<tblDepartment> Getdep();
+        IEnumerable<tblRole> Getroles();
 
         tblUser GetById(int userId);
 

@@ -74,5 +74,19 @@ namespace Serene_AMS.DAL.Repository
 
         }
 
+        public IEnumerable<tblAdmincheck> Getadmin()
+        {
+            return context.tblAdminchecks;
+        }
+
+        public IEnumerable<tblDepartment> Getdep()
+        {
+            return context.tblDepartments;
+        }
+
+        public IEnumerable<tblRole> Getroles()
+        {
+            return context.tblRoles;
+        }
     }
 }

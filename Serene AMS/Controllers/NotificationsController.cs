@@ -1,4 +1,5 @@
-﻿using Serene_AMS.DAL.Interface;
+﻿using Serene_AMS.DAL.Classes;
+using Serene_AMS.DAL.Interface;
 using Serene_AMS.DAL.Repository;
 using Serene_AMS.ViewModels;
 using System;
@@ -14,7 +15,7 @@ using System.Web.Mvc;
 namespace Serene_AMS.Controllers
 {
     public class NotificationsController : Controller
-    {
+    { InsertmultipleitemPR db = new InsertmultipleitemPR();
         public JsonResult GetReqNoti()
         {
             ReqList obj = new ReqList();
@@ -71,9 +72,9 @@ namespace Serene_AMS.Controllers
                 {
                     Position = dr["Position"].ToString(),
                     Experience = dr["Experience"].ToString(),
-                    EmployeeId=Convert.ToInt32(dr["EmployeeId"])
+                    EmployeeId = Convert.ToInt32(dr["EmployeeId"])
 
-                   
+
                 });
             }
             return Json(listpro, JsonRequestBehavior.AllowGet);
@@ -94,7 +95,7 @@ namespace Serene_AMS.Controllers
                     EmployeeName = dr["EmployeeName"].ToString(),
                     DateofRequest = Convert.ToDateTime(dr["DateofRequest"]),
                     RequestType = dr["RequestType"].ToString(),
-                    Leavetype=dr["LeaveType"].ToString(),
+                    Leavetype = dr["LeaveType"].ToString(),
                     Position = dr["Position"].ToString()
 
                 });
@@ -139,6 +140,61 @@ namespace Serene_AMS.Controllers
                 });
             }
             return Json(listreq, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetUserscount()
+        {
+            
+            return Json(db.getUserCountNo(), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetLeavesCount()
+        {
+            return Json(db.getTotalLeaves(),JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetEmpcount()
+        {
+            return Json(db.getEmpcount(), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetReorderNoticount()
+        {
+            var role = System.Web.HttpContext.Current.Session["RoleName"].ToString();
+            var isadmin = System.Web.HttpContext.Current.Session["isAdmin"].ToString();
+            if (role == "Inventory Manager")                
+            {
+                ReqList obj = new ReqList();
+                DataSet ds = obj.Show_Reordernoticounts();
+                List<RequestVM> listreq = new List<RequestVM>();
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    listreq.Add(new RequestVM
+                    {
+                        count = Convert.ToInt32(dr["Totalcount"])
+                    });
+                }
+                return Json(listreq, JsonRequestBehavior.AllowGet);
+            }
+            return Json(JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetReorderpointnoti()
+        {
+            var role = System.Web.HttpContext.Current.Session["RoleName"].ToString();
+            if (role == "Inventory Manager")
+            {
+
+                ReqList obj = new ReqList();
+                DataSet ds = obj.Show_Reorderpointnoti();
+                List<ProcureVM> listreq = new List<ProcureVM>();
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    listreq.Add(new ProcureVM
+                    {
+                        ItemName = dr["ItemName"].ToString()
+                    });
+                }
+                return Json(listreq, JsonRequestBehavior.AllowGet);
+            }
+            return Json(JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetReqNoticountres()
         {

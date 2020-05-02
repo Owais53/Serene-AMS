@@ -675,7 +675,7 @@ namespace Serene_AMS.DAL.Repository
             obj.AvailableStock = obj.AvailableStock - qty;
             context.Entry(obj).State = EntityState.Modified;
         }
-
+       
         public void addmissingquantityinreturnline(int Grno, int itemid, int qty)
         {
             var obj = context.tblreturnlineitems.Where(x => x.Grreferenceno == Grno && x.ItemId == itemid).FirstOrDefault();
@@ -753,5 +753,67 @@ namespace Serene_AMS.DAL.Repository
             obj.Approved = "Yes";
             context.Entry(obj).State = EntityState.Modified;
         }
+
+        public tblDocument AddGI()
+        {
+            var user = System.Web.HttpContext.Current.Session["UserName"].ToString();
+            var add = new tblDocument()
+            {
+                DTypeId=6,
+                CreationDate=DateTime.Now.Date,
+                CreatedBy=user,
+                DocStatus="Complete",
+                Status="Complete",
+                IssuedDate=DateTime.Now.Date,
+
+            };
+            return add;
+        }
+
+        public tblGiLine AddGilineitem(int gino, int itemid, int issueqty)
+        {
+            var add = new tblGiLine()
+            {
+                GINo=gino,
+                ItemId=itemid,
+                IssuedQuantity=issueqty,
+            };
+            return add;
+        }
+
+        public void addgiline(tblGiLine obj)
+        {
+            context.tblGiLines.Add(obj);
+        }
+
+        public void updatestatustonull(int docno)
+        {
+            var obj = context.tblDocuments.Where(x => x.DocumentNo==docno).FirstOrDefault();
+            obj.Status =null;
+            context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public IEnumerable<tblExpens> Getexp()
+        {
+            return context.tblExpenses;
+        }
+
+        public tblExpens Addexp(decimal amount)
+        {
+            var add = new tblExpens()
+            {
+                Year=DateTime.Now.Year,
+                Month=DateTime.Now.ToString("MMM"),
+                ExpenseDate=DateTime.Now.Date,
+                Amount=amount,
+            };
+            return add;
+        }
+        public void addexpense(tblExpens obj)
+        {
+            context.tblExpenses.Add(obj);
+        }
+
+       
     }
 }

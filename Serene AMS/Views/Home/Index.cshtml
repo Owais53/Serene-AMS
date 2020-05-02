@@ -13,6 +13,7 @@
 <div class="ibox">
 
     <div class="ibox-body">
+
         @if (Session["RoleName"].ToString() == "Recruitment Manager")
         {
 
@@ -47,12 +48,56 @@
 
             </table>
         }
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="ibox bg-success color-white widget-stat">
+                    <div class="ibox-body">
+                        <h2 class="m-b-5 font-strong" id="getempcount"></h2>
+                        <div class="m-b-5">Total Employees</div><i class="ti-dashboard widget-stat-icon"></i>
+                        <div><i class="fa fa-bookmark m-r-5"></i><small></small></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="ibox bg-info color-white widget-stat">
+                    <div class="ibox-body" id="appendleave">
+                        <a href="~/Admin/LeaveList" id="linktoleavelist">
+                            <h2 class="m-b-5 font-strong" id="getleavescount" style="color:white;"></h2>
+                            <div class="m-b-5" style="color:white;">Leaves Left</div><i class="ti-agenda widget-stat-icon" style="color:white;"></i>
+                            <div><i class="fa fa-address-card m-r-5" style="color:white;"></i><small style="color:white;">View Leaves</small></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="ibox bg-warning color-white widget-stat">
+                    <div class="ibox-body">
+                        <h2 class="m-b-5 font-strong">$1570</h2>
+                        <div class="m-b-5">TOTAL INCOME</div><i class="fa fa-money widget-stat-icon"></i>
+                        <div><i class="fa fa-level-up m-r-5"></i><small>22% higher</small></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="ibox bg-danger color-white widget-stat">
+                    <div class="ibox-body">
+                        <a href="~/Admin/UserList">
+                            <h2 class="m-b-5 font-strong" id="getusercount" style="color:white;"></h2>
+                            <div class="m-b-5" style="color:white;">Total USERS</div><i class="ti-user widget-stat-icon" style="color:white;"></i>
+                            <div><i class="fa fa-address-book m-r-5" style="color:white;"></i><small style="color:white;">View Users</small></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div> <select onchange="javascript: ddlyear(this);" class="form-control select2_demo_2" id="ddly"></select></div>
+        <div id="container"></div>
     </div>
-</div>
+        </div>
+   
+        @section scripts{
 
-@section scripts{
-
-<script type="text/javascript">
+            <script type="text/javascript">
      $(function () {
             var successMessage = '@TempData["SuccessMessage101"]'
             if (successMessage != '')
@@ -111,7 +156,7 @@
                         return '<a href="/CV/' + data + '">View</a>'
                     },
                 }
-               
+
 
 
             ]
@@ -119,8 +164,79 @@
 
         });
 
+        $.get("/Notifications/GetUserscount", function (res) {
+            $("#getusercount").html(res);
+        });
+        $.get("/Notifications/GetEmpcount", function (res) {
+            $("#getempcount").html(res);
+        });
+        $.get("/Notifications/GetLeavesCount", function (res) {
+            if (res == 0) {
+               
+                $("#linktoleavelist").remove();
+                var $card = $('#appendleave');
+                $card.append(
+                    '<div id="removecard"' +
+                    '<h3 class="m-b-5 font-strong" id="getleavescount" style="color:white;">Not Assigned</h3>' +
+                    ' <div class="m-b-5" style="color:white;">Leaves Left</div><i class="ti-agenda widget-stat-icon" style="color:white;"></i>' +
+                    '<div><i class="fa fa-address-card m-r-5" style="color:white;"></i><small style="color:white;">View Leaves</small></div>'
+                    + '</div>'
+                );
+              
+            }
+            else {
+                $("#removecard").remove();
+                $("#getleavescount").html(res);
 
-    });
-</script>
+            }
+        });
+        $.getJSON("/Home/GetLineChartData", function (res) {
+            var Months = []
+            var amount = []
+            for (var i = 0; i < res.length; i++) {
+                Months.push(res[i].month);
+                amount.push(res[i].total);
+            }
+            
+        Highcharts.chart('container', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Total Expenses'
+            },
+            subtitle: {
+                text: 'Monthly Expense'
+            },
+            xAxis: {
+                categories: Months
+            },
+            yAxis: {
+                title: {
+                    text: 'Amount'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: 'Total Expenses',
+                data: amount
+            
+            }]
+          });
+        });
+        $("ddly").append("<option id='" + row.year + "' value='" + row.year + "'>" + row.year + "</option>")
+       });
+                function ddlyear(id) {
+                    
+                }
+              
+    </script>
 
-}
+        }

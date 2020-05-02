@@ -17,16 +17,16 @@ namespace Serene_AMS.Models
         public int Id { get; set; }
         public Nullable<int> ReturnNo { get; set; }
         public Nullable<int> Grreferenceno { get; set; }
+        public Nullable<int> VendorId { get; set; }
         public Nullable<int> ItemId { get; set; }
+        public Nullable<int> DeliveredQuantity { get; set; }
         public Nullable<int> RejectedQuantity { get; set; }
         public Nullable<int> ApprovedQtybyQuality { get; set; }
         public Nullable<int> MissingQuantity { get; set; }
         public Nullable<int> AvailableQuantity { get; set; }
-        public Nullable<int> DeliveredQuantity { get; set; }
-        public Nullable<int> VendorId { get; set; }
-        public string Approved { get; set; }
         public Nullable<int> ReturnQuantity { get; set; }
-        public Nullable<int> RemainingQuantity { get; set; }
         public Nullable<int> PartialReturnQuantity { get; set; }
+        public Nullable<int> RemainingQuantity { get; set; }
+        public string Approved { get; set; }
     }
 }
