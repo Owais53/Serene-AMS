@@ -154,6 +154,10 @@ namespace Serene_AMS.Controllers
         {
             return Json(db.getEmpcount(), JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetExp()
+        {
+            return Json(db.getExp(), JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetReorderNoticount()
         {
             var role = System.Web.HttpContext.Current.Session["RoleName"].ToString();

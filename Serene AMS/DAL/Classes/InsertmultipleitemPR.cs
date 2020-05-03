@@ -180,6 +180,24 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
+        public decimal getExp()
+        {
+            IEmployeeRepository obj = new EmployeeRepository();
+
+
+            int month = DateTime.Now.Month;
+            int year = DateTime.Now.Year;
+            decimal id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select Sum(Amount) as Total from tblExpenses where Month="+month+" and Year="+year+"";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (decimal)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
         public int getTotalLeaves()
         {
             IEmployeeRepository obj = new EmployeeRepository();

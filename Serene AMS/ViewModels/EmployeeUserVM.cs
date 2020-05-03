@@ -30,6 +30,7 @@ namespace Serene_AMS.ViewModel
         [NotMapped]
         public string RoleName { get; set; }
         public int AdminId { get; set; }
+        public int TotalEmployee { get; set; }
         [DataType("Password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }

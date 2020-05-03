@@ -433,7 +433,47 @@ namespace Serene_AMS.DAL.Repository
             da.Fill(ds);
             return ds;
         }
+        public DataSet Get_Years()
+        {
 
+            SqlCommand com = new SqlCommand("select Year from tblExpenses group by Year", con);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+        public DataSet Get_Months(int? y)
+        {
+            if (y == null || y == 0)
+            {
+
+                var year = DateTime.Now.Year;
+                SqlCommand com = new SqlCommand("SELECT Sum(Amount) as Total,MONTH(ExpenseDate) [month] FROM tblExpenses WHERE YEAR(ExpenseDate) = " + year + " GROUP BY MONTH(ExpenseDate) ORDER BY [month];", con);
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                return ds;
+            }
+            else
+            {
+                var year = DateTime.Now.Year;
+                SqlCommand com = new SqlCommand("SELECT Sum(Amount) as Total,MONTH(ExpenseDate) [month] FROM tblExpenses WHERE YEAR(ExpenseDate) = " + y + " GROUP BY MONTH(ExpenseDate) ORDER BY [month];", con);
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                return ds;
+            }
+        }
+        public DataSet Get_TotalStock()
+        {         
+                var year = DateTime.Now.Year;
+                SqlCommand com = new SqlCommand("select ItemName,Availablestock,Qualityinspectionstock,ReorderPoint from tblItem", con);
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                return ds;
+            
+        }
 
     }
 }

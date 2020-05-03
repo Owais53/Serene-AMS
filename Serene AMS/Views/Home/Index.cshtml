@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Serene_AMS.ViewModels.ProcureVM
+@{
     /**/
 
     ViewBag.Title = "Home Page";
@@ -72,9 +73,9 @@
             <div class="col-lg-3 col-md-6">
                 <div class="ibox bg-warning color-white widget-stat">
                     <div class="ibox-body">
-                        <h2 class="m-b-5 font-strong">$1570</h2>
-                        <div class="m-b-5">TOTAL INCOME</div><i class="fa fa-money widget-stat-icon"></i>
-                        <div><i class="fa fa-level-up m-r-5"></i><small>22% higher</small></div>
+                        <h2 class="m-b-5 font-strong" id="gettotalexp"></h2>
+                        <div class="m-b-5">TOTAL Expense</div><i class="fa fa-money widget-stat-icon"></i>
+                        <div><i class="fa fa-money m-r-5"></i><small>Current Month</small></div>
                     </div>
                 </div>
             </div>
@@ -90,14 +91,38 @@
                 </div>
             </div>
         </div>
-        <div> <select onchange="javascript: ddlyear(this);" class="form-control select2_demo_2" id="ddly"></select></div>
-        <div id="container"></div>
     </div>
-        </div>
-   
-        @section scripts{
+</div>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="ibox">
+            <div class="ibox-body">
+                <div>
+                    @Html.DropDownListFor(model => model.year, (SelectList)ViewBag.getyearlist, "Select Year", new { @id = "ddl", @class = "form-control", @onchange = "javascript: ddlyear(this);" })
 
-            <script type="text/javascript">
+
+                </div>
+                <div id="container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+
+<div class="col-lg-8">
+    <div class="ibox">
+        <div class="ibox-body">
+           
+                <div id="piechart"></div>
+            
+        </div>
+    </div>
+</div>
+    </div>
+@section scripts{
+
+    <script type="text/javascript">
      $(function () {
             var successMessage = '@TempData["SuccessMessage101"]'
             if (successMessage != '')
@@ -170,9 +195,12 @@
         $.get("/Notifications/GetEmpcount", function (res) {
             $("#getempcount").html(res);
         });
+        $.get("/Notifications/GetExp", function (res) {
+            $("#gettotalexp").html(res);
+        });
         $.get("/Notifications/GetLeavesCount", function (res) {
             if (res == 0) {
-               
+
                 $("#linktoleavelist").remove();
                 var $card = $('#appendleave');
                 $card.append(
@@ -182,7 +210,7 @@
                     '<div><i class="fa fa-address-card m-r-5" style="color:white;"></i><small style="color:white;">View Leaves</small></div>'
                     + '</div>'
                 );
-              
+
             }
             else {
                 $("#removecard").remove();
@@ -190,6 +218,7 @@
 
             }
         });
+
         $.getJSON("/Home/GetLineChartData", function (res) {
             var Months = []
             var amount = []
@@ -197,7 +226,7 @@
                 Months.push(res[i].month);
                 amount.push(res[i].total);
             }
-            
+
         Highcharts.chart('container', {
             chart: {
                 type: 'line'
@@ -227,16 +256,139 @@
             series: [{
                 name: 'Total Expenses',
                 data: amount
-            
+
             }]
           });
         });
-        $("ddly").append("<option id='" + row.year + "' value='" + row.year + "'>" + row.year + "</option>")
-       });
-                function ddlyear(id) {
-                    
-                }
+        $.getJSON("/Home/GetBarChartData", function (res) {
+            var item = []
+            var availbleqty = []
+            var qualityqty = []
+            var reorderpointqty=[]
+            for (var i = 0; i < res.length; i++) {
+                item.push(res[i].ItemName);
+                availbleqty.push(res[i].AvailableStock);
+                qualityqty.push(res[i].QualityStock);
+                reorderpointqty.push(res[i].ReorderPoint);
+            }
+
+            Highcharts.chart('piechart', {
+                chart: {
+                   
+                    type: 'column'
+                },
+                title: {
+                    text: 'Total Stock per Item '
+                },
+                xAxis: {
+                    categories: item
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text:'Total Stock'
+                    },
+                
+                  stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+
+                        ) || 'gray'
+                    }
+                 } 
+                },
+                length: {
+                    align: 'right',
+                    x: -30,
+                    verticalAlign: 'top',
+                    y: 25,
+                    floating: true,
+                    backgroundColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    headerFormat:'<b>{point.x}</br><br/>',
+                    pointFormat:'{series.name}:{point.y}</b>'
+                },
               
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Available Stock',
+                    data: availbleqty
+
+                }, {
+                        name: 'Quality Inspection Stock',
+                        data: qualityqty
+                    },
+                    {
+                        name: 'Reorder Point',
+                        data: reorderpointqty
+                    }]
+            });
+        });
+
+    });
+
+
+
+                function ddlyear(id) {
+
+                    $.getJSON("/Home/GetLineChartData", { y: id.value }, function (res) {
+                        var Months = []
+                        var amount = []
+                        for (var i = 0; i < res.length; i++) {
+                            Months.push(res[i].month);
+                            amount.push(res[i].total);
+                        }
+
+                        Highcharts.chart('container', {
+                            chart: {
+                                type: 'line'
+                            },
+                            title: {
+                                text: 'Total Expenses'
+                            },
+                            subtitle: {
+                                text: 'Monthly Expense'
+                            },
+                            xAxis: {
+                                categories: Months
+                            },
+                            yAxis: {
+                                title: {
+                                    text: 'Amount'
+                                }
+                            },
+                            plotOptions: {
+                                line: {
+                                    dataLabels: {
+                                        enabled: true
+                                    },
+                                    enableMouseTracking: false
+                                }
+                            },
+                            series: [{
+                                name: 'Total Expenses',
+                                data: amount
+
+                            }]
+                        });
+                    });
+
+                }
+
     </script>
 
-        }
+}

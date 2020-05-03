@@ -106,7 +106,7 @@
                     <li class="dropdown dropdown-user">
                         <a class="nav-link dropdown-toggle link" data-toggle="dropdown" id="bar">
                             <img src=@Url.Content("~/img/admin-avatar.png")>
-                            <span></span>Admin<i class="fa fa-angle-down m-l-5"></i>
+                            <span></span>@Session["UserName"].ToString()<i class="fa fa-angle-down m-l-5"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right" id="contents">
                             <li class="dropdown-divider"></li>
@@ -232,7 +232,7 @@
                         {
                             <a href="javascript:;">
                                 <i class="sidebar-item-icon fa fa-bar-chart"></i>
-                                <span class="nav-label">Promotions</span><i class="fa fa-angle-left arrow"></i>
+                                <span class="nav-label">Set Promotions Salary</span><i class="fa fa-angle-left arrow"></i>
                             </a>
                             <ul class="nav-2-level collapse">
                                 <li>@Html.ActionLink("View Promoted Employees", "SetPromotedEmployeeSalary", "Notifications")</li>
@@ -245,113 +245,101 @@
                             <i class="sidebar-item-icon fa fa-bar-chart"></i>
                             <span class="nav-label">Personnel Actions</span><i class="fa fa-angle-left arrow"></i>
                         </a>
-                        <ul class="nav-2-level collapse">
-
-                            @if (Session["RoleName"].ToString() == "Recruitment Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
+                        <ul class="nav-2-level collapse">                       
                                 <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
-                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
-                            }
-                            @if (Session["RoleName"].ToString() == "Recruitment Officer" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
-                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
-                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
-                            }
-                            @if (Session["RoleName"].ToString() == "DGM" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
-                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
-                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
-                            }
-                            @if (Session["RoleName"].ToString() == "Hr Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
-                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
-                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
-                            }
-                            @if (Session["RoleName"].ToString() == "Finance Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
-                                <li>@Html.ActionLink("Transfer Request", "RequestTransfer", "Requests")</li>
-                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>
-                            }
-
+                                <li>@Html.ActionLink("Leave Request", "LeaveRequest", "Requests")</li>                                              
                         </ul>
                     </li>
                     <li>
-                        <a href="javascript:;">
-                            <i class="sidebar-item-icon fa fa-bar-chart"></i>
-                            <span class="nav-label">Purchase</span><i class="fa fa-angle-left arrow"></i>
-                        </a>
-                        <ul class="nav-2-level collapse">
+                        @if (Session["RoleName"].ToString() == "Inventory Manager" || Session["RoleName"].ToString() == "Store Manager"|| Session["RoleName"].ToString() == "Finance Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin"|| Session["isAdmin"].ToString() == "Admin")
+                        {
+                            <a href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-bar-chart"></i>
+                                <span class="nav-label">Purchase</span><i class="fa fa-angle-left arrow"></i>
+                            </a>
+                        }
+                            <ul class="nav-2-level collapse">
 
-                            @if (Session["RoleName"].ToString() == "Inventory Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
-                                <li>@Html.ActionLink("Create PR", "CreatePR", "Inventory")</li>
-                                <li>@Html.ActionLink("Create PO", "CreatePurchaseOrder", "Inventory")</li>
+                                @if (Session["RoleName"].ToString() == "Inventory Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                                {
+                                    <li>@Html.ActionLink("Create PR", "CreatePR", "Inventory")</li>
+                                    <li>@Html.ActionLink("Create PO", "CreatePurchaseOrder", "Inventory")</li>
 
-                            }
-                            @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
+                                }
+                                @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                                {
 
-                                <li>@Html.ActionLink("Create GR", "ViewPOforGR", "Inventory")</li>
+                                    <li>@Html.ActionLink("Create GR", "ViewPOforGR", "Inventory")</li>
 
-                            }
-                            @if (Session["RoleName"].ToString() == "Finance Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
+                                }
+                                @if (Session["RoleName"].ToString() == "Finance Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                                {
 
-                                <li>@Html.ActionLink("Create Invoice Receipt", "ViewGRforInvoice", "Inventory")</li>
+                                    <li>@Html.ActionLink("Create Invoice Receipt", "ViewGRforInvoice", "Inventory")</li>
 
-                            }
-                        </ul>
-                    </li>
+                                }
+                            </ul>
+                        </li>
                     <li>
-                        <a href="javascript:;">
-                            <i class="sidebar-item-icon fa fa-bar-chart"></i>
-                            <span class="nav-label">Purchase Return</span><i class="fa fa-angle-left arrow"></i>
-                        </a>
-                        <ul class="nav-2-level collapse">
-                            @if (Session["RoleName"].ToString() == "Quality Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
+                        @if (Session["RoleName"].ToString() == "Quality Manager" || Session["RoleName"].ToString() == "Store Manager"  ||  Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                        {
+                            <a href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-bar-chart"></i>
+                                <span class="nav-label">Purchase Return</span><i class="fa fa-angle-left arrow"></i>
+                            </a>
+                        }
+                            <ul class="nav-2-level collapse">
+                                @if (Session["RoleName"].ToString() == "Quality Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                                {
 
-                                <li>@Html.ActionLink("Create Return Delivery", "ReturnDelivery", "Return")</li>
+                                    <li>@Html.ActionLink("Create Return Delivery", "ReturnDelivery", "Return")</li>
 
-                            }
-                            @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
+                                }
+                                @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                                {
 
-                                <li>@Html.ActionLink("Approve GR Items", "ApproveItems", "Return")</li>
+                                    <li>@Html.ActionLink("Approve GR Items", "ApproveItems", "Return")</li>
 
-                            }
-                        </ul>
-                    </li>
+                                }
+                            </ul>
+                        </li>
                     <li>
-                        <a href="javascript:;">
-                            <i class="sidebar-item-icon fa fa-bar-chart"></i>
-                            <span class="nav-label">Issue Goods</span><i class="fa fa-angle-left arrow"></i>
-                        </a>
-                        <ul class="nav-2-level collapse">
-                            @if (Session["RoleName"].ToString() == "Quality Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
+                        @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                        {
 
-                                <li>@Html.ActionLink("Create Goods Issue", "CreateGoodsIssue", "Inventory")</li>
+                            <a href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-bar-chart"></i>
+                                <span class="nav-label">Issue Goods</span><i class="fa fa-angle-left arrow"></i>
+                            </a>
+                        }
+                            <ul class="nav-2-level collapse">
+                                @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                                {
 
-                            }
+                                    <li>@Html.ActionLink("Create Goods Issue", "CreateGoodsIssue", "Inventory")</li>
 
-                        </ul>
-                    </li>
+                                }
+
+                            </ul>
+                        </li>
                     <li>
-                        <a href="javascript:;">
-                            <i class="sidebar-item-icon fa fa-bar-chart"></i>
-                            <span class="nav-label">Reports</span><i class="fa fa-angle-left arrow"></i>
-                        </a>
-                        <ul class="nav-2-level collapse">
+                        @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                        {
+                            <a href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-bar-chart"></i>
+                                <span class="nav-label">Reports</span><i class="fa fa-angle-left arrow"></i>
+                            </a>
+                        }
+                            <ul class="nav-2-level collapse">
 
-                            @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
-                            {
+                                @if (Session["RoleName"].ToString() == "Store Manager" || Session["RoleName"].ToString() == "Admin" && Session["isAdmin"].ToString() == "Admin" || Session["isAdmin"].ToString() == "Admin")
+                                {
 
-                                <li>@Html.ActionLink("Stock Report", "StockReport", "Reports")</li>
-                                <li>@Html.ActionLink("View Documents", "ViewDocuments", "Reports")</li>
-                            }
-                        </ul>
-                    </li>
+                                    <li>@Html.ActionLink("Stock Report", "StockReport", "Reports")</li>
+                                    <li>@Html.ActionLink("View Documents", "ViewDocuments", "Reports")</li>
+                                }
+                            </ul>
+                        </li>
 
                 </ul>
             </div>

@@ -803,7 +803,7 @@ namespace Serene_AMS.DAL.Repository
             var add = new tblExpens()
             {
                 Year=DateTime.Now.Year,
-                Month=DateTime.Now.ToString("MMM"),
+                Month=DateTime.Now.Month.ToString(),
                 ExpenseDate=DateTime.Now.Date,
                 Amount=amount,
             };
