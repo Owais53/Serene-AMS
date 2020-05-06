@@ -729,7 +729,7 @@ namespace Serene_AMS.Controllers
 
             return View(data);
         }
-        public ActionResult GetPRDataPartial(int DocNo)
+        public ActionResult GetPRDataPartial(int? DocNo)
         {
             IProcure obj = new Procure();
             var data = obj.GetDoc().Where(x => x.DocumentNo == DocNo).Select(x => new ProcureVM() { DocNo = x.DocumentNo, VendorId = (int)x.VendorId, Prno = x.Docno, RequestedDate = (DateTime)x.ItemRequestedDate }).FirstOrDefault();
@@ -1122,10 +1122,11 @@ namespace Serene_AMS.Controllers
                             obj.Save();
                             obj.updatestatuspartial(db.getPono(Docno));
                             obj.Save();
-                            foreach (ProcureVM gr in grlists)
+                           
+                             foreach (ProcureVM gr in grlists)
                             {
-                                var checkitemqty = obj.GetDocDetail().Where(x => x.DocumentNo == Docno  && x.PartialDeliveredQuantity == 0).FirstOrDefault();
-                                if (checkitemqty == null)
+                                var checkitemqty = obj.GetDocDetail().Where(x => x.DocumentNo == Docno && x.PartialDeliveredQuantity == 0).FirstOrDefault();
+                                if (db.getLastItemNoPQty(db.getItemid(gr.ItemName), Docno) == db.getItemid(gr.ItemName))
                                 {
 
                                     var addprice2 = obj.addGritemsPrice(add1.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
@@ -1137,9 +1138,10 @@ namespace Serene_AMS.Controllers
                                     obj.Save();
                                     obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
                                     obj.Save();
+                                    return Json(new { Grno = add1.DocumentNo, message = "Goods Receipt " + add1.Docno + " Created with Status Partial Delivery" }, JsonRequestBehavior.AllowGet);
                                 }
                                 else
-                                {
+                            {
                                     db.Deletegr(add1.DocumentNo);
                                     obj.updatestatustonull(db.getPono(Docno));
                                     obj.Save();
@@ -1147,7 +1149,9 @@ namespace Serene_AMS.Controllers
                                 }
 
                             }
-                            return Json(new { Grno = add1.DocumentNo, message = "Goods Receipt " + add1.Docno + " Created with Status Partial Delivery" }, JsonRequestBehavior.AllowGet);
+
+                            return Json(JsonRequestBehavior.AllowGet);
+                           
                         }
                         else
                         {
@@ -1168,10 +1172,13 @@ namespace Serene_AMS.Controllers
                             obj.Save();
                             obj.updatestatuscomplete(db.getPono(Docno));
                             obj.Save();
-                            foreach (ProcureVM gr in grlists)
+
+
+                           
+                                foreach (ProcureVM gr in grlists)
                             {
-                                var checkitemqty = obj.GetDocDetail().Where(x => x.DocumentNo == Docno && x.DeliveredQuantity == null).LastOrDefault();
-                                if (checkitemqty == null)
+                               
+                                if (db.getLastItemNoDQty(db.getItemid(gr.ItemName),Docno) == db.getItemid(gr.ItemName))
                                 {
                                     var addprice2 = obj.addGritemsPrice(add.DocumentNo, db.getItemid(gr.ItemName), gr.DeliveredQuantity);
                                     obj.addpriceofitems(addprice2);
@@ -1182,6 +1189,8 @@ namespace Serene_AMS.Controllers
                                     obj.Save();
                                     obj.updateitemstock(db.getItemid(gr.ItemName), gr.DeliveredQuantity);
                                     obj.Save();
+                                    return Json(new { Grno = add.DocumentNo, message = "Goods Receipt " + add.Docno + " Created with Status Complete Delivery" }, JsonRequestBehavior.AllowGet);
+
                                 }
                                 else
                                 {
@@ -1193,7 +1202,7 @@ namespace Serene_AMS.Controllers
 
                             }
 
-                            return Json(new { Grno = add.DocumentNo, message = "Goods Receipt " + add.Docno + " Created with Status Complete Delivery" }, JsonRequestBehavior.AllowGet);
+                            return Json(JsonRequestBehavior.AllowGet);
                         }
 
                         else

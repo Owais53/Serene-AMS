@@ -50,11 +50,11 @@ namespace Serene_AMS.Controllers
            
                 ReqList r = new ReqList();
                 DataSet ds = r.Get_Months(y);
-                List<ProcureVM> list = new List<ProcureVM>();
+                List<PoVM> list = new List<PoVM>();
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    list.Add(new ProcureVM
+                    list.Add(new PoVM
                     {
                         month=DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(Convert.ToInt32(dr["month"])),
                         total=Convert.ToDecimal(dr["Total"])
@@ -69,11 +69,11 @@ namespace Serene_AMS.Controllers
 
             ReqList r = new ReqList();
             DataSet ds = r.Get_TotalStock();
-            List<ProcureVM> list = new List<ProcureVM>();
+            List<PoVM> list = new List<PoVM>();
 
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
-                list.Add(new ProcureVM
+                list.Add(new PoVM
                 {
                      ItemName=dr["ItemName"].ToString(),
                      AvailableStock=Convert.ToInt32(dr["Availablestock"]),

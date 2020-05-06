@@ -256,21 +256,6 @@
                 $("#Modalpo").modal('show');
             })
         }
-       
-        function OnSuccess(res) {
-            var modal = $("#Modalconfirmreject");
-
-            modal.modal('hide');
-            $.notify(res.message, {
-                globalPosition: "top center",
-                className: "success"
-
-            });
-            dataTableprpo.ajax.reload();
-        }
-        function OnFailure() {
-            alert("Error");
-        }
         function SuccessPostPo(res) {
             if (res) {
                 $.ajax({
@@ -322,6 +307,21 @@
         function FailurePostpo(res) {
             alert("UnSuccessfull");
         }
+        function OnSuccess(res) {
+            var modal = $("#Modalconfirmreject");
+
+            modal.modal('hide');
+            $.notify(res.message, {
+                globalPosition: "top center",
+                className: "success"
+
+            });
+            dataTableprpo.ajax.reload();
+        }
+        function OnFailure() {
+            alert("Error");
+        }
+        
         $("#btnsubmitdocpo").click(function (e) {
             var doc = $("#getdocpovalue").val();
             window.location.href = '@Url.Action("POReport", "Reports", new {id = "doc"})'.replace("doc", doc);

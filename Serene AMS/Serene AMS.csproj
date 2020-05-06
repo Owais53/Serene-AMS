@@ -354,8 +354,10 @@
     <Compile Include="ViewModels\CandidateEmployeeVM.cs" />
     <Compile Include="ViewModels\EmployeeUserVM.cs" />
     <Compile Include="ViewModels\PositionVM.cs" />
+    <Compile Include="ViewModels\PoVM.cs" />
     <Compile Include="ViewModels\ProcureVM.cs" />
     <Compile Include="ViewModels\RequestVM.cs" />
+    <Compile Include="ViewModels\ResetPasswordModel.cs" />
     <Compile Include="ViewModels\VacancyVM.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1161,6 +1163,8 @@
     <Content Include="Views\Admin\UserList.cshtml" />
     <Content Include="Views\Admin\LeaveList.cshtml" />
     <Content Include="Views\Reports\ViewDocuments.cshtml" />
+    <Content Include="Views\Account\ForgetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

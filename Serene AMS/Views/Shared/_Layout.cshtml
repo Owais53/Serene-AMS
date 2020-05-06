@@ -538,7 +538,7 @@
                        success: function (responses) {
 
                            $.each(responses, function (i, v) {
-                               $("#maincontent").append($('<div id="getresp"><a href="/Requests/ViewLeaveResponse/' + v.RequestId + '" class="list-group-item"> <div class="media"><div class="media-img"> <img src=@Url.Content("~/img/leaves.png")></div> <div class="media-body"><div class="font-13" style="color:black;">Item ' + v.ItemName + ' has less Stock</div></div></div></a></div>'))
+                               $("#maincontent").append($('<div id="getresp"><a href="/Inventory/CreatePR" class="list-group-item"> <div class="media"><div class="media-img"> <img src=@Url.Content("~/img/leaves.png")></div> <div class="media-body"><div class="font-13" style="color:black;">Item ' + v.ItemName + ' has less Stock</div></div></div></a></div>'))
 
                            });
 

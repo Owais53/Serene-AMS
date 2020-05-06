@@ -1,8 +1,12 @@
 ﻿using Serene_AMS.Models;
+using Serene_AMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace Serene_AMS.Controllers
@@ -144,6 +148,122 @@ namespace Serene_AMS.Controllers
 
 
             return RedirectToAction("Login", "Account");
+        }
+        [NonAction]
+        public void SendVerificationLinkEmail(string emailID,string activationCode,string emailfor)
+        {
+            var verifyUrl = "/Account/" + emailfor + "/" +activationCode;
+            var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
+
+            var fromEmail = new MailAddress("owaismumtaz96@gmail.com", "AMS");
+            var toEmail = new MailAddress(emailID);
+            var fromEmailPassword = "9248133abc";
+
+            string subject = "";
+            string body = "";
+            if(emailfor=="Reset Password")
+            {
+                subject = "Reset Password";
+                body = "Hi,<br/><br/>We got request for reset your account password.Please click on the below link to reset your password"+
+                    "<br/><br/><a href="+link+">Reset Password Link</a>";
+            }
+            var smtp = new SmtpClient
+            {
+                Host="smtp.gmail.com",
+                Port=587,
+                EnableSsl=true,
+                DeliveryMethod=SmtpDeliveryMethod.Network,
+                UseDefaultCredentials=false,
+                Credentials=new NetworkCredential(fromEmail.Address,fromEmailPassword)
+            };
+            using (var message = new MailMessage(fromEmail, toEmail)
+            {
+                Subject = "Reset Password",
+                Body = "Hi,<br/><br/>We got request for reset your account password.Please click on the below link to reset your password" +
+                    "<br/><br/><a href=" + link + ">Reset Password Link</a>",
+                IsBodyHtml = true
+
+            })
+           smtp.Send(message);
+        }
+
+        public ActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ForgetPassword(string EmailID,string UserName)
+        {
+            bool status = false;
+
+            var account = (from user in db.tblUsers
+                           join emp in db.tblEmployees on user.EmployeeId equals emp.EmployeeId
+                           where emp.Email == EmailID && user.UserName==UserName
+                           select new
+                           {
+                               emp.Email,
+                               emp.EmployeeId
+                               
+                               
+                           }).FirstOrDefault();
+            if (account != null)
+            {
+                string resetCode = Guid.NewGuid().ToString();
+                SendVerificationLinkEmail(account.Email, resetCode, "ResetPassword");
+                var getuser = db.tblUsers.Where(x => x.EmployeeId == account.EmployeeId).FirstOrDefault();
+                if (getuser != null)
+                {
+                    getuser.ResetPasswordCode = resetCode;
+                    db.Configuration.ValidateOnSaveEnabled = false;
+                    db.SaveChanges();
+                    TempData["Success"] = "Password reset link sent to your Email";
+                }
+            }
+            else
+            {
+                TempData["Error"] = "Account not found";
+            }
+                           
+            return View();
+        }
+        public ActionResult ResetPassword(string id)
+        {
+            var user = db.tblUsers.Where(x => x.ResetPasswordCode == id).FirstOrDefault();
+            if (user != null)
+            {
+                ResetPasswordModel model = new ResetPasswordModel();
+                model.ResetCode = id;              
+                return View(model);
+                
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+        }
+        [HttpPost]
+        public ActionResult ResetPassword(ResetPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = db.tblUsers.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
+                if (user != null)
+                {
+                    user.Password =model.NewPassword;
+                    user.ResetPasswordCode = "";
+                    db.Configuration.ValidateOnSaveEnabled = false;
+                    db.SaveChanges();
+                    TempData["Success"] = "Password changed successfully";
+                    return RedirectToAction("Login");
+                   
+                }
+            }
+            else
+            {
+                TempData["Error"] = "Someting invalid";
+            }
+
+            return View(model);
         }
 
     }

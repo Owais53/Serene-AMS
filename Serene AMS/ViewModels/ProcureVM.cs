@@ -49,11 +49,11 @@ namespace Serene_AMS.ViewModels
         public int DocNo { get; set; }
        public int Quantity { get; set; }
         public int year { get; set; }
-        public string month { get; set; }
+       
         public string Item { get; set; }
        public int IssuedQuantity { get; set; }
         public string status { get; set; }
-        public decimal total { get; set; }
+      
         public DateTime Createdon { get; set; }
         public string Createdby { get; set; }
         public string Reasonofreturn { get; set; }
@@ -75,9 +75,7 @@ namespace Serene_AMS.ViewModels
         public int returnref { get; set; }
         public int DeliveredQuantity { get; set; }
         public int RemainingQuantity { get; set; }
-        public int AvailableStock { get; set; }
-        public int QualityStock { get; set; }
-        public int reorderpoint { get; set; }
+      
         public decimal Paid { get; set; }
         public decimal Balance { get; set; }
         public List<ProcureVM> GRDetails { get; set; }

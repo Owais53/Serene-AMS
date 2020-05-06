@@ -22,6 +22,7 @@ namespace Serene_AMS.Models
         public Nullable<int> DepartmentId { get; set; }
         public Nullable<int> EmployeeId { get; set; }
         public Nullable<int> IsActive { get; set; }
+        public string ResetPasswordCode { get; set; }
     
         public virtual tblAdmincheck tblAdmincheck { get; set; }
         public virtual tblRole tblRole { get; set; }

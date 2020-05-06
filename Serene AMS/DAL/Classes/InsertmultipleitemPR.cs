@@ -148,6 +148,32 @@ namespace Serene_AMS.DAL.Classes
             }
             return id;
         }
+        public int getLastItemNoDQty(int itemid,int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select Max(ItemId) as itemid from tblDocDetails where ItemId="+itemid+" and DocumentNo="+docno+" and DeliveredQuantity IS NOT NULL";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
+        public int getLastItemNoPQty(int itemid, int docno)
+        {
+            int id;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
+            {
+                con.Open();
+                String s = "select Max(ItemId) as itemid from tblDocDetails where ItemId=" + itemid + " and DocumentNo=" + docno + " and PartialDeliveredQuantity!=0";
+                SqlCommand smd = new SqlCommand(s, con);
+                id = (int)smd.ExecuteScalar();
+
+            }
+            return id;
+        }
         public int getDocTypeId(int docno)
         {
             int id;
