@@ -167,7 +167,7 @@ namespace Serene_AMS.DAL.Classes
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
-                String s = "select Max(ItemId) as itemid from tblDocDetails where ItemId=" + itemid + " and DocumentNo=" + docno + " and PartialDeliveredQuantity!=0";
+                String s = "select Max(ItemId) as itemid from tblDocDetails where ItemId=" + itemid + " and DocumentNo=" + docno + " and PartialDeliveredQuantity=0";
                 SqlCommand smd = new SqlCommand(s, con);
                 id = (int)smd.ExecuteScalar();
 
@@ -209,7 +209,7 @@ namespace Serene_AMS.DAL.Classes
         public decimal getExp()
         {
             IEmployeeRepository obj = new EmployeeRepository();
-
+            IProcure repo = new Procure();
 
             int month = DateTime.Now.Month;
             int year = DateTime.Now.Year;
@@ -217,10 +217,18 @@ namespace Serene_AMS.DAL.Classes
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
-                String s = "select Sum(Amount) as Total from tblExpenses where Month="+month+" and Year="+year+"";
-                SqlCommand smd = new SqlCommand(s, con);
-                id = (decimal)smd.ExecuteScalar();
-
+                var check = repo.Getexp().Where(x => x.Month == month.ToString() && x.Year == year).FirstOrDefault();
+                if (check != null)
+                {
+                    String s = "select Sum(Amount) as Total from tblExpenses where Month="+month+" and Year="+year+"";
+                    SqlCommand smd = new SqlCommand(s, con);   
+                    id = (decimal)smd.ExecuteScalar();
+                }
+                else
+                {
+                    id = 0;
+                }
+                
             }
             return id;
         }
