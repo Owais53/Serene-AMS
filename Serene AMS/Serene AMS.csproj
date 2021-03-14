@@ -941,6 +941,7 @@
       <DependentUpon>SqlModel.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\SereneAMS20210314133620 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\SereneAMSByteErp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\countdowntime.js" />
     <Content Include="Scripts\dashboard_1_demo.js" />
