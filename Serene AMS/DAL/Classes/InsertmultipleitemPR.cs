@@ -111,7 +111,7 @@ namespace Serene_AMS.DAL.Classes
         }
         public bool getRemainingQtyforReturn(int docno)
         {
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select RemainingQuantity from tblreturnlineitem where ReturnNo=" + docno + "";
@@ -138,7 +138,7 @@ namespace Serene_AMS.DAL.Classes
         public int getDocumentNo()
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "SELECT max(DocumentNo) FROM [Hrms].[dbo].[tblDocument]";
@@ -151,7 +151,7 @@ namespace Serene_AMS.DAL.Classes
         public int getLastItemNoDQty(int itemid,int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select Max(ItemId) as itemid from tblDocDetails where ItemId="+itemid+" and DocumentNo="+docno+" and DeliveredQuantity IS NOT NULL";
@@ -164,7 +164,7 @@ namespace Serene_AMS.DAL.Classes
         public int getLastItemNoPQty(int itemid, int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select Max(ItemId) as itemid from tblDocDetails where ItemId=" + itemid + " and DocumentNo=" + docno + " and PartialDeliveredQuantity=0";
@@ -177,7 +177,7 @@ namespace Serene_AMS.DAL.Classes
         public int getDocTypeId(int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "SELECT DTypeId FROM [Hrms].[dbo].[tblDocument] where DocumentNo=@docno";
@@ -196,7 +196,7 @@ namespace Serene_AMS.DAL.Classes
             
             
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "SELECT Count(*) FROM [Hrms].[dbo].[tblEmployee]";
@@ -214,7 +214,7 @@ namespace Serene_AMS.DAL.Classes
             int month = DateTime.Now.Month;
             int year = DateTime.Now.Year;
             decimal id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 var check = repo.Getexp().Where(x => x.Month == month.ToString() && x.Year == year).FirstOrDefault();
@@ -251,7 +251,7 @@ namespace Serene_AMS.DAL.Classes
             {
                
                 int id;
-                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
                 {
                     con.Open();
                     String s = "select (CasualLeave+SickLeave) as TotalLeave from tblEmployeeLeaves where EmployeeId=" + empid + "";
@@ -266,7 +266,7 @@ namespace Serene_AMS.DAL.Classes
         public int getUserCountNo()
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "SELECT Count(*) FROM [Hrms].[dbo].[tblUsers]";
@@ -279,7 +279,7 @@ namespace Serene_AMS.DAL.Classes
         public int getLastItemGrNo(int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select ItemId from tblGrItemsPrice where DocumentNo="+docno+" and id=(SELECT MAX(id)  FROM tblGrItemsPrice where DocumentNo="+docno+")";
@@ -292,7 +292,7 @@ namespace Serene_AMS.DAL.Classes
         public int getLastItemRdNo(int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select ItemId from tblreturnlineitem where Grreferenceno=" + docno + " and id=(SELECT MAX(id) FROM tblreturnlineitem where Grreferenceno=" + docno + ")";
@@ -305,7 +305,7 @@ namespace Serene_AMS.DAL.Classes
         public int getPrrefforgr(int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select PrReferenceNo from tblDocument where DocumentNo=" + docno + "";
@@ -318,7 +318,7 @@ namespace Serene_AMS.DAL.Classes
         public int getGrrefforreturn(int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select GrReferencenoforReturn from tblDocument where DocumentNo=" + docno + "";
@@ -331,7 +331,7 @@ namespace Serene_AMS.DAL.Classes
         public int getPorefforgr(int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select DocumentNo from tblDocument where (PrReferenceNo=" + docno + " or GrReferencenoforReturn="+docno+")";
@@ -345,7 +345,7 @@ namespace Serene_AMS.DAL.Classes
         public int gettypeidgr(int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select DTypeId from tblDocument where DocumentNo=" + docno + "";
@@ -359,7 +359,7 @@ namespace Serene_AMS.DAL.Classes
         public int getreturnrefforgr(int docno)
         {
             int id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select DocumentNo from tblDocument where GrReferencenoforReturn=" + docno + " and DTypeId=5";
@@ -373,7 +373,7 @@ namespace Serene_AMS.DAL.Classes
         public string getReturnNo(int Docno)
         {
             string id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "SELECT Docno FROM [Hrms].[dbo].[tblDocument] where GRReferencenoforReturn="+Docno+" and DTypeId=5";
@@ -386,7 +386,7 @@ namespace Serene_AMS.DAL.Classes
         public decimal getTotalPrice(int Doc)
         {
             decimal id;
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["HrmsEntities"].ConnectionString))
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Con"].ConnectionString))
             {
                 con.Open();
                 String s = "select Sum(ItemPrice) from tblGritemsPrice where DocumentNo=@doc";
