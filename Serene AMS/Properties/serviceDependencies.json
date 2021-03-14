@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "Con"
+    },
     "mssql1": {
       "type": "mssql",
       "connectionId": "HrmsEntities"

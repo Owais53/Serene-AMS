@@ -1,6 +1,12 @@
 {
   "dependencies": {
+    "mssql2": {
+      "type": "mssql.onprem",
+      "connectionId": "Con",
+      "secretStore": "AzureAppSettings"
+    },
     "mssql1": {
+      "resourceId": null,
       "type": "mssql.onprem",
       "connectionId": "HrmsEntities",
       "secretStore": "AzureAppSettings"
